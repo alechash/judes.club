@@ -4,42 +4,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Judes Club</title>
-    <link rel="stylesheet" href="/assets/main.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://use.typekit.net/ycv7pzn.css">
+    <title>Document</title>
+    <link rel="stylesheet" href="/assets/3.css">
+    <link rel="stylesheet" href="https://use.typekit.net/rup4qgs.css">
 </head>
 
 <body>
-    <nav>
+    <main>
         <div>
-            <h1 class="title">jude wilson</h1>
-            <h1 class="apps_button"><button onclick="document.getElementById('applications').classList.toggle('hide')"
-                    href="/applications.html">applications</button></h1>
-            <h1><button href="/photography.html">photography</button></h1>
-            <h1><button href="/design.html">design</button></h1>
-            <h1><button href="/follow.html">follow</button></h1>
+            <h1>Jude Wilson</h1>
+            <p>
+                <a class="active">Home</a>
+                <a href="/about">About</a>
+                <a href="https://blog.alecw.net" target="_blank">Blog</a>
+                <a href="mailto:jude@alecw.net">Contact</a> |
+                <a href="https://unsplash.com/@alechash" target="_blank">Unsplash</a>
+                <a href="https://instagram.com/wil.tography" target="_blank">Instagram</a>
+                <a href="https://github.com/alechash" target="_blank">GitHub</a>
+            </p>
         </div>
-    </nav>
+        <div class="gallery" id="gallery">
 
-    <div id="applications" class="hide">
-        <h1>Applications</h1>
-        <div class="app">
-            <h2>LiftKit: Social Weight Lifting</h2>
-            <h4><a href="https://liftkit.app" target="_blank">Download "LiftKit"</a></h4>
         </div>
-        <div class="app">
-            <h2>Simple Funds: Budget Simply</h2>
-            <h4><a href="https://liftkit.app" target="_blank">Download "Simple Funds"</a></h4>
-        </div>
-        <div class="app">
-            <h2>Leadspect: Track Leads with Ease</h2>
-            <h4><a href="https://liftkit.app" target="_blank">Download "Leadspect"</a></h4>
-        </div>
-            <h3 class="apps_button"><a onclick="document.getElementById('applications').classList.toggle('hide')">close
-                    popup</a></h3>
-    </div>
+        <ul id="images"></ul>
+    </main>
+
+    <script>
+        var html = "";
+
+        for (i = 0; i < 49; i++) {
+            html = html + `
+              <li>
+                  <a href="/assets/images/photo_${49 - i}.jpg"><img src="/assets/images/photo_${49 - i}.jpg" alt="Image ${i}"></a>
+              </li>
+              `;
+        };
+
+        html = html + "<li></li>";
+
+        document.getElementById('images').innerHTML = html;
+    </script>
 </body>
 
 </html>
