@@ -111,3 +111,23 @@ li a:hover {
 br {
     margin: 5px;
 }
+
+.announcement span {
+    background: orangered;
+    padding: 10px 20px;
+    color: white;
+    border: 3px solid black;
+    border-radius: 10px;
+    margin-top: 30px;
+}
+
+.announcement span a {
+    color: white;
+    margin: 0;
+    border-bottom: 3px solid black
+}
+
+.announcement span a:hover {
+    color: black;
+    margin: 0;
+}
