@@ -13,34 +13,45 @@
 <body>
     <main>
         <div>
+            <p class="announcement"><span>Announcing <a href="https://photury.com" target="_blank">Photury</a>, share
+                    your best photo spots with
+                    the community!</span></p>
             <h1>Jude Wilson</h1>
             <p>
                 <a class="active">Home</a>
                 <a href="/about">About</a>
-                <a href="https://blog.alecw.net" target="_blank">Blog</a>
-                <a href="mailto:jude@alecw.net">Contact</a> |
+                <a href="sms:9376685138">Text Me</a>
                 <a href="https://unsplash.com/@alechash" target="_blank">Unsplash</a>
                 <a href="https://instagram.com/wil.tography" target="_blank">Instagram</a>
-                <a href="https://github.com/alechash" target="_blank">GitHub</a>
+                <a href="https://alecw.net" target="_blank">Software Portfolio</a>
             </p>
-        </div>
-        <br><br>
-        <p class="announcement"><span>Announcing <a href="https://photury.com" target="_blank">Photury</a>, share
-                your best photo spots with
-                the community!</span></p>
-        <div class="gallery" id="gallery">
-
-        </div>
+        </div><!--
+        <h2>Photo Collections</h2>
+        <ul class="gallery">
+            <li class="project">
+                <img src="/assets/images/photo_50.jpg">
+                <h2 class="title">Subaru WRX Shoot</h2>
+            </li>
+            <li class="project">
+                <img src="/assets/images/photo_50.jpg">
+                <h2 class="title">Infiniti Q50 Shoot</h2>
+            </li>
+            <li class="project">
+                <img src="/assets/images/photo_50.jpg">
+                <h2 class="title">Ecuadorian Collection</h2>
+            </li>
+        </ul>-->
+        <h2>All Photos</h2>
         <ul id="images"></ul>
     </main>
 
     <script>
         var html = "";
 
-        for (i = 0; i < 54; i++) {
+        for (i = 0; i < 72; i++) {
             html = html + `
               <li>
-                  <a href="/assets/images/photo_${54 - i}.jpg"><img src="/assets/images/photo_${54 - i}.jpg" alt="Image ${i}" loading="lazy"></a>
+                  <a href="/assets/images/photo_${i}.jpg"><img src="/assets/images/photo_${i}.jpg" alt="Image ${i}" loading="lazy"></a>
               </li>
               `;
         };

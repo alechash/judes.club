@@ -5,11 +5,10 @@ body {
 h1 {
     font-family: "bree", sans-serif;
     font-weight: 700;
-    font-style: italic;
     text-transform: uppercase;
     font-size: 50px;
     text-align: center;
-    margin-bottom: 60px;
+    margin-bottom: 30px;
 }
 
 p {
@@ -119,6 +118,7 @@ br {
     border: 3px solid black;
     border-radius: 10px;
     margin-top: 30px;
+    display: inline-block;
 }
 
 .announcement span a {
@@ -130,4 +130,34 @@ br {
 .announcement span a:hover {
     color: black;
     margin: 0;
+}
+
+.project {
+    border-radius: 10px;
+    border: 1px solid rgb(188, 188, 188);
+    display: block;
+    margin: 5px;
+
+}
+
+.project img {
+    border-top-left-radius: 9px;
+    border-top-right-radius: 9px;
+    height: 225px;
+}
+
+.project h2 {
+    display: block;
+    margin: 20px;
+    font-family: "bree", sans-serif;
+    font-size: 20px;
+}
+
+h2:not(.title) {
+    font-family: "bree", sans-serif;
+    font-weight: 700;
+    font-size: 35px;
+    text-align: left;
+    margin: 50px 20px;
+    margin-bottom: -30px;
 }
