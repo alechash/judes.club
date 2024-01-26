@@ -97,11 +97,9 @@
 
         document.getElementById('gallery').innerHTML = projectHtml
 
-        if (Number(project) <= projects.length && Number(project) >= 0) {
-            document.getElementById('collection_view').style.display = 'inherit'
-             
+        if (queryString.includes('?project=') && Number(project) <= projects.length && Number(project) >= 0) {            
             document.getElementById('collection_title').innerText = projects[project].title
-
+            document.getElementById('collection_view').style.display = 'inherit'
 
             var projectPhotosHtml = "";
 
