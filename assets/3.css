@@ -177,6 +177,7 @@ h2:not(.title) {
     background-color: white;
     z-index: 1000;
     overflow: scroll;
+    display: none;
 }
 
 .close-project {

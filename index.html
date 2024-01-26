@@ -98,6 +98,8 @@
         document.getElementById('gallery').innerHTML = projectHtml
 
         if (Number(project) <= projects.length && Number(project) >= 0) {
+            document.getElementById('collection_view').style.display = 'inherit'
+             
             document.getElementById('collection_title').innerText = projects[project].title
 
 
@@ -114,8 +116,6 @@
             projectPhotosHtml = projectPhotosHtml + "<li></li>";
 
             document.getElementById('collection_images').innerHTML = projectPhotosHtml;
-        } else {
-            document.getElementById('collection_view').style.display = 'none'
         }
 
     </script>
