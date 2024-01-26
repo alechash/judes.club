@@ -45,8 +45,8 @@ ul {
 }
 
 li {
-    height: 40vh;
-    flex-grow: 1;
+    height: 25vh;
+    flex-grow: 10;
     margin: 10px
 }
 
@@ -67,13 +67,13 @@ li:last-child {
 
 @media (max-aspect-ratio: 1/1) {
     li {
-        height: 30vh;
+        height: 18.75vh;
     }
 }
 
 @media (max-height: 480px) {
     li {
-        height: 80vh;
+        height: 50vh;
     }
 }
 
@@ -89,7 +89,7 @@ li:last-child {
 
     img {
         width: 100%;
-        max-height: 75vh;
+        max-height: 46.875vh;
         min-width: 0;
     }
 }
@@ -137,20 +137,26 @@ br {
     border: 1px solid rgb(188, 188, 188);
     display: block;
     margin: 5px;
-
+    height: 20vh
 }
 
 .project img {
     border-top-left-radius: 9px;
     border-top-right-radius: 9px;
-    height: 225px;
+    height: 13vh;
 }
 
 .project h2 {
     display: block;
-    margin: 20px;
+    margin: 10px;
     font-family: "bree", sans-serif;
     font-size: 20px;
+    text-decoration: none;
+}
+
+.project a {
+    text-decoration: none;
+    color: black;
 }
 
 h2:not(.title) {
@@ -160,4 +166,40 @@ h2:not(.title) {
     text-align: left;
     margin: 50px 20px;
     margin-bottom: -30px;
+}
+
+#collection_view {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: white;
+    z-index: 1000;
+    overflow: scroll;
+}
+
+.close-project {
+    position: fixed;
+    top: 40px;
+    right: 60px;
+    text-decoration: none;
+    color: black;
+    background-color: white;
+    width: 30px;
+    height: 30px;
+    margin: 0;
+    padding: 0;
+    z-index: 10000000;
+}
+
+.close-project a {
+    text-decoration: none;
+    color: black;
+    background-color: white;
+    padding: 0 18px;
+    width: 30px;
+    height: 30px;
+    padding-bottom: 5px;
+    z-index: 10000000;
 }

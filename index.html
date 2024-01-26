@@ -25,33 +25,26 @@
                 <a href="https://instagram.com/wil.tography" target="_blank">Instagram</a>
                 <a href="https://alecw.net" target="_blank">Software Portfolio</a>
             </p>
-        </div><!--
+        </div>
         <h2>Photo Collections</h2>
-        <ul class="gallery">
-            <li class="project">
-                <img src="/assets/images/photo_50.jpg">
-                <h2 class="title">Subaru WRX Shoot</h2>
-            </li>
-            <li class="project">
-                <img src="/assets/images/photo_50.jpg">
-                <h2 class="title">Infiniti Q50 Shoot</h2>
-            </li>
-            <li class="project">
-                <img src="/assets/images/photo_50.jpg">
-                <h2 class="title">Ecuadorian Collection</h2>
-            </li>
-        </ul>-->
+        <ul id="gallery">
+        </ul>
         <h2>All Photos</h2>
         <ul id="images"></ul>
+
+        <div id="collection_view">
+            <h2>Collection: <span id="collection_title"></span> <span class="close-project"><a href="?project=-1">×</a></span></h2>
+            <ul id="collection_images"></ul>
+        </div>
     </main>
 
     <script>
         var html = "";
 
-        for (i = 0; i < 72; i++) {
+        for (i = 0; i < 30; i++) {
             html = html + `
               <li>
-                  <a href="/assets/images/photo_${i}.jpg"><img src="/assets/images/photo_${i}.jpg" alt="Image ${i}" loading="lazy"></a>
+                  <a href="/assets/images/image_${i}.jpg"><img src="/assets/images/image_${i}.jpg" alt="Image ${i}" loading="lazy"></a>
               </li>
               `;
         };
@@ -59,6 +52,79 @@
         html = html + "<li></li>";
 
         document.getElementById('images').innerHTML = html;
+    </script>
+
+    <script>
+
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const project = urlParams.get('project')
+
+        const projects = [
+            {
+                "title": "Perfect North Car Shoot",
+                "cover": "wrx_shoot/img-1",
+                "album": {
+                    "folder": "wrx_shoot",
+                    "photo_prefix": "img-",
+                    "photo_index": 12
+                }
+            },
+            {
+                "title": "Perfect North Car Shoot",
+                "cover": "wrx_shoot/img-1",
+                "album": {
+                    "folder": "wrx_shoot",
+                    "photo_prefix": "img-",
+                    "photo_index": 12
+                }
+            },
+            {
+                "title": "Perfect North Car Shoot",
+                "cover": "wrx_shoot/img-1",
+                "album": {
+                    "folder": "wrx_shoot",
+                    "photo_prefix": "img-",
+                    "photo_index": 12
+                }
+            }
+        ]
+
+        var projectHtml = '';
+
+        for (i = 0; i < projects.length; i++) {
+            projectHtml = projectHtml + `
+            <li class="project">
+                <a href="?project=${i}">
+                    <img src="/assets/images/${projects[i].cover}.jpg">
+                    <h2 class="title">${projects[i].title}</h2>
+                </a>
+            </li>`
+        }
+
+        document.getElementById('gallery').innerHTML = projectHtml
+
+        if (Number(project) <= projects.length && Number(project) >= 0) {
+            document.getElementById('collection_title').innerText = projects[project].title
+
+
+            var projectPhotosHtml = "";
+
+            for (j = 0; j < projects[Number(project)].album.photo_index; j++) {
+                projectPhotosHtml = projectPhotosHtml + `
+                <li>
+                    <a href="/assets/images/${projects[Number(project)].album.folder}/${projects[Number(project)].album.photo_prefix}${j}.jpg"><img src="/assets/images/${projects[Number(project)].album.folder}/${projects[Number(project)].album.photo_prefix}${j}.jpg" alt="Image ${j}" loading="lazy"></a>
+                </li>
+                `;
+            };
+
+            projectPhotosHtml = projectPhotosHtml + "<li></li>";
+
+            document.getElementById('collection_images').innerHTML = projectPhotosHtml;
+        } else {
+            document.getElementById('collection_view').style.display = 'none'
+        }
+
     </script>
 </body>
 
