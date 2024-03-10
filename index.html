@@ -1,144 +1,184 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home | Judes Club</title>
-    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
-    <link rel="stylesheet" href="/assets/3.css">
-    <link rel="stylesheet" href="https://use.typekit.net/rup4qgs.css">
-</head>
-
-<body>
-    <main>
-        <div>
-           <!--<p class="announcement"><span>Announcing <a href="https://photury.com" target="_blank">Photury</a>, share
-                    your best photo spots with
-                    the community!</span></p>-->
-            <h1>Jude Wilson</h1>
-            <p>
-                <a class="active">Home</a>
-                <a href="/about">About</a>
-                <a href="sms:9376685138">Contact Me</a>
-                <a href="https://unsplash.com/@alechash" target="_blank">Unsplash</a>
-                <a href="https://instagram.com/wil.tography" target="_blank">Instagram</a>
-                <!--<br><br><br>
-                <a>View higher quality versions of these photos on Unsplash or Instagram</a>-->
-                <!--<a href="https://alecw.net" target="_blank">Software Portfolio</a>-->
-            </p>
-        </div>
-        <h2>Photo Collections</h2>
-        <ul id="gallery">
-        </ul>
-        <h2>All Photos</h2>
-        <ul id="images"></ul>
-
-        <div id="collection_view">
-            <h2>Collection: <span id="collection_title"></span> <span class="close-project"><a href="?project=-1">×</a></span></h2>
-            <ul id="collection_images"></ul>
-        </div>
-    </main>
-
-    <script>
-        var html = "";
-
-        for (i = 0; i < 30; i++) {
-            html = html + `
-              <li>
-                  <a href="/assets/images/home/image_${i}.jpg"><img src="/assets/images/home/image_${i}.jpg" alt="Image ${i}" loading="lazy"></a>
-              </li>
-              `;
-        };
-
-        html = html + "<li></li>";
-
-        document.getElementById('images').innerHTML = html;
-    </script>
-
-    <script>
-
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-        const project = urlParams.get('project')
-
-        const projects = [
-            {
-                "title": "PNS Car Shoot: 1/3/24",
-                "cover": "wrx_shoot/img-1",
-                "desc": "",
-                "album": {
-                    "folder": "wrx_shoot",
-                    "photo_prefix": "img-",
-                    "photo_index": 12
-                }
-            },
-            {
-                "title": "Rocket",
-                "cover": "rocket/img-5",
-                "desc": "",
-                "album": {
-                    "folder": "rocket",
-                    "photo_prefix": "img-",
-                    "photo_index": 6
-                }
-            },
-            {
-                "title": "Ecuador 23",
-                "cover": "ecuador/img-24",
-                "desc": "",
-                "album": {
-                    "folder": "ecuador",
-                    "photo_prefix": "img-",
-                    "photo_index": 27
-                }
-            },
-            {
-                "title": "Real Estate Example",
-                "cover": "re/img_0",
-                "desc": "",
-                "album": {
-                    "folder": "re",
-                    "photo_prefix": "img_",
-                    "photo_index": 52
-                }
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Judes Club</title>
+        <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
+        <link rel="stylesheet" href="https://use.typekit.net/mln8zle.css" />
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
             }
-        ]
 
-        var projectHtml = '';
+            body {
+                margin: 40px;
+                background-color: #100f14;
+                color: #f1f1f1;
+                font-family: "nimbus-sans-extended", sans-serif;
+                font-weight: 300;
+                font-style: normal;
+            }
 
-        for (i = 0; i < projects.length; i++) {
-            projectHtml = projectHtml + `
-            <li class="project">
-                <a href="?project=${i}">
-                    <img src="/assets/images/${projects[i].cover}.jpg">
-                    <h2 class="title">${projects[i].title}</h2>
-                </a>
-            </li>`
-        }
+            h1 {
+                font-weight: 700;
+                text-align: center;
+                display: block;
+            }
 
-        document.getElementById('gallery').innerHTML = projectHtml
+            h2 {
+                font-weight: 600;
+                text-align: center;
+                display: inline-block;
+                color: #e9e9e9;
+            }
 
-        if (queryString.includes('?project=') && Number(project) <= projects.length && Number(project) >= 0) {            
-            document.getElementById('collection_title').innerText = projects[project].title
-            document.getElementById('collection_view').style.display = 'inherit'
+            .fit {
+                display: inline-block;
+                white-space: nowrap;
+            }
 
-            var projectPhotosHtml = "";
+            p {
+                color: #e9e9ff;
+            }
 
-            for (j = 0; j < projects[Number(project)].album.photo_index; j++) {
-                projectPhotosHtml = projectPhotosHtml + `
-                <li>
-                    <a href="/assets/images/${projects[Number(project)].album.folder}/${projects[Number(project)].album.photo_prefix}${j}.jpg"><img src="/assets/images/${projects[Number(project)].album.folder}/${projects[Number(project)].album.photo_prefix}${j}.jpg" alt="Image ${j}" loading="lazy"></a>
-                </li>
-                `;
-            };
+            hr {
+                border: none;
+                color: #f00;
+                margin: 5vh auto;
+                display: inline-block;
+                width: 200vw;
+                margin-left: -70px;
+                white-space: nowrap;
+            }
 
-            projectPhotosHtml = projectPhotosHtml + "<li></li>";
+            hr::after {
+                content: "🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟";
+            }
+            section {
+                max-width: 600px;
+                margin: 0 auto;
+                overflow-x: hidden;
+            }
 
-            document.getElementById('collection_images').innerHTML = projectPhotosHtml;
-        }
+            div {
+                margin-bottom: 3.5vh;
+                text-align: center;
+            }
 
+            div a {
+                color: blue;
+                background: white;
+                text-decoration: none;
+                font-weight: 900;
+                margin: 10px 10px;
+                padding: 5px 12px;
+                border-radius: 4px;
+                display: inline-block;
+            }
+
+            div a:hover {
+                background: blue;
+                color: white;
+                transition: 100ms;
+            }
+
+            span span.tag {
+                background: blue;
+                color: white;
+                padding: 5px 12px;
+                border-radius: 8px;
+                margin: 0 5px 5px 5px;
+                display: inline-block;
+            }
+
+            span a {
+                background: white;
+                color: blue;
+                padding: 5px 12px;
+                border-radius: 8px;
+                margin: 10px 5px;
+                text-decoration: none;
+                display: inline-block;
+            }
+
+            section p a {
+                color: aliceblue;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+
+    <body>
+        <section id="one">
+            <h1>Hello, my name is</h1>
+            <h1>Jude Wilson.</h1>
+            <br /><br />
+            <p>
+                <a href="https://github.com/alechash">GitHub</a>.
+                <a href="https://instagram.com/txtjude">Instagram</a>.
+                <a href="https://medium.com/@mrmemr">Medium</a>.
+                <a href="https://www.linkedin.com/in/alec-j-wilson">LinkedIn</a
+                >. <a href="sms:9376685138">Text me</a>.
+            </p>
+            <br /><br />
+            <p>I create apps and take photos.</p>
+            <p>I am currently a senior in highschool.</p>
+            <p>I am also a freshman in college.</p>
+            <p>I live just north of Cincinnati, Ohio.</p>
+            <p>Let's take a look at some things I've made.</p>
+        </section>
+        <section>
+            <hr />
+            <br /><br />
+            <span>
+                <span class="tag">Project</span>
+                <a href="https://digesto.app/ios">Download for iOS</a>
+                <a href="https://news.digesto.app">Read Online</a>
+            </span>
+            <br />
+            <h2>Digesto: AI News</h2>
+            <p>Digesto is an artificial intelligent news platform.</p>
+            <p>The app only pulls the factual and important info.</p>
+            <br /><br /><br /><br />
+            <span>
+                <span class="tag">Application</span>
+                <a href="https://think.judes.club/ios">Download for iOS</a>
+            </span>
+            <br />
+            <h2>Think. Quick notes.</h2>
+            <p>Think. helps you track the important things in life.</p>
+            <p>The app only pulls the factual and important info.</p>
+        </section>
+        <section>
+            <hr />
+            <br /><br />
+            <span>
+                <span class="tag">Hobby</span>
+            </span>
+            <h2>I love photography. 📸︎</h2>
+            <p>You can follow my work using many platforms:</p>
+            <p>
+                <a href="/photo.html">Web portfolio</a>.
+                <a href="https://instagram.com/wil.tography">Instagram</a>.
+                <a href="https://unsplash.com/@alechash">Unsplash</a>.
+                <a href="https://glass.photo/wilude">Glass</a>.
+            </p>
+            <br /><br /><br /><br />
+            <span> 🤟 👋 ♥️ 📸 </span>
+            <br /><br />
+            <span> 📍 (937) Dayton-Ohio</span>
+            <br /><br />
+        </section>
+    </body>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/fitty/2.2.6/fitty.min.js"
+        integrity="sha512-KkWBcUQjpR0NMNLytOBHfEqSF0urYJMXGRU/dzQxa+HQ4zak1gRSoegRvRnUcCFWBPcDIlLU7tBY8o7+bIkvWA=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+    ></script>
+    <script>
+        fitty("h1, h2, p");
     </script>
-</body>
-
 </html>

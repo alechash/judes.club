@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Home | Judes Club</title>
+        <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
+        <link rel="stylesheet" href="/assets/3.css" />
+        <link rel="stylesheet" href="https://use.typekit.net/rup4qgs.css" />
+    </head>
+
+    <body>
+        <main>
+            <div>
+                <!--<p class="announcement"><span>Announcing <a href="https://photury.com" target="_blank">Photury</a>, share
+                    your best photo spots with
+                    the community!</span></p>-->
+                <h1>Jude Wilson</h1>
+                <p>
+                    <a class="active">Home</a>
+                    <a href="sms:9376685138">Text Me</a>
+                    <a href="https://unsplash.com/@alechash" target="_blank"
+                        >Unsplash</a
+                    >
+                    <a href="https://instagram.com/wil.tography" target="_blank"
+                        >Instagram</a
+                    >
+                    <a href="https://glass.photo/wilude" target="_blank"
+                        >Glass</a
+                    >
+                    <!--<br><br><br>
+                <a>View higher quality versions of these photos on Unsplash or Instagram</a>-->
+                    <!--<a href="https://alecw.net" target="_blank">Software Portfolio</a>-->
+                </p>
+            </div>
+            <h2>Photo Collections</h2>
+            <ul id="gallery"></ul>
+            <h2>All Photos</h2>
+            <ul id="images"></ul>
+
+            <div id="collection_view">
+                <h2>
+                    Collection: <span id="collection_title"></span>
+                    <span class="close-project"
+                        ><a href="?project=-1">×</a></span
+                    >
+                </h2>
+                <ul id="collection_images"></ul>
+            </div>
+        </main>
+
+        <script>
+            var html = "";
+
+            for (i = 0; i < 30; i++) {
+                html =
+                    html +
+                    `
+              <li>
+                  <a href="/assets/images/home/image_${i}.jpg"><img src="/assets/images/home/image_${i}.jpg" alt="Image ${i}" loading="lazy"></a>
+              </li>
+              `;
+            }
+
+            html = html + "<li></li>";
+
+            document.getElementById("images").innerHTML = html;
+        </script>
+
+        <script>
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const project = urlParams.get("project");
+
+            const projects = [
+                {
+                    title: "PNS Car Shoot: 1/3/24",
+                    cover: "wrx_shoot/img-1",
+                    desc: "",
+                    album: {
+                        folder: "wrx_shoot",
+                        photo_prefix: "img-",
+                        photo_index: 12,
+                    },
+                },
+                {
+                    title: "Rocket",
+                    cover: "rocket/img-5",
+                    desc: "",
+                    album: {
+                        folder: "rocket",
+                        photo_prefix: "img-",
+                        photo_index: 6,
+                    },
+                },
+                {
+                    title: "Ecuador 23",
+                    cover: "ecuador/img-24",
+                    desc: "",
+                    album: {
+                        folder: "ecuador",
+                        photo_prefix: "img-",
+                        photo_index: 27,
+                    },
+                },
+                {
+                    title: "Real Estate Example",
+                    cover: "re/img_0",
+                    desc: "",
+                    album: {
+                        folder: "re",
+                        photo_prefix: "img_",
+                        photo_index: 52,
+                    },
+                },
+            ];
+
+            var projectHtml = "";
+
+            for (i = 0; i < projects.length; i++) {
+                projectHtml =
+                    projectHtml +
+                    `
+            <li class="project">
+                <a href="?project=${i}">
+                    <img src="/assets/images/${projects[i].cover}.jpg">
+                    <h2 class="title">${projects[i].title}</h2>
+                </a>
+            </li>`;
+            }
+
+            document.getElementById("gallery").innerHTML = projectHtml;
+
+            if (
+                queryString.includes("?project=") &&
+                Number(project) <= projects.length &&
+                Number(project) >= 0
+            ) {
+                document.getElementById("collection_title").innerText =
+                    projects[project].title;
+                document.getElementById("collection_view").style.display =
+                    "inherit";
+
+                var projectPhotosHtml = "";
+
+                for (
+                    j = 0;
+                    j < projects[Number(project)].album.photo_index;
+                    j++
+                ) {
+                    projectPhotosHtml =
+                        projectPhotosHtml +
+                        `
+                <li>
+                    <a href="/assets/images/${projects[Number(project)].album.folder}/${projects[Number(project)].album.photo_prefix}${j}.jpg"><img src="/assets/images/${projects[Number(project)].album.folder}/${projects[Number(project)].album.photo_prefix}${j}.jpg" alt="Image ${j}" loading="lazy"></a>
+                </li>
+                `;
+                }
+
+                projectPhotosHtml = projectPhotosHtml + "<li></li>";
+
+                document.getElementById("collection_images").innerHTML =
+                    projectPhotosHtml;
+            }
+        </script>
+    </body>
+</html>
