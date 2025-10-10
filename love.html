@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+</head>
+
+<body>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Reddit+Mono:wght@200..900&display=swap');
+
+        body {
+            overflow: hidden;
+            background-color: #07071f;
+            color: white;
+            ;
+        }
+
+        #love {
+            white-space: nowrap;
+            font-family: 'Reddit Mono', monospace;
+            font-weight: 700;
+            font-style: normal;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            position: absolute;
+            margin: 0;
+            padding: 0;
+        }
+
+        #know {
+            position: fixed;
+            left: 50%;
+            top: 25%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+        }
+
+        #days {
+            font-size: 70px;
+            font-family: 'Reddit Mono', monospace;
+            font-optical-sizing: auto;
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        .hidden {
+            color: transparent;
+        }
+    </style>
+
+    <div>
+        <p id='love'>I&nbsp;l<span id='o'>o</span>ve&nbsp;you&nbsp;so&nbsp;much.<span id="hide"></span></p>
+        <p id='know'><span id="known_message">I have known you for</span><br><span id='days'>000</span> days.</p>
+    </div>
+
+    <script>
+        var i = 0;
+        var days = document.getElementById('days');
+        var love = document.getElementById('love');
+
+        var loop = () => {
+            setTimeout(() => {
+                if (i < 764) {
+                    var o = document.getElementById('o');
+                    var hide = document.getElementById('hide');
+                    o.innerHTML = o.innerHTML +
+                        `<span class="o" style="color: ${getRandomColor()}">o</span>`;
+                    hide.innerHTML = hide.innerHTML + '<span class="hidden">o</span>';
+                    if (i < 9) {
+                        days.innerText = "00" + (i + 1)
+                    } else if (i < 99) {
+                        days.innerText = "0" + (i + 1)
+                    } else {
+                        days.innerText = i + 1
+                    }
+                    //love.style.paddingLeft = `${80/764*i}vw`
+                    i++;
+                    loop();
+                } else {
+                    var known_message = document.getElementById('known_message')
+                    known_message.innerText = "I cannot wait to know you for"
+                }
+            }, 15);
+        };
+
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        setTimeout(() => {
+            loop()
+        }, 2000)
+    </script>
+</body>
+
+</html>

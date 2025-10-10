@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bookly: AI Book Tracker</title>
+    <meta
+      name="description"
+      content="Simple, focused apps crafted by an indie developer."
+    />
+    <meta name="color-scheme" content="dark light" />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --bg: #0b0d10;
+        --bg-glow-1: radial-gradient(
+          1200px 800px at 10% -10%,
+          rgba(255, 122, 24, 0.08),
+          transparent 60%
+        );
+        --bg-glow-2: radial-gradient(
+          800px 600px at 90% 0%,
+          rgba(255, 61, 61, 0.06),
+          transparent 50%
+        );
+        --surface: #0f1216;
+        --elev: #141820;
+        --text: #eef0f4;
+        --muted: #9aa3b2;
+        --accent: #ff7a18;
+        --accent-2: #ff3d3d;
+        --border: #272e3a;
+        --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        --radius: 18px;
+        --maxw: 1120px;
+      }
+
+      html[data-theme="light"]:root {
+        --bg: #ffffff;
+        --bg-glow-1: radial-gradient(
+          1200px 800px at 10% -10%,
+          rgba(255, 122, 24, 0.06),
+          transparent 60%
+        );
+        --bg-glow-2: radial-gradient(
+          800px 600px at 90% 0%,
+          rgba(255, 61, 61, 0.05),
+          transparent 50%
+        );
+        --surface: #f7f8fb;
+        --elev: #ffffff;
+        --text: #0b0d10;
+        --muted: #516079;
+        --border: #e6e9ef;
+        --shadow: 0 6px 22px rgba(0, 0, 0, 0.07);
+      }
+
+      body {
+        background: var(--bg-glow-1), var(--bg-glow-2), var(--bg);
+        color: var(--text);
+        font: 16px/1.6 -apple-system, BlinkMacSystemFont, "SF Pro Text",
+          system-ui, Segoe UI, Roboto, Helvetica, Arial, Apple Color Emoji,
+          Segoe UI Emoji;
+      }
+      a,
+      a:visited {
+        color: inherit;
+        text-decoration: none;
+      }
+      a:hover {
+        opacity: 0.9;
+      }
+
+      .site {
+        min-height: 100svh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      header.site-nav {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        background: transparent;
+        border-bottom: 1px solid transparent;
+      }
+      .nav-inner {
+        max-width: var(--maxw);
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 12px 18px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+      }
+      .brand-badge {
+        width: 28px;
+        height: 28px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        box-shadow: var(--shadow);
+      }
+      .brand-title {
+        font-weight: 800;
+        letter-spacing: 0.2px;
+      }
+      nav a {
+        padding: 8px 12px;
+        border-radius: 999px;
+        text-decoration: none;
+        color: var(--muted);
+        border: 1px solid transparent;
+      }
+      nav a.active,
+      nav a:hover {
+        color: var(--text);
+        background: var(--elev);
+        border-color: var(--border);
+      }
+      .spacer {
+        flex: 1;
+      }
+      .theme-toggle {
+        appearance: none;
+        border: 1px solid var(--border);
+        background: var(--elev);
+        color: var(--text);
+        border-radius: 999px;
+        padding: 8px 14px;
+        cursor: pointer;
+      }
+
+      main {
+        flex: 1;
+      }
+      .wrap {
+        max-width: var(--maxw);
+        margin: 0 auto;
+        padding: 28px;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: 1.25fr 1fr;
+        gap: 32px;
+        align-items: center;
+        padding: 70px 0;
+      }
+      .hero-card {
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 32px;
+        box-shadow: var(--shadow);
+        background: linear-gradient(
+          to bottom right,
+          rgba(255, 255, 255, 0.04),
+          rgba(255, 255, 255, 0.01)
+        );
+      }
+      .hero-card.hero-shot {
+        background: transparent;
+      }
+      .hero h1 {
+        font-size: clamp(32px, 5vw, 54px);
+        line-height: 1.05;
+        margin: 14px 0 12px;
+      }
+      .hero p {
+        color: var(--muted);
+        margin: 6px 0 22px;
+        font-size: 18px;
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(255, 122, 24, 0.12);
+        border: 1px solid var(--border);
+        color: var(--accent);
+        font-weight: 600;
+        margin-bottom: 14px;
+      }
+
+      section {
+        margin: 96px 0;
+      }
+      .section-head {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 18px;
+      }
+      .eyebrow {
+        display: inline-block;
+        font-size: 12px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent);
+        background: rgba(255, 122, 24, 0.12);
+        border: 1px solid var(--border);
+        padding: 6px 10px;
+        border-radius: 999px;
+      }
+      .section-title {
+        font-size: 24px;
+        margin: 10px 0;
+      }
+      .subtle {
+        color: var(--muted);
+      }
+
+      .grid {
+        display: grid;
+        gap: 18px;
+      }
+      .cards-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+      .cards-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      @media (max-width: 1020px) {
+        .hero {
+          grid-template-columns: 1fr;
+        }
+        .cards-3 {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+      @media (max-width: 640px) {
+        .cards-3,
+        .cards-2 {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .card {
+        background: linear-gradient(180deg, var(--surface), transparent 120%);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 5px 20px;
+        box-shadow: var(--shadow);
+      }
+      .review {
+        display: flex;
+        gap: 12px;
+        padding: 20px;
+      }
+      .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      }
+
+      .shot {
+        aspect-ratio: 9/16;
+        border-radius: 20px;
+        border: 1px solid var(--border);
+        background: transparent;
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+        padding: 10px;
+      }
+      .shot img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain; /* show full image without cropping */
+        border-radius: inherit;
+        display: block;
+        background: var(--surface); /* optional: clean backdrop */
+        pointer-events: none;
+        user-select: none;
+      }
+      dialog.lightbox {
+        border: none;
+        padding: 0;
+        border-radius: 16px;
+        width: min(90vw, 400px);
+        max-height: min(90vh, 800px);
+        background: var(--elev);
+        color: inherit;
+        box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+        overflow: hidden;
+      }
+      dialog::backdrop {
+        background: rgba(0, 0, 0, 0.6);
+      }
+      dialog.lightbox img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+
+      details {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 12px;
+      }
+      summary {
+        cursor: pointer;
+        font-weight: 700;
+      }
+      details .details-body {
+        overflow: hidden;
+        max-height: 0;
+        opacity: 0;
+        transition: max-height 0.3s ease, opacity 0.25s ease;
+      }
+      details[open] .details-body {
+        opacity: 1;
+        max-height: 480px;
+      }
+
+      footer {
+        border-top: 1px solid var(--border);
+        padding: 30px 18px;
+        color: var(--muted);
+      }
+      footer .foot {
+        max-width: var(--maxw);
+        margin: 0 auto;
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      footer nav {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      [data-route] {
+        display: none;
+      }
+      [data-route].show {
+        display: block;
+      }
+
+      @media (prefers-reduced-motion: no-preference) {
+        html,
+        body,
+        header.site-nav,
+        .card,
+        .hero-card,
+        .btn,
+        .brand-badge,
+        details,
+        footer,
+        .site,
+        .wrap,
+        dialog.lightbox {
+          transition: background-color 0.35s ease, color 0.35s ease,
+            border-color 0.35s ease, box-shadow 0.35s ease;
+        }
+      }
+
+      .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 22px;
+  border-radius: 14px;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1;
+  border: 1px solid var(--border);
+  background: var(--elev);
+  color: var(--text);
+  text-decoration: none;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,.1);
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0,0,0,.15);
+  border-color: var(--accent);
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(0,0,0,.2) inset;
+}
+
+.btn.primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #fff;
+  border: none;
+  box-shadow: 0 4px 12px rgba(255, 80, 40, .3);
+}
+
+.btn.primary:hover {
+  box-shadow: 0 6px 16px rgba(255, 80, 40, .4);
+  transform: translateY(-1.5px);
+}
+
+.btn.primary:active {
+  box-shadow: 0 2px 6px rgba(255, 80, 40, .4) inset;
+  transform: translateY(0);
+}
+    </style>
+  </head>
+  <body>
+    <div class="site">
+      <header class="site-nav">
+        <div class="nav-inner">
+          <a class="brand" href="#/"
+            ><span aria-hidden class="brand-badge"></span
+            ><span class="brand-title" id="brandTitle">Indie Apps</span></a
+          >
+          <nav>
+            <a href="#/" data-link>Home</a>
+            <a href="#/about" data-link>About</a>
+            <a href="#/contact" data-link>Contact</a>
+            <a href="#/changelog" data-link>Changelog</a>
+            <a href="#/privacy" data-link>Privacy & Terms</a>
+          </nav>
+          <div class="spacer"></div>
+          <button class="theme-toggle" id="themeToggle">🌓 Theme</button>
+        </div>
+      </header>
+
+      <main>
+        <div class="wrap">
+          <!-- HOME -->
+          <div data-route="/">
+            <!-- Header -->
+            <section class="hero">
+              <div class="hero-card">
+                <span class="badge">New • Smaller, faster, nicer</span>
+                <h1 id="siteHeadline">Thoughtfully simple apps.</h1>
+                <p id="siteSub">
+                  SwiftUI‑inspired tools that do one thing well — and look great
+                  doing it.
+                </p>
+                <div class="cta-row">
+                  <a class="btn primary" id="primaryCTA" href="#"
+                    >Download on the App Store</a
+                  >
+                  <a class="btn" href="#/about">Learn more</a>
+                </div>
+              </div>
+              <div class="hero-shot">
+                <button
+                  class="shot"
+                  data-shot="hero"
+                  aria-label="Open featured screenshot"
+                >
+                  🎯 App Screenshot
+                </button>
+              </div>
+            </section>
+
+            <!-- Features -->
+            <section>
+              <div class="section-head">
+                <span class="eyebrow">Features</span>
+                <div class="subtle">Focused, opinionated, fast.</div>
+              </div>
+              <h2 class="section-title">Designed like an Apple feature</h2>
+              <div class="grid cards-3">
+                <div class="card">
+                  <h3>⚡ Fast</h3>
+                  <p class="subtle">
+                    Swift‑first performance. No bloat. Just speed.
+                  </p>
+                </div>
+                <div class="card">
+                  <h3>🔒 Private</h3>
+                  <p class="subtle">
+                    We collect the bare minimum. Your data stays yours.
+                  </p>
+                </div>
+                <div class="card">
+                  <h3>✨ Polished</h3>
+                  <p class="subtle">
+                    Native feel, crisp typography, and thoughtful motion.
+                  </p>
+                </div>
+              </div>
+            </section>
+
+            <!-- Screenshots -->
+            <section>
+              <div class="section-head">
+                <span class="eyebrow">Screenshots</span>
+                <div class="subtle">Tap to zoom</div>
+              </div>
+              <h2 class="section-title">What it looks like</h2>
+              <div id="shotsGrid" class="grid cards-3"></div>
+            </section>
+
+            <!-- Reviews -->
+            <section>
+              <div class="section-head">
+                <span class="eyebrow">Reviews</span>
+                <div class="subtle">From people who use it daily</div>
+              </div>
+              <h2 class="section-title">Loved by focused people</h2>
+              <div class="grid cards-2">
+                <div class="card review">
+                  <div class="avatar" aria-hidden></div>
+                  <div>
+                    <strong>Alex</strong><br /><span class="subtle"
+                      >“A tiny app that saves huge time.”</span
+                    >
+                  </div>
+                </div>
+                <div class="card review">
+                  <div class="avatar" aria-hidden></div>
+                  <div>
+                    <strong>Sam</strong><br /><span class="subtle"
+                      >“It feels like a native Apple feature.”</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- FAQ -->
+            <section>
+              <div class="section-head">
+                <span class="eyebrow">FAQ</span>
+                <div class="subtle">Quick answers</div>
+              </div>
+              <h2 class="section-title">Things people ask</h2>
+              <div class="grid">
+                <details class="card-3">
+                  <summary>Does it work offline?</summary>
+                  <div class="details-body">
+                    <p>
+                      Yes, core features do. Cloud features require a
+                      connection.
+                    </p>
+                  </div>
+                </details>
+                <details class="card-3">
+                  <summary>What about my data?</summary>
+                  <div class="details-body">
+                    <p>We keep as little as possible and never sell it.</p>
+                  </div>
+                </details>
+                <details class="card-3">
+                  <summary>Refund policy?</summary>
+                  <div class="details-body">
+                    <p>
+                      App Store purchases are managed by Apple. Contact us and
+                      we’ll help.
+                    </p>
+                  </div>
+                </details>
+              </div>
+            </section>
+          </div>
+
+          <!-- ABOUT -->
+          <div data-route="/about">
+            <section class="hero">
+              <div class="hero-card">
+                <h1>About</h1>
+                <p class="subtle">
+                  I’m an indie developer who ships small, sharp tools. I design
+                  for focus, speed, and delight.
+                </p>
+              </div>
+              <div class="hero-card">
+                <h3>Principles</h3>
+                <ul class="subtle">
+                  <li>Build the smallest thing that’s genuinely useful.</li>
+                  <li>Prefer clarity over configuration.</li>
+                  <li>Respect attention and privacy.</li>
+                </ul>
+              </div>
+            </section>
+          </div>
+
+          <!-- CONTACT -->
+          <div data-route="/contact">
+            <section class="hero">
+              <div class="hero-card">
+                <h1>Contact</h1>
+                <p class="subtle">
+                  Questions, feedback, or press? Reach out anytime.
+                </p>
+                <div class="card">
+                  <p>
+                    <strong>Email:</strong>
+                    <a id="contactEmail" href="mailto:hello@example.com"
+                      >hello@example.com</a
+                    >
+                  </p>
+                  <p>
+                    <strong>Twitter/X:</strong>
+                    <a id="contactX" href="#" target="_blank" rel="noreferrer"
+                      >@yourhandle</a
+                    >
+                  </p>
+                </div>
+              </div>
+              <div class="hero-card">
+                <h3>Support</h3>
+                <p class="subtle">
+                  Include steps to reproduce issues and device details.
+                  Screenshots help.
+                </p>
+              </div>
+            </section>
+          </div>
+
+          <!-- CHANGELOG -->
+          <div data-route="/changelog">
+            <section>
+              <h1>Changelog</h1>
+              <p class="subtle">Highlights from recent releases.</p>
+              <div id="changelogList" class="grid"></div>
+            </section>
+          </div>
+
+          <!-- PRIVACY & TERMS -->
+          <div data-route="/privacy">
+            <section>
+              <h1>Privacy & Terms</h1>
+              <div class="card">
+                <h3>Privacy Policy</h3>
+                <p class="subtle">
+                  We collect only what’s necessary to make the app work. No
+                  third‑party ads. No selling data. Crash analytics may be
+                  collected in aggregate to improve performance.
+                </p>
+                <ul class="subtle">
+                  <li>
+                    Data we do <em>not</em> collect: personal contacts, photos,
+                    precise location (unless core to the app and you explicitly
+                    allow it).
+                  </li>
+                  <li>
+                    Data we may collect: anonymous usage metrics, crash logs,
+                    basic device info (model, OS version).
+                  </li>
+                  <li>
+                    Retention: minimal and only as long as needed for the
+                    feature.
+                  </li>
+                </ul>
+                <p class="subtle">Contact us to request data deletion.</p>
+                <h3>Terms of Use</h3>
+                <p class="subtle">
+                  By using the app, you agree not to reverse engineer, resell,
+                  or misuse the service. The app is provided “as is” without
+                  warranty. Liability is limited to the amount paid, if any.
+                </p>
+              </div>
+            </section>
+          </div>
+        </div>
+      </main>
+
+      <footer>
+        <div class="foot">
+          <div class="subtle">
+            built with 🫶 by
+            <a href="https://judes.club" target="_blank" rel="noreferrer"
+              >Jude Wilson</a
+            >
+          </div>
+          <nav>
+            <a href="#/">Home</a>
+            <a href="#/about">About</a>
+            <a href="#/contact">Contact</a>
+            <a href="#/changelog">Changelog</a>
+            <a href="#/privacy">Privacy & Terms</a>
+          </nav>
+          <div class="spacer"></div>
+        </div>
+      </footer>
+    </div>
+
+    <dialog class="lightbox" id="lightbox" aria-label="screenshot">
+      <img alt="screenshot" id="lightboxImg" src="" />
+    </dialog>
+
+    <script>
+      const SITE = {
+        brand: "Bookly",
+        headline: "Track your books. Know your books.",
+        sub: "A book tracker designed for readers who love simplicity and speed. No bloat, just books.",
+        primaryCTA: { label: "Download on the App Store", href: "#" },
+        contact: { email: "apps@judes.club", x: "https://x.com/alechash" },
+        changelog: [
+          {
+            version: "1.0.0",
+            date: "October 9th, 2025",
+            notes: ["Initial release"],
+          },
+        ],
+        defaultTheme: "dark",
+      };
+
+      // 1) Add screenshots to SITE config (hero + gallery)
+      SITE.screenshots = [
+        // Featured (used in hero). If omitted, first gallery item will be featured.
+        {
+          id: "hero",
+          thumb: "https://dummyimage.com/800x450/1b1f27/ffffff&text=Featured",
+          full: "https://dummyimage.com/1600x900/1b1f27/ffffff&text=Featured+Large",
+          alt: "Featured app screenshot",
+        },
+        // Gallery items
+        {
+          id: "s1",
+          thumb: "https://dummyimage.com/414x896/1b1f27/ffffff&text=Shot+1",
+          full: "https://dummyimage.com/828x1792/1b1f27/ffffff&text=Shot+1+Large",
+          alt: "App screenshot 1",
+        },
+        {
+          id: "s2",
+          thumb: "https://dummyimage.com/414x896/1b1f27/ffffff&text=Shot+2",
+          full: "https://dummyimage.com/828x1792/1b1f27/ffffff&text=Shot+2+Large",
+          alt: "App screenshot 2",
+        },
+        {
+          id: "s3",
+          thumb: "https://dummyimage.com/414x896/1b1f27/ffffff&text=Shot+3",
+          full: "https://dummyimage.com/828x1792/1b1f27/ffffff&text=Shot+3+Large",
+          alt: "App screenshot 3",
+        },
+      ];
+
+      // 2) Helper for safe element creation
+      const mk = (tag, props = {}, children = []) => {
+        const el = document.createElement(tag);
+        Object.entries(props).forEach(([k, v]) => {
+          if (k === "class") el.className = v;
+          else if (k === "dataset") Object.assign(el.dataset, v);
+          else if (k in el) el[k] = v;
+          else el.setAttribute(k, v);
+        });
+        children.forEach((c) => el.appendChild(c));
+        return el;
+      };
+
+      // 3) Render screenshots (hero + grid)
+      function renderScreenshots() {
+        const shots = Array.isArray(SITE.screenshots) ? SITE.screenshots : [];
+
+        // Render hero screenshot
+        const heroBtn = document.querySelector('[data-shot="hero"]');
+        if (heroBtn) {
+          const hero = shots.find((s) => s.id === "hero") || shots[0];
+          if (hero) {
+            heroBtn.innerHTML = ""; // clear placeholder
+            heroBtn.dataset.full = hero.full;
+            heroBtn.dataset.alt = hero.alt || "Featured screenshot";
+            heroBtn.appendChild(
+              mk("img", {
+                src: hero.thumb,
+                alt: hero.alt || "Featured screenshot",
+                // keep entire image visible (no cropping)
+                style:
+                  "width:100%;height:100%;object-fit:contain;display:block;border-radius:inherit;pointer-events:none;user-select:none;background:var(--surface);",
+              })
+            );
+          }
+        }
+
+        // Render gallery grid (exclude the hero entry)
+        const grid = document.getElementById("shotsGrid");
+        if (grid) {
+          grid.innerHTML = "";
+          shots
+            .filter((s) => s.id !== "hero")
+            .forEach((s, i) => {
+              const btn = mk(
+                "button",
+                {
+                  class: "shot",
+                  dataset: {
+                    full: s.full,
+                    alt: s.alt || `Screenshot ${i + 1}`,
+                  },
+                  "aria-label": s.alt || `Open screenshot ${i + 1}`,
+                },
+                [
+                  mk("img", {
+                    src: s.thumb,
+                    alt: s.alt || `Screenshot ${i + 1}`,
+                    style:
+                      "width:100%;height:100%;object-fit:contain;display:block;border-radius:inherit;pointer-events:none;user-select:none;background:var(--surface);",
+                  }),
+                ]
+              );
+              grid.appendChild(btn);
+            });
+        }
+      }
+
+      // 4) Lightbox hookup (opens correct large image)
+      function setupShotsWithConfig() {
+        const dlg = document.getElementById("lightbox");
+        const img = document.getElementById("lightboxImg");
+        if (!dlg || !img) return;
+
+        // Delegated click handler for any .shot button
+        document.addEventListener("click", (e) => {
+          const btn = e.target.closest(".shot");
+          if (!btn) return;
+          const full = btn.dataset.full;
+          const alt = btn.dataset.alt || "Screenshot";
+          if (!full) return;
+          img.src = full;
+          img.alt = alt;
+          dlg.showModal();
+        });
+
+        dlg.addEventListener("click", (e) => {
+          if (e.target === dlg) dlg.close();
+        });
+        window.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && dlg.open) dlg.close();
+        });
+      }
+
+      const dlg = document.getElementById("lightbox");
+      const img = document.getElementById("lightboxImg");
+      document.querySelectorAll("[data-shot]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-shot");
+          img.src =
+            btn.dataset.src ||
+            (id === "hero"
+              ? "https://dummyimage.com/800x450/1b1f27/ffffff&text=Featured+Shot"
+              : `https://dummyimage.com/414x896/1b1f27/ffffff&text=Shot+${id}`);
+          dlg.showModal();
+        });
+      });
+      dlg.addEventListener("click", (e) => {
+        if (e.target === dlg) dlg.close();
+      });
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && dlg.open) dlg.close();
+      });
+
+      // Helpers
+      const $ = (id) => document.getElementById(id);
+      const setText = (id, text) => {
+        const el = $(id);
+        if (el) el.textContent = text;
+      };
+
+      // Routing
+      const routes = Array.from(document.querySelectorAll("[data-route]"));
+      function renderRoute() {
+        const path = location.hash.replace("#", "") || "/";
+        routes.forEach((r) =>
+          r.classList.toggle("show", r.getAttribute("data-route") === path)
+        );
+        document.querySelectorAll("nav a[data-link]").forEach((a) => {
+          const href = a.getAttribute("href").replace("#", "");
+          a.classList.toggle("active", href === `#${path}`);
+        });
+        window.scrollTo({ top: 0, behavior: "auto" });
+      }
+      window.addEventListener("hashchange", renderRoute);
+
+      // Apply config
+      function applyConfig() {
+        setText("brandTitle", SITE.brand);
+        document.title = SITE.brand;
+        setText("siteHeadline", SITE.headline);
+        setText("siteSub", SITE.sub);
+        const cta = $("primaryCTA");
+        if (cta) {
+          cta.textContent = SITE.primaryCTA.label;
+          cta.href = SITE.primaryCTA.href;
+        }
+        const email = $("contactEmail");
+        if (email) {
+          email.href = `mailto:${SITE.contact.email}`;
+          email.textContent = SITE.contact.email;
+        }
+        const cx = $("contactX");
+        if (cx) {
+          cx.href = SITE.contact.x;
+          cx.textContent = SITE.contact.x.replace("https://", "");
+        }
+
+        const log = $("changelogList");
+        if (log) {
+          log.innerHTML = "";
+          SITE.changelog.forEach((entry) => {
+            const card = document.createElement("div");
+            card.className = "card";
+            const h = document.createElement("h3");
+            h.innerHTML = `<span class="eyebrow" style="padding: 2px 10px">v${entry.version}</span><br><div>${entry.date}</div>`;
+            const ul = document.createElement("ul");
+            entry.notes.forEach((n) => {
+              const li = document.createElement("li");
+              li.textContent = n;
+              ul.appendChild(li);
+            });
+            card.append(h, ul);
+            log.appendChild(card);
+          });
+        }
+      }
+
+      // Theme
+      const html = document.documentElement;
+      const key = "site-theme";
+      function setTheme(mode) {
+        html.setAttribute("data-theme", mode);
+        try {
+          localStorage.setItem(key, mode);
+        } catch (_) {}
+      }
+      function initTheme() {
+        const saved = (() => {
+          try {
+            return localStorage.getItem(key);
+          } catch (_) {
+            return null;
+          }
+        })();
+        setTheme(saved || SITE.defaultTheme || "dark");
+      }
+      const themeBtn = $("themeToggle");
+      if (themeBtn) {
+        themeBtn.addEventListener("click", () => {
+          const current = html.getAttribute("data-theme");
+          const next =
+            current === "dark"
+              ? "light"
+              : current === "light"
+              ? "auto"
+              : "dark";
+          setTheme(next);
+        });
+      }
+
+      // FAQ smooth expand
+      function setupFAQ() {
+        const items = document.querySelectorAll("details");
+        items.forEach((d) => {
+          const body = d.querySelector(".details-body");
+          if (!body) return;
+          d.addEventListener("toggle", () => {
+            body.style.maxHeight = d.open ? body.scrollHeight + "px" : "0px";
+          });
+          body.style.maxHeight = d.open ? body.scrollHeight + "px" : "0px";
+        });
+      }
+
+      // Screenshots lightbox
+      function setupShots() {
+        const dlg = $("lightbox");
+        const img = $("lightboxImg");
+        if (!dlg || !img) return;
+        document.querySelectorAll("[data-shot]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const id = btn.getAttribute("data-shot");
+            img.src =
+              btn.dataset.src ||
+              (id === "hero"
+                ? "https://dummyimage.com/1600x900/1b1f27/ffffff&text=Featured+Shot"
+                : `https://dummyimage.com/828x1792/1b1f27/ffffff&text=Shot+${id}`);
+            dlg.showModal();
+          });
+        });
+        dlg.addEventListener("click", (e) => {
+          if (e.target === dlg) dlg.close();
+        });
+        window.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && dlg.open) dlg.close();
+        });
+      }
+
+      // Self-tests
+      function selfTest() {
+        const ok = (name, cond) =>
+          console[cond ? "log" : "warn"](cond ? "✅" : "⚠️", name);
+        ok("brandTitle exists", !!$("brandTitle"));
+        ok("home route exists", !!document.querySelector('[data-route="/"]'));
+        ok(
+          "CTA populated",
+          !!(($("primaryCTA") || {}).textContent || "").trim().length
+        );
+        ok(
+          "theme attribute present",
+          !!document.documentElement.getAttribute("data-theme")
+        );
+      }
+
+      // Init
+      applyConfig();
+      initTheme();
+      renderRoute();
+      setupFAQ();
+      setupShots();
+      selfTest();
+      renderScreenshots();
+      setupShotsWithConfig();
+    </script>
+  </body>
+</html>
