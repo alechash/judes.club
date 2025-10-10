@@ -485,6 +485,49 @@
   box-shadow: 0 0 0 3px rgba(255, 122, 24, .5);
   border-color: var(--accent);
 }
+
+/* --- Fix screenshots overlapping next section --- */
+
+/* Ensure the screenshots section always grows to fit its children */
+#shotsGrid {
+  align-items: start;         /* no vertical stretching surprises */
+  overflow: visible;          /* let tall children expand */
+  contain: layout paint;      /* isolate layout; prevents bleed-through on some engines */
+}
+
+/* Make each shot a self-contained box that can't bleed out of its cell */
+.shot {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;           /* hard stop for any child overflow */
+  position: relative;         /* create a stacking context per card */
+  z-index: 0;
+}
+
+/* Guarantee image never pushes beyond the shot box */
+.shot img {
+  max-width: 100%;
+  max-height: 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;        /* show full image without cropping */
+  display: block;
+}
+
+/* Give each section its own stacking context so nothing “slides under” it */
+section {
+  position: relative;
+  z-index: 0;
+}
+
+/* Mobile: simpler column + predictable heights */
+@media (max-width: 768px) {
+  #shotsGrid { 
+    grid-template-columns: 1fr;   /* single column on phones */
+    gap: 12px;
+  }
+  .shot { aspect-ratio: 9 / 16; } /* stable height on small screens */
+}
     </style>
   </head>
   <body>
