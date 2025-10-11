@@ -261,6 +261,10 @@ footer nav{ display:flex; gap:10px; flex-wrap:wrap; }
   box-shadow:0 0 0 3px rgba(255,122,24,.5);
   border-color:var(--accent);
 }
+
+/* SPA: hide all routes by default; show only the active one */
+[data-route] { display: none; }
+[data-route].show { display: block; }
 a, button{ -webkit-tap-highlight-color: transparent; }
     </style>
   </head>
@@ -906,6 +910,7 @@ a, button{ -webkit-tap-highlight-color: transparent; }
       selfTest();
       renderScreenshots();
       setupShotsWithConfig();
+      renderRoute();
     </script>
   </body>
 </html>
