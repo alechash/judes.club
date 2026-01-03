@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Judes Club</title>
+        <title>Jude Wilson | iOS & DevOps Engineer</title>
         <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
         <link rel="stylesheet" href="https://use.typekit.net/mln8zle.css" />
         <style>
@@ -12,181 +12,307 @@
                 padding: 0;
             }
 
+            :root {
+                color-scheme: dark;
+                --bg: #0d0b12;
+                --bg-alt: #14121c;
+                --text: #f2f2f2;
+                --muted: #b7b7c9;
+                --accent: #7c6cff;
+                --accent-strong: #9b8cff;
+                --border: rgba(255, 255, 255, 0.08);
+            }
+
             body {
-                margin: 40px;
-                background-color: #100f14;
-                color: #f1f1f1;
+                margin: 0;
+                min-height: 100vh;
+                background: radial-gradient(circle at top, #1a1730 0%, var(--bg) 45%);
+                color: var(--text);
                 font-family: "nimbus-sans-extended", sans-serif;
                 font-weight: 300;
                 font-style: normal;
+                line-height: 1.6;
+            }
+
+            main {
+                max-width: 980px;
+                margin: 0 auto;
+                padding: 64px 24px 120px;
+                display: flex;
+                flex-direction: column;
+                gap: 48px;
+            }
+
+            header {
+                display: grid;
+                gap: 24px;
+                align-items: center;
             }
 
             h1 {
                 font-weight: 700;
-                text-align: center;
-                display: block;
+                font-size: clamp(2.6rem, 6vw, 4.2rem);
+                letter-spacing: -0.03em;
+                margin-bottom: 8px;
             }
 
             h2 {
                 font-weight: 600;
-                text-align: center;
-                display: inline-block;
-                color: #e9e9e9;
+                color: var(--accent-strong);
+                margin-bottom: 16px;
             }
 
-            .fit {
-                display: inline-block;
-                white-space: nowrap;
+            h3 {
+                font-weight: 600;
+                font-size: 1.1rem;
+                margin-bottom: 8px;
             }
 
             p {
-                color: #e9e9ff;
+                color: var(--muted);
+                font-size: 1.02rem;
             }
 
-            hr {
-                border: none;
-                color: #f00;
-                margin: 5vh auto;
-                display: inline-block;
-                width: 200vw;
-                margin-left: -70px;
-                white-space: nowrap;
+            a {
+                color: inherit;
             }
 
-            hr::after {
-                content: "🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟";
+            .pill {
+                background: rgba(124, 108, 255, 0.18);
+                color: var(--accent-strong);
+                padding: 6px 14px;
+                border-radius: 999px;
+                font-size: 0.85rem;
+                font-weight: 600;
+                display: inline-flex;
+                gap: 6px;
+                align-items: center;
             }
+
+            .cta-links {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            .cta-links a {
+                padding: 10px 16px;
+                border-radius: 10px;
+                text-decoration: none;
+                font-weight: 600;
+                border: 1px solid var(--border);
+                background: var(--bg-alt);
+                color: var(--text);
+                transition: transform 0.2s ease, border 0.2s ease;
+            }
+
+            .cta-links a:hover {
+                transform: translateY(-2px);
+                border-color: rgba(124, 108, 255, 0.5);
+            }
+
             section {
-                max-width: 600px;
-                margin: 0 auto;
-                overflow-x: hidden;
+                background: var(--bg-alt);
+                border: 1px solid var(--border);
+                border-radius: 20px;
+                padding: 32px;
+                display: grid;
+                gap: 20px;
             }
 
-            div {
-                margin-bottom: 3.5vh;
+            .grid {
+                display: grid;
+                gap: 16px;
+            }
+
+            .grid-two {
+                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            }
+
+            .list {
+                display: grid;
+                gap: 10px;
+            }
+
+            .list-item {
+                background: rgba(255, 255, 255, 0.04);
+                border: 1px solid var(--border);
+                border-radius: 14px;
+                padding: 16px;
+            }
+
+            .meta {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 12px 18px;
+                color: var(--muted);
+                font-size: 0.95rem;
+            }
+
+            .meta span {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .tag {
+                background: rgba(255, 255, 255, 0.06);
+                border: 1px solid var(--border);
+                padding: 6px 12px;
+                border-radius: 999px;
+                font-size: 0.8rem;
+                color: var(--text);
+            }
+
+            footer {
                 text-align: center;
+                color: var(--muted);
+                font-size: 0.9rem;
+                padding-top: 24px;
             }
 
-            div a {
-                color: blue;
-                background: white;
-                text-decoration: none;
-                font-weight: 900;
-                margin: 10px 10px;
-                padding: 5px 12px;
-                border-radius: 4px;
-                display: inline-block;
-            }
+            @media (max-width: 640px) {
+                main {
+                    padding-top: 48px;
+                }
 
-            div a:hover {
-                background: blue;
-                color: white;
-                transition: 100ms;
-            }
-
-            span span.tag {
-                background: blue;
-                color: white;
-                padding: 5px 12px;
-                border-radius: 8px;
-                margin: 0 5px 5px 5px;
-                display: inline-block;
-            }
-
-            span a {
-                background: white;
-                color: blue;
-                padding: 5px 12px;
-                border-radius: 8px;
-                margin: 10px 5px;
-                text-decoration: none;
-                display: inline-block;
-            }
-
-            section p a {
-                color: aliceblue;
-                cursor: pointer;
+                section {
+                    padding: 24px;
+                }
             }
         </style>
     </head>
 
     <body>
-        <section id="one">
-            <h1>Hello, my name is</h1>
-            <h1>Jude Wilson.</h1>
-            <br /><br />
-            <p>
-                <a href="https://github.com/alechash">GitHub</a>.
-                <a href="https://instagram.com/txtjude">Instagram</a>.
-                <a href="https://www.linkedin.com/in/alec-j-wilson">LinkedIn</a>.
-                <a href="mailto:hi@judes.club">Email me</a>.
-                <a href="sms:9376685138">Text me</a>.
-            </p>
-            <br /><br />
-            <p>I create apps and take photos.</p>
-            <p>I just turned eighteen years old.</p>
-            <p>I am also a freshman in college.</p>
-            <p>I live just north of Cincinnati, Ohio.</p>
-            <p>Let's take a look at some things I've made.</p>
-        </section>
-        <section>
-            <hr />
-            <br /><br />
-            <span>
-                <span class="tag">Project</span>
-                <a href="https://apps.apple.com/us/app/digesto-news-skip-the-fluff/id6479177570">Download for iOS</a>
-            </span>
-            <br />
-            <h2>Digesto: AI News</h2>
-            <p>Digesto is an artificial intelligent news platform.</p>
-            <p>The app only pulls the factual and important info.</p>
-            <br /><br /><br /><br />
-            <span>
-                <span class="tag">Project</span>
-                <a href="https://verbuise.com">Landing Page</a>
-            </span>
-            <br />
-            <h2>Verbuise</h2>
-            <p>Verbuise is an AI powered content localization platform.</p>
-            <p>Text, images, currency conversions. We've got it.</p>
-            <br /><br /><br /><br />
-            <span>
-                <span class="tag">Application</span>
-                <a href="https://apps.apple.com/us/app/think-easy-markdown-thoughts/id6499279945">Download for iOS</a>
-            </span>
-            <br />
-            <h2>Think. Quick notes.</h2>
-            <p>Think. helps you track the important things in life.</p>
-            <p>The app only pulls the factual and important info.</p>
-        </section>
-        <section>
-            <hr />
-            <br /><br />
-            <span>
-                <span class="tag">Hobby</span>
-            </span>
-            <h2>I love photography. 📸︎</h2>
-            <p>You can follow my work using many platforms:</p>
-            <p>
-                <a href="/photo.html">Web portfolio</a>.
-                <a href="https://instagram.com/wil.tography">Instagram</a>.
-                <a href="https://unsplash.com/@alechash">Unsplash</a>.
-                <a href="https://glass.photo/wilude">Glass</a>.
-            </p>
-            <br /><br /><br /><br />
-            <span> 🤟 👋 ♥️ 📸 </span>
-            <br /><br />
-            <span> 📍 (937) Dayton-Ohio</span>
-            <br /><br />
-        </section>
+        <main>
+            <header>
+                <span class="pill">Available for select collaborations</span>
+                <div>
+                    <h1>Jude Wilson</h1>
+                    <p>iOS &amp; DevOps Engineer building fast, reliable mobile experiences.</p>
+                </div>
+                <div class="meta">
+                    <span>📍 New York MSA</span>
+                    <span>🎂 19 years old</span>
+                    <span>🛠️ iOS + DevOps</span>
+                    <span>🏢 NDA</span>
+                </div>
+                <div class="cta-links">
+                    <a href="https://github.com/alechash">GitHub</a>
+                    <a href="https://www.linkedin.com/in/alec-j-wilson">LinkedIn</a>
+                    <a href="mailto:hi@judes.club">Email</a>
+                    <a href="sms:9376685138">Text</a>
+                </div>
+            </header>
+
+            <section aria-labelledby="about">
+                <h2 id="about">About</h2>
+                <p>
+                    I’m a 19-year-old iOS and DevOps engineer focused on building polished mobile apps
+                    and the infrastructure behind them. I design fast, reliable experiences from
+                    SwiftUI interfaces through scalable backend services and automated delivery.
+                </p>
+            </section>
+
+            <section aria-labelledby="skills">
+                <h2 id="skills">Skills</h2>
+                <div class="grid grid-two">
+                    <div class="list-item">
+                        <h3>iOS Engineering</h3>
+                        <p>Swift, SwiftUI, UIKit, performance tuning, and delightful UX.</p>
+                    </div>
+                    <div class="list-item">
+                        <h3>DevOps</h3>
+                        <p>Docker, containers, Kubernetes, and infrastructure operations.</p>
+                    </div>
+                    <div class="list-item">
+                        <h3>API Design &amp; Integration</h3>
+                        <p>Mobile-first API design and fast client integration.</p>
+                    </div>
+                    <div class="list-item">
+                        <h3>Backend Services</h3>
+                        <p>Scalable services tailored to mobile workflows.</p>
+                    </div>
+                    <div class="list-item">
+                        <h3>CI/CD &amp; Automations</h3>
+                        <p>Build pipelines, release automation, and reliability tooling.</p>
+                    </div>
+                    <div class="list-item">
+                        <h3>Quick Learner</h3>
+                        <p>Rapid adoption of new stacks and emerging technologies.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section aria-labelledby="projects">
+                <h2 id="projects">Projects</h2>
+                <div class="list">
+                    <div class="list-item">
+                        <div class="meta">
+                            <span class="tag">App</span>
+                            <a href="https://apps.apple.com/us/app/threadery-digital-closet/id6754129300">
+                                Threadery: A Wardrobe Manager
+                            </a>
+                        </div>
+                        <p>Wardrobe management for daily outfits, closet organization, and styling.</p>
+                    </div>
+                    <div class="list-item">
+                        <div class="meta">
+                            <span class="tag">App (Acquired)</span>
+                            <span>Flipwise: Study Decks</span>
+                        </div>
+                        <p>Flashcard-driven study decks for students. Acquired in January 2026.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section aria-labelledby="founded">
+                <h2 id="founded">Founded</h2>
+                <div class="list-item">
+                    <div class="meta">
+                        <span class="tag">Belayer Development</span>
+                        <a href="https://belayer.dev">belayer.dev</a>
+                        <span>Founded Nov 2025</span>
+                    </div>
+                    <p>
+                        Belayer Development houses independent contract work and long-term
+                        maintenance. Highlights include redeveloping a sales app for one of the
+                        largest privately owned companies in its sector, increasing new sales ARR by
+                        10% YoY.
+                    </p>
+                </div>
+            </section>
+
+            <section aria-labelledby="hobbies">
+                <h2 id="hobbies">Hobbies</h2>
+                <div class="grid grid-two">
+                    <div class="list-item">
+                        <h3>Fitness</h3>
+                        <p>Working out, powerlifting, and active sports.</p>
+                    </div>
+                    <div class="list-item">
+                        <h3>Club Volleyball</h3>
+                        <p>Competitive club play and community leagues.</p>
+                    </div>
+                    <div class="list-item">
+                        <h3>Photography</h3>
+                        <p>
+                            Follow my photography on
+                            <a href="/photo.html">my portfolio</a> or
+                            <a href="https://instagram.com/wil.tography">Instagram</a>.
+                        </p>
+                    </div>
+                    <div class="list-item">
+                        <h3>Skiing</h3>
+                        <p>Seasonal trips and mountain weekends.</p>
+                    </div>
+                </div>
+            </section>
+
+            <footer>
+                Let’s build something useful. Email me at
+                <a href="mailto:hi@judes.club">hi@judes.club</a>.
+            </footer>
+        </main>
     </body>
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/fitty/2.2.6/fitty.min.js"
-        integrity="sha512-KkWBcUQjpR0NMNLytOBHfEqSF0urYJMXGRU/dzQxa+HQ4zak1gRSoegRvRnUcCFWBPcDIlLU7tBY8o7+bIkvWA=="
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer"
-    ></script>
-    <script>
-        fitty("h1, h2, p");
-    </script>
 </html>
