@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 | Alec (Jude) Wilson</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Instrument Serif', serif;
+            font-style: italic;
+            min-height: 100vh;
+            background: #111;
+            color: white;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            z-index: 1000;
+            padding: 1.5rem 2rem;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            color: white;
+            font-family: 'Instrument Serif', serif;
+            font-style: italic;
+            padding: 0.5rem 1.5rem;
+            background: radial-gradient(ellipse 150% 100% at center, rgba(10, 61, 44, 0.4) 0%, transparent 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 0.5rem;
+        }
+
+        .nav-menu a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            transition: opacity 0.3s;
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            padding: 0.5rem 0.5rem;
+            display: block;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transform: scaleX(0.8);
+            background: radial-gradient(ellipse 150% 100% at center, rgba(10, 61, 44, 0.4) 0%, transparent 100%);
+        }
+
+        .nav-menu a:hover {
+            opacity: 0.6;
+        }
+
+        @media (max-width: 500px) {
+            .navbar {
+                padding: 1.5rem 1.5rem;
+            }
+
+            .nav-container {
+                align-items: flex-start;
+            }
+
+            .nav-menu {
+                flex-direction: column;
+                gap: 0.5rem;
+                text-align: right;
+            }
+
+            .nav-menu a {
+                font-size: 0.85rem;
+            }
+        }
+
+        .error-page {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .error-code {
+            font-size: 8rem;
+            font-weight: 400;
+            font-style: normal;
+            letter-spacing: -2px;
+            line-height: 1;
+            opacity: 0.15;
+        }
+
+        .error-message {
+            font-size: 2rem;
+            font-weight: 400;
+            font-style: normal;
+            margin-top: -0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .error-desc {
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 1rem;
+            font-weight: 300;
+            opacity: 0.5;
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+        }
+
+        .error-link {
+            display: inline-block;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 0.95rem;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            padding: 0.75rem 2rem;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .error-link:hover {
+            background: rgba(255, 255, 255, 0.14);
+            border-color: rgba(255, 255, 255, 0.45);
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.8s ease forwards;
+        }
+
+        .fade-in-delay-1 { animation-delay: 0.1s; }
+        .fade-in-delay-2 { animation-delay: 0.2s; }
+        .fade-in-delay-3 { animation-delay: 0.3s; }
+
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .error-code {
+                font-size: 5rem;
+            }
+
+            .error-message {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">Alec (Jude) Wilson</a>
+            <ul class="nav-menu">
+                <li><a href="/#apps">Apps</a></li>
+                <li><a href="/photo">Photography</a></li>
+                <li><a href="/#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="error-page">
+        <div class="error-code fade-in">404</div>
+        <h1 class="error-message fade-in fade-in-delay-1">Page not found</h1>
+        <p class="error-desc fade-in fade-in-delay-2">The page you're looking for doesn't exist or has been moved.</p>
+        <a href="/" class="error-link fade-in fade-in-delay-3">Back to home</a>
+    </div>
+</body>
+</html>

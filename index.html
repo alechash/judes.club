@@ -1,192 +1,789 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Judes Club</title>
-        <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
-        <link rel="stylesheet" href="https://use.typekit.net/mln8zle.css" />
-        <style>
-            * {
-                margin: 0;
-                padding: 0;
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alec (Jude) Wilson</title>
+    <meta name="description" content="Developer and photographer based in New York. I build software and take photos.">
+    <meta property="og:title" content="Alec (Jude) Wilson">
+    <meta property="og:description" content="Developer and photographer based in New York. I build software and take photos.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="/bg.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Alec (Jude) Wilson">
+    <meta name="twitter:description" content="Developer and photographer based in New York. I build software and take photos.">
+    <meta name="twitter:image" content="/bg.png">
+    <link rel="preload" href="/bg.png" as="image">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Instrument Serif', serif;
+            font-style: italic;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            z-index: 1000;
+            padding: 1.5rem 2rem;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            color: white;
+            font-family: 'Instrument Serif', serif;
+            font-style: italic;
+            padding: 0.5rem 1.5rem;
+            background: radial-gradient(ellipse 150% 100% at center, rgba(10, 61, 44, 0.4) 0%, transparent 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 0.5rem;
+        }
+
+        .nav-menu a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            transition: opacity 0.3s;
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            padding: 0.5rem 0.5rem;
+            display: block;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transform: scaleX(0.8);
+            background: radial-gradient(ellipse 150% 100% at center, rgba(10, 61, 44, 0.4) 0%, transparent 100%);
+        }
+
+        .nav-menu a:hover {
+            opacity: 0.6;
+        }
+
+        @media (max-width: 500px) {
+            .navbar {
+                padding: 1.5rem 1.5rem;
             }
 
-            body {
-                margin: 40px;
-                background-color: #100f14;
-                color: #f1f1f1;
-                font-family: "nimbus-sans-extended", sans-serif;
-                font-weight: 300;
-                font-style: normal;
+            .nav-container {
+                align-items: flex-start;
             }
 
-            h1 {
-                font-weight: 700;
-                text-align: center;
-                display: block;
+            .nav-menu {
+                flex-direction: column;
+                gap: 0.5rem;
+                text-align: right;
             }
 
-            h2 {
-                font-weight: 600;
-                text-align: center;
-                display: inline-block;
-                color: #e9e9e9;
+            .nav-menu a {
+                font-size: 0.85rem;
+            }
+        }
+
+        .section {
+            position: relative;
+            min-height: 100vh;
+            background-color: #111;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .section-1 {
+            background-image: url('/bg.png');
+            background-position: center right;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        .section-2 {
+            background-image: url('/background.jpeg');
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+
+        .section-3 {
+            background-image: url('/background2.jpeg');
+            position: sticky;
+            top: 0;
+            z-index: 3;
+        }
+
+        .section-4 {
+            background-image: url('/background3.jpeg');
+            position: sticky;
+            top: 0;
+            z-index: 4;
+        }
+
+        .section-5 {
+            background-image: url('/background4.jpg');
+            z-index: 5;
+        }
+
+        /* Dark overlay for readability */
+        .section-2::before,
+        .section-3::before,
+        .section-4::before,
+        .section-5::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: 0;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+            padding: 8rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            color: white;
+        }
+
+        .content h1 {
+            font-size: 3rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+            letter-spacing: 0.5px;
+            font-style: normal;
+        }
+
+        .content p {
+            font-size: 1.1rem;
+            font-weight: 400;
+            font-style: normal;
+            line-height: 1.6;
+            opacity: 0.9;
+            max-width: 600px;
+            text-shadow: 0 1px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .content .subtitle {
+            font-size: 1.4rem;
+            opacity: 0.7;
+            margin-bottom: 2rem;
+            font-style: italic;
+            text-shadow: 0 1px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Apps grid */
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2.5rem;
+        }
+
+        .app-card {
+            display: block;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-left: 2px solid rgba(255, 255, 255, 0.35);
+            padding: 2rem 2rem 1.75rem;
+            transition: background 0.3s, border-left-color 0.3s, transform 0.3s;
+            text-decoration: none;
+            color: white;
+        }
+
+        .app-card:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-left-color: rgba(255, 255, 255, 0.7);
+            transform: translateY(-2px);
+        }
+
+        .app-card .app-tag {
+            display: inline-block;
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 0.7rem;
+            font-weight: 400;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            opacity: 0.45;
+            margin-bottom: 0.75rem;
+        }
+
+        .app-card h3 {
+            font-size: 1.4rem;
+            font-weight: 400;
+            margin-bottom: 0.6rem;
+            font-style: normal;
+            letter-spacing: 0.3px;
+        }
+
+        .app-card p {
+            font-size: 0.9rem;
+            opacity: 0.65;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.5;
+        }
+
+        /* Photography links */
+        .photo-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 2.5rem;
+        }
+
+        .photo-link {
+            display: inline-block;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 1rem;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            padding: 0.75rem 1.75rem;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .photo-link:hover {
+            background: rgba(255, 255, 255, 0.14);
+            border-color: rgba(255, 255, 255, 0.45);
+        }
+
+        /* Contact form */
+        .contact-form {
+            margin-top: 2.5rem;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 300;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .contact-form input::placeholder,
+        .contact-form textarea::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            border-color: rgba(255, 255, 255, 0.45);
+        }
+
+        .contact-form textarea {
+            resize: vertical;
+            min-height: 130px;
+        }
+
+        .contact-form button {
+            align-self: flex-start;
+            padding: 0.75rem 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .contact-form button:hover {
+            background: rgba(255, 255, 255, 0.18);
+            border-color: rgba(255, 255, 255, 0.45);
+        }
+
+        .contact-email {
+            margin-top: 2rem;
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 0.9rem;
+            font-weight: 300;
+            opacity: 0.5;
+            text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .contact-email a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .contact-email a:hover {
+            opacity: 0.7;
+        }
+
+        /* Footer section */
+        .section-5 {
+            min-height: auto;
+            padding-bottom: 0;
+        }
+
+        .footer-content {
+            position: relative;
+            z-index: 1;
+            padding: 6rem 2rem 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            color: white;
+        }
+
+        .social-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-top: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .social-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 0.95rem;
+            font-weight: 300;
+            transition: opacity 0.3s;
+        }
+
+        .social-links a:hover {
+            opacity: 0.6;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 0.85rem;
+            font-weight: 300;
+            opacity: 0.5;
+            text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Hero section */
+        .hero-intro {
+            margin-top: 3rem;
+            display: flex;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-blurb {
+            max-width: 420px;
+        }
+
+        .hero-blurb p {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 300;
+            line-height: 1.8;
+            opacity: 0.7;
+            text-shadow: 0 1px 10px rgba(0, 0, 0, 0.6);
+        }
+
+        .hero-details {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .hero-detail {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .hero-detail .label {
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 0.65rem;
+            font-weight: 400;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            opacity: 0.35;
+            text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6);
+        }
+
+        .hero-detail .value {
+            font-size: 1.15rem;
+            font-style: normal;
+            font-weight: 400;
+            opacity: 0.9;
+            letter-spacing: 0.3px;
+            text-shadow: 0 1px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 2.5rem;
+            left: 2rem;
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 0.85rem;
+            font-weight: 400;
+            letter-spacing: 1.5px;
+            opacity: 1;
+            text-shadow: 0 0 20px rgba(0, 0, 0, 0.9), 0 0 40px rgba(0, 0, 0, 0.5);
+            text-transform: uppercase;
+            color: white;
+            animation: drift 2.5s ease-in-out infinite;
+        }
+
+        @keyframes drift {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(6px); }
+        }
+
+        /* Scroll fade-in */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fade-in-delay-1 { transition-delay: 0.1s; }
+        .fade-in-delay-2 { transition-delay: 0.2s; }
+        .fade-in-delay-3 { transition-delay: 0.3s; }
+        .fade-in-delay-4 { transition-delay: 0.4s; }
+        .fade-in-delay-5 { transition-delay: 0.5s; }
+
+        /* Photo caption */
+        .photo-caption {
+            position: absolute;
+            bottom: 1.5rem;
+            right: 2rem;
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 0.75rem;
+            font-weight: 300;
+            color: white;
+            opacity: 0.85;
+            letter-spacing: 0.5px;
+            text-shadow: 0 0 20px rgba(0, 0, 0, 0.9), 0 0 40px rgba(0, 0, 0, 0.5);
+            z-index: 1;
+            padding: 0.4rem 0.8rem;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        /* Photo grid */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .photo-grid-item {
+            aspect-ratio: 1;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .photo-grid-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .photo-grid-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .photo-grid-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 0.7rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.25);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Form status */
+        .form-status {
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 0.9rem;
+            font-weight: 300;
+            padding: 0.75rem 1rem;
+            display: none;
+        }
+
+        .form-status.success {
+            display: block;
+            color: #8fdfb0;
+            border: 1px solid rgba(143, 223, 176, 0.25);
+            background: rgba(143, 223, 176, 0.06);
+        }
+
+        .form-status.error {
+            display: block;
+            color: #f0a0a0;
+            border: 1px solid rgba(240, 160, 160, 0.25);
+            background: rgba(240, 160, 160, 0.06);
+        }
+
+        @media (max-width: 768px) {
+            .content h1 {
+                font-size: 2rem;
             }
 
-            .fit {
-                display: inline-block;
-                white-space: nowrap;
+            .apps-grid {
+                grid-template-columns: 1fr;
             }
 
-            p {
-                color: #e9e9ff;
+            .hero-intro {
+                flex-direction: column;
+                gap: 2rem;
             }
 
-            hr {
-                border: none;
-                color: #f00;
-                margin: 5vh auto;
-                display: inline-block;
-                width: 200vw;
-                margin-left: -70px;
-                white-space: nowrap;
+            .photo-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
 
-            hr::after {
-                content: "🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟🤟";
+            .photo-grid-item {
+                aspect-ratio: 3 / 2;
             }
-            section {
-                max-width: 600px;
-                margin: 0 auto;
-                overflow-x: hidden;
-            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">Alec (Jude) Wilson</div>
+            <ul class="nav-menu">
+                <li><a href="#apps">Apps</a></li>
+                <li><a href="/photo">Photography</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
 
-            div {
-                margin-bottom: 3.5vh;
-                text-align: center;
-            }
+    <!-- About Me -->
+    <section class="section section-1" id="about">
+        <div class="content">
+            <h1 class="fade-in">I <i>Write</i> Software</h1>
+            <div class="hero-intro">
+                <div class="hero-blurb fade-in fade-in-delay-1">
+                    <p>Developer and photographer splitting time between writing code and chasing light. I build tools that I want to exist and photograph places that make me feel something.</p>
+                </div>
 
-            div a {
-                color: blue;
-                background: white;
-                text-decoration: none;
-                font-weight: 900;
-                margin: 10px 10px;
-                padding: 5px 12px;
-                border-radius: 4px;
-                display: inline-block;
-            }
+                <div class="hero-details fade-in fade-in-delay-2">
+                    <div class="hero-detail">
+                        <span class="label">Location</span>
+                        <span class="value">New York, USA</span>
+                    </div>
+                    <div class="hero-detail">
+                        <span class="label">Focus</span>
+                        <span class="value">Web & Mobile</span>
+                    </div>
+                    <div class="hero-detail">
+                        <span class="label">Currently</span>
+                        <span class="value">Building things</span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            div a:hover {
-                background: blue;
-                color: white;
-                transition: 100ms;
-            }
+        <div class="scroll-hint">&#8595; Scroll</div>
+        <span class="photo-caption">Manta, Ecuador</span>
+    </section>
 
-            span span.tag {
-                background: blue;
-                color: white;
-                padding: 5px 12px;
-                border-radius: 8px;
-                margin: 0 5px 5px 5px;
-                display: inline-block;
-            }
+    <!-- Apps -->
+    <section class="section section-2" id="apps">
+        <div class="content">
+            <h1 class="fade-in">Apps</h1>
+            <p class="subtitle fade-in fade-in-delay-1">Things I build</p>
+            <div class="apps-grid">
+                <a href="#" class="app-card fade-in fade-in-delay-2">
+                    <span class="app-tag">Web</span>
+                    <h3>Project One</h3>
+                    <p>Description of your first app or project.</p>
+                </a>
+                <a href="#" class="app-card fade-in fade-in-delay-3">
+                    <span class="app-tag">Mobile</span>
+                    <h3>Project Two</h3>
+                    <p>Description of your second app or project.</p>
+                </a>
+                <a href="#" class="app-card fade-in fade-in-delay-4">
+                    <span class="app-tag">Tool</span>
+                    <h3>Project Three</h3>
+                    <p>Description of your third app or project.</p>
+                </a>
+            </div>
+        </div>
+        <span class="photo-caption">Old San Juan, Puerto Rico</span>
+    </section>
 
-            span a {
-                background: white;
-                color: blue;
-                padding: 5px 12px;
-                border-radius: 8px;
-                margin: 10px 5px;
-                text-decoration: none;
-                display: inline-block;
-            }
+    <!-- Photography -->
+    <section class="section section-3" id="photography">
+        <div class="content">
+            <h1 class="fade-in">Photography</h1>
+            <p class="subtitle fade-in fade-in-delay-1">Places I've been, things I've seen — I shoot on film and digital across Latin America, the US, Europe, Africa, and wherever else I end up.</p>
+            <div class="photo-grid fade-in fade-in-delay-3">
+                <div class="photo-grid-item"><img src="/bg.png" alt="Photo" loading="lazy" decoding="async"></div>
+                <div class="photo-grid-item"><img src="/background.jpeg" alt="Photo" loading="lazy" decoding="async"></div>
+                <div class="photo-grid-item"><img src="/background2.jpeg" alt="Photo" loading="lazy" decoding="async"></div>
+                <div class="photo-grid-item"><img src="/background3.jpeg" alt="Photo" loading="lazy" decoding="async"></div>
+            </div>
+            <div class="photo-links fade-in fade-in-delay-4">
+                <a href="https://instagram.com/wil.tography" class="photo-link" target="_blank">Instagram</a>
+                <a href="/photo" class="photo-link">Portfolio</a>
+                <a href="#" class="photo-link">Prints</a>
+            </div>
+        </div>
+        <span class="photo-caption">Marrakech, Morocco</span>
+    </section>
 
-            section p a {
-                color: aliceblue;
-                cursor: pointer;
-            }
-        </style>
-    </head>
+    <!-- Contact -->
+    <section class="section section-4" id="contact">
+        <div class="content">
+            <h1 class="fade-in">Contact</h1>
+            <p class="subtitle fade-in fade-in-delay-1">Get in touch</p>
+            <form class="contact-form" id="contact-form" action="" method="POST">
+                <input type="text" name="name" placeholder="Name" required class="fade-in fade-in-delay-2">
+                <input type="email" name="email" placeholder="Email" required class="fade-in fade-in-delay-3">
+                <textarea name="message" placeholder="Message" required class="fade-in fade-in-delay-4"></textarea>
+                <button type="submit" class="fade-in fade-in-delay-5">Send</button>
+                <div class="form-status" id="form-status"></div>
+            </form>
+            <p class="contact-email fade-in fade-in-delay-5">or email me directly at <a href="mailto:hi@judes.club">hi@judes.club</a></p>
+        </div>
+        <span class="photo-caption">Kochel am See, Deutschland</span>
+    </section>
 
-    <body>
-        <section id="one">
-            <h1>Hello, my name is</h1>
-            <h1>Jude Wilson.</h1>
-            <br /><br />
-            <p>
-                <a href="https://github.com/alechash">GitHub</a>.
-                <a href="https://instagram.com/txtjude">Instagram</a>.
-                <a href="https://www.linkedin.com/in/alec-j-wilson">LinkedIn</a>.
-                <a href="mailto:hi@judes.club">Email me</a>.
-                <a href="sms:9376685138">Text me</a>.
-            </p>
-            <br /><br />
-            <p>I create apps and take photos.</p>
-            <p>I just turned eighteen years old.</p>
-            <p>I am also a freshman in college.</p>
-            <p>I live just north of Cincinnati, Ohio.</p>
-            <p>Let's take a look at some things I've made.</p>
-        </section>
-        <section>
-            <hr />
-            <br /><br />
-            <span>
-                <span class="tag">Project</span>
-                <a href="https://apps.apple.com/us/app/digesto-news-skip-the-fluff/id6479177570">Download for iOS</a>
-            </span>
-            <br />
-            <h2>Digesto: AI News</h2>
-            <p>Digesto is an artificial intelligent news platform.</p>
-            <p>The app only pulls the factual and important info.</p>
-            <br /><br /><br /><br />
-            <span>
-                <span class="tag">Project</span>
-                <a href="https://verbuise.com">Landing Page</a>
-            </span>
-            <br />
-            <h2>Verbuise</h2>
-            <p>Verbuise is an AI powered content localization platform.</p>
-            <p>Text, images, currency conversions. We've got it.</p>
-            <br /><br /><br /><br />
-            <span>
-                <span class="tag">Application</span>
-                <a href="https://apps.apple.com/us/app/think-easy-markdown-thoughts/id6499279945">Download for iOS</a>
-            </span>
-            <br />
-            <h2>Think. Quick notes.</h2>
-            <p>Think. helps you track the important things in life.</p>
-            <p>The app only pulls the factual and important info.</p>
-        </section>
-        <section>
-            <hr />
-            <br /><br />
-            <span>
-                <span class="tag">Hobby</span>
-            </span>
-            <h2>I love photography. 📸︎</h2>
-            <p>You can follow my work using many platforms:</p>
-            <p>
-                <a href="/photo.html">Web portfolio</a>.
-                <a href="https://instagram.com/wil.tography">Instagram</a>.
-                <a href="https://unsplash.com/@alechash">Unsplash</a>.
-                <a href="https://glass.photo/wilude">Glass</a>.
-            </p>
-            <br /><br /><br /><br />
-            <span> 🤟 👋 ♥️ 📸 </span>
-            <br /><br />
-            <span> 📍 (937) Dayton-Ohio</span>
-            <br /><br />
-        </section>
-    </body>
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/fitty/2.2.6/fitty.min.js"
-        integrity="sha512-KkWBcUQjpR0NMNLytOBHfEqSF0urYJMXGRU/dzQxa+HQ4zak1gRSoegRvRnUcCFWBPcDIlLU7tBY8o7+bIkvWA=="
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer"
-    ></script>
+    <!-- Footer -->
+    <section class="section section-5">
+        <div class="footer-content">
+            <h1 class="fade-in" style="font-size: 2rem; font-weight: 400; font-style: normal;">Links</h1>
+            <div class="social-links fade-in fade-in-delay-1">
+                <a href="https://github.com/alechash" target="_blank">GitHub</a>
+                <a href="https://instagram.com/wil.tography" target="_blank">Instagram</a>
+                <a href="https://x.com/alechash" target="_blank">X</a>
+            </div>
+            <div class="footer-bottom fade-in fade-in-delay-2">
+                &copy; 2026 Alec (Jude) Wilson
+            </div>
+        </div>
+        <span class="photo-caption">The Sky, Earth</span>
+    </section>
+
     <script>
-        fitty("h1, h2, p");
+        // Scroll fade-in
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Contact form submission
+        const form = document.getElementById('contact-form');
+        const status = document.getElementById('form-status');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = form.querySelector('button');
+            btn.textContent = 'Sending...';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch(form.action, {
+                    method: 'POST',
+                    body: new FormData(form),
+                });
+
+                if (res.ok) {
+                    status.textContent = 'Message sent. I\'ll get back to you soon.';
+                    status.className = 'form-status success';
+                    form.reset();
+                } else {
+                    throw new Error();
+                }
+            } catch {
+                status.textContent = 'Something went wrong. Try emailing me directly.';
+                status.className = 'form-status error';
+            }
+
+            btn.textContent = 'Send';
+            btn.disabled = false;
+        });
     </script>
+</body>
 </html>

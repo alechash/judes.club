@@ -1,171 +1,764 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home | Judes Club</title>
-    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
-    <link rel="stylesheet" href="/assets/3.css" />
-    <link rel="stylesheet" href="https://use.typekit.net/rup4qgs.css" />
-</head>
-
-<body>
-    <main>
-        <div>
-            <!--<p class="announcement"><span>Announcing <a href="https://photury.com" target="_blank">Photury</a>, share
-                    your best photo spots with
-                    the community!</span></p>-->
-            <h1>Jude Wilson</h1>
-            <p>
-                <a class="active">Home</a>
-                <a href="sms:9376685138">Text Me</a>
-                <a href="https://unsplash.com/@alechash" target="_blank">Unsplash</a>
-                <a href="https://instagram.com/wil.tography" target="_blank">Instagram</a>
-                <a href="https://glass.photo/wilude" target="_blank">Glass</a>
-                <!--<br><br><br>
-                <a>View higher quality versions of these photos on Unsplash or Instagram</a>-->
-                <!--<a href="https://alecw.net" target="_blank">Software Portfolio</a>-->
-            </p>
-        </div>
-        <h2>Photo Collections</h2>
-        <ul id="gallery"></ul>
-        <h2>All Photos</h2>
-        <ul id="images"></ul>
-
-        <div id="collection_view">
-            <h2>
-                Collection: <span id="collection_title"></span>
-                <span class="close-project"><a href="?project=-1">×</a></span>
-            </h2>
-            <ul id="collection_images"></ul>
-        </div>
-    </main>
-
-    <script>
-        var html = "";
-
-        for (i = 0; i < 30; i++) {
-            html =
-                html +
-                `
-              <li>
-                  <a href="/assets/images/home/image_${i}.jpg"><img src="/assets/images/home/image_${i}.jpg" alt="Image ${i}" loading="lazy"></a>
-              </li>
-              `;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photography | Alec (Jude) Wilson</title>
+    <meta name="description" content="Photography by Alec (Jude) Wilson. Film and digital across Latin America, the US, Europe, Africa, and beyond.">
+    <meta property="og:title" content="Photography | Alec (Jude) Wilson">
+    <meta property="og:description" content="Photography by Alec (Jude) Wilson. Film and digital across Latin America, the US, Europe, Africa, and beyond.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="/bg.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        html {
+            scroll-behavior: smooth;
         }
 
-        html = html + "<li></li>";
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-        document.getElementById("images").innerHTML = html;
-    </script>
+        body {
+            font-family: 'Instrument Serif', serif;
+            font-style: italic;
+            min-height: 100vh;
+            background: #111;
+            color: white;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            z-index: 1000;
+            padding: 1.5rem 2rem;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            color: white;
+            font-family: 'Instrument Serif', serif;
+            font-style: italic;
+            padding: 0.5rem 1.5rem;
+            background: radial-gradient(ellipse 150% 100% at center, rgba(10, 61, 44, 0.4) 0%, transparent 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 0.5rem;
+        }
+
+        .nav-menu a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            transition: opacity 0.3s;
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            padding: 0.5rem 0.5rem;
+            display: block;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transform: scaleX(0.8);
+            background: radial-gradient(ellipse 150% 100% at center, rgba(10, 61, 44, 0.4) 0%, transparent 100%);
+        }
+
+        .nav-menu a:hover {
+            opacity: 0.6;
+        }
+
+        @media (max-width: 500px) {
+            .navbar {
+                padding: 1.5rem 1.5rem;
+            }
+
+            .nav-container {
+                align-items: flex-start;
+            }
+
+            .nav-menu {
+                flex-direction: column;
+                gap: 0.5rem;
+                text-align: right;
+            }
+
+            .nav-menu a {
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Page content */
+        .page-content {
+            padding: 8rem 2rem 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .page-content h1 {
+            font-size: 3rem;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.5px;
+            font-style: normal;
+        }
+
+        .page-subtitle {
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 1rem;
+            font-weight: 300;
+            opacity: 0.5;
+            margin-bottom: 3rem;
+            line-height: 1.6;
+        }
+
+        .page-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 3rem;
+        }
+
+        .page-links a {
+            display: inline-block;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 0.9rem;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            padding: 0.6rem 1.25rem;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .page-links a:hover {
+            background: rgba(255, 255, 255, 0.14);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .page-links a.active {
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        /* Section headings */
+        .section-heading {
+            font-size: 1.6rem;
+            font-weight: 400;
+            font-style: normal;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.3px;
+        }
+
+        /* Collections grid */
+        .collections-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 4rem;
+        }
+
+        .collection-card {
+            position: relative;
+            display: block;
+            text-decoration: none;
+            color: white;
+            overflow: hidden;
+            aspect-ratio: 16 / 10;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: border-color 0.3s, transform 0.3s;
+        }
+
+        .collection-card:hover {
+            border-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .collection-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .collection-card:hover img {
+            transform: scale(1.03);
+        }
+
+        .collection-card .collection-title {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1.25rem;
+            font-family: 'Instrument Serif', serif;
+            font-size: 1.3rem;
+            font-weight: 400;
+            font-style: normal;
+            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+            text-shadow: 0 1px 10px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Photo grid */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 0.75rem;
+            margin-bottom: 4rem;
+        }
+
+        .photo-grid-item {
+            aspect-ratio: 1;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .photo-grid-item a {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .photo-grid-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .photo-grid-item:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Collection modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            background: rgba(0, 0, 0, 0);
+            backdrop-filter: blur(0px);
+            -webkit-backdrop-filter: blur(0px);
+            overflow-y: auto;
+            opacity: 0;
+            transition: opacity 0.4s ease, background 0.4s ease, backdrop-filter 0.4s ease, -webkit-backdrop-filter 0.4s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .modal-overlay.closing {
+            opacity: 0;
+            background: rgba(0, 0, 0, 0);
+            backdrop-filter: blur(0px);
+            -webkit-backdrop-filter: blur(0px);
+        }
+
+        .modal-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: 100vh;
+            transform: translateY(30px) scale(0.97);
+            opacity: 0;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+        }
+
+        .modal-overlay.active .modal-inner {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+
+        .modal-overlay.closing .modal-inner {
+            transform: translateY(20px) scale(0.98);
+            opacity: 0;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-top: 1rem;
+        }
+
+        .modal-header h2 {
+            font-size: 2rem;
+            font-weight: 400;
+            font-style: normal;
+            letter-spacing: 0.3px;
+        }
+
+        .modal-overlay.active .photo-grid-item {
+            opacity: 0;
+            transform: translateY(15px);
+            animation: modalItemIn 0.4s ease forwards;
+        }
+
+        @keyframes modalItemIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-overlay.active .photo-grid-item:nth-child(1) { animation-delay: 0.1s; }
+        .modal-overlay.active .photo-grid-item:nth-child(2) { animation-delay: 0.15s; }
+        .modal-overlay.active .photo-grid-item:nth-child(3) { animation-delay: 0.2s; }
+        .modal-overlay.active .photo-grid-item:nth-child(4) { animation-delay: 0.25s; }
+        .modal-overlay.active .photo-grid-item:nth-child(5) { animation-delay: 0.3s; }
+        .modal-overlay.active .photo-grid-item:nth-child(6) { animation-delay: 0.35s; }
+        .modal-overlay.active .photo-grid-item:nth-child(n+7) { animation-delay: 0.4s; }
+
+        .modal-close {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 0.9rem;
+            font-weight: 300;
+            padding: 0.5rem 1.25rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.14);
+            border-color: rgba(255, 255, 255, 0.45);
+            color: white;
+        }
+
+        /* Image lightbox */
+        .lightbox-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 3000;
+            background: rgba(0, 0, 0, 0);
+            backdrop-filter: blur(0px);
+            -webkit-backdrop-filter: blur(0px);
+            opacity: 0;
+            transition: opacity 0.35s ease, background 0.35s ease, backdrop-filter 0.35s ease, -webkit-backdrop-filter 0.35s ease;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-overlay.active {
+            opacity: 1;
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+        }
+
+        .lightbox-overlay.closing {
+            opacity: 0;
+            background: rgba(0, 0, 0, 0);
+            backdrop-filter: blur(0px);
+            -webkit-backdrop-filter: blur(0px);
+        }
+
+        .lightbox-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            transform: scale(0.9) translateY(20px);
+            opacity: 0;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+            max-width: 90vw;
+            max-height: 90vh;
+        }
+
+        .lightbox-overlay.active .lightbox-content {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
+        .lightbox-overlay.closing .lightbox-content {
+            transform: scale(0.95) translateY(10px);
+            opacity: 0;
+        }
+
+        .lightbox-content img {
+            max-width: 90vw;
+            max-height: 75vh;
+            object-fit: contain;
+        }
+
+        .lightbox-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .lightbox-btn {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 0.9rem;
+            font-weight: 300;
+            padding: 0.6rem 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .lightbox-btn:hover {
+            background: rgba(255, 255, 255, 0.14);
+            border-color: rgba(255, 255, 255, 0.45);
+            color: white;
+        }
+
+        /* Footer */
+        .footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer span {
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 0.85rem;
+            font-weight: 300;
+            opacity: 0.4;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.25rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 0.85rem;
+            font-weight: 300;
+            transition: opacity 0.3s;
+        }
+
+        .footer-links a:hover {
+            opacity: 0.6;
+        }
+
+        /* Fade in */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fade-in-delay-1 { transition-delay: 0.1s; }
+        .fade-in-delay-2 { transition-delay: 0.2s; }
+        .fade-in-delay-3 { transition-delay: 0.3s; }
+
+        @media (max-width: 768px) {
+            .page-content h1 {
+                font-size: 2rem;
+            }
+
+            .collections-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .photo-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .photo-grid-item {
+                aspect-ratio: 1;
+            }
+
+            .footer {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/index2.html" class="logo">Alec (Jude) Wilson</a>
+            <ul class="nav-menu">
+                <li><a href="https://unsplash.com/@alechash" target="_blank">Unsplash</a></li>
+                <li><a href="https://instagram.com/wil.tography" target="_blank">Instagram</a></li>
+                <li><a href="https://glass.photo/wilude" target="_blank">Glass</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="page-content">
+        <h1 class="fade-in">Photography</h1>
+        <p class="page-subtitle fade-in fade-in-delay-1">Film and digital across Latin America, the US, Europe, Africa, and wherever else I end up.</p>
+
+        <h2 class="section-heading fade-in fade-in-delay-2">Collections</h2>
+        <div class="collections-grid fade-in fade-in-delay-3" id="gallery"></div>
+
+        <h2 class="section-heading fade-in">All Photos</h2>
+        <div class="photo-grid fade-in" id="images"></div>
+    </div>
+
+    <footer class="footer">
+        <span>&copy; 2026 Alec (Jude) Wilson</span>
+        <div class="footer-links">
+            <a href="/index2.html">Home</a>
+            <a href="https://github.com/alechash" target="_blank">GitHub</a>
+            <a href="https://x.com/alechash" target="_blank">X</a>
+        </div>
+    </footer>
+
+    <div class="lightbox-overlay" id="lightbox">
+        <div class="lightbox-content">
+            <img id="lightbox-img" src="" alt="Photo">
+            <div class="lightbox-actions">
+                <a id="lightbox-download" class="lightbox-btn" href="" download>Download</a>
+                <button class="lightbox-btn" id="lightbox-close">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="collection-modal">
+        <div class="modal-inner">
+            <div class="modal-header">
+                <h2 id="collection_title"></h2>
+                <button class="modal-close" id="modal-close">Close</button>
+            </div>
+            <div class="photo-grid" id="collection_images"></div>
+        </div>
+    </div>
 
     <script>
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-        const project = urlParams.get("project");
+        // All photos grid
+        var html = "";
+        for (var i = 0; i < 30; i++) {
+            html += `
+            <div class="photo-grid-item">
+                <a href="/assets/images/home/image_${i}.jpg">
+                    <img src="/assets/images/home/image_${i}.jpg" alt="Image ${i}" loading="lazy" decoding="async">
+                </a>
+            </div>`;
+        }
+        document.getElementById("images").innerHTML = html;
 
+        // Collections
         const projects = [
             {
                 title: "Rice Farm Horses",
                 cover: "rice_horses/img_2",
                 desc: "",
-                album: {
-                    folder: "rice_horses",
-                    photo_prefix: "img_",
-                    photo_index: 15,
-                },
+                album: { folder: "rice_horses", photo_prefix: "img_", photo_index: 15 },
             },
             {
                 title: "PNS Car Shoot: 1/3/24",
                 cover: "wrx_shoot/img-1",
                 desc: "",
-                album: {
-                    folder: "wrx_shoot",
-                    photo_prefix: "img-",
-                    photo_index: 12,
-                },
+                album: { folder: "wrx_shoot", photo_prefix: "img-", photo_index: 12 },
             },
             {
                 title: "Rocket",
                 cover: "rocket/img-5",
                 desc: "",
-                album: {
-                    folder: "rocket",
-                    photo_prefix: "img-",
-                    photo_index: 6,
-                },
+                album: { folder: "rocket", photo_prefix: "img-", photo_index: 6 },
             },
             {
                 title: "Ecuador 23",
                 cover: "ecuador/img-24",
                 desc: "",
-                album: {
-                    folder: "ecuador",
-                    photo_prefix: "img-",
-                    photo_index: 27,
-                },
+                album: { folder: "ecuador", photo_prefix: "img-", photo_index: 27 },
             },
             {
                 title: "Real Estate Example",
                 cover: "re/img_0",
                 desc: "",
-                album: {
-                    folder: "re",
-                    photo_prefix: "img_",
-                    photo_index: 52,
-                },
+                album: { folder: "re", photo_prefix: "img_", photo_index: 52 },
             },
         ];
 
+        // Render collection cards
         var projectHtml = "";
-
-        for (i = 0; i < projects.length; i++) {
-            projectHtml =
-                projectHtml +
-                `
-            <li class="project">
-                <a href="?project=${i}">
-                    <img src="/assets/images/${projects[i].cover}.jpg">
-                    <h2 class="title">${projects[i].title}</h2>
-                </a>
-            </li>`;
+        for (var i = 0; i < projects.length; i++) {
+            projectHtml += `
+            <a href="#" class="collection-card" data-project="${i}">
+                <img src="/assets/images/${projects[i].cover}.jpg" alt="${projects[i].title}" loading="lazy" decoding="async">
+                <div class="collection-title">${projects[i].title}</div>
+            </a>`;
         }
-
         document.getElementById("gallery").innerHTML = projectHtml;
 
-        if (
-            queryString.includes("?project=") &&
-            Number(project) <= projects.length &&
-            Number(project) >= 0
-        ) {
-            document.getElementById("collection_title").innerText =
-                projects[project].title;
-            document.getElementById("collection_view").style.display =
-                "inherit";
+        // Modal logic
+        const modal = document.getElementById('collection-modal');
+        const modalTitle = document.getElementById('collection_title');
+        const modalImages = document.getElementById('collection_images');
+        const modalClose = document.getElementById('modal-close');
 
-            var projectPhotosHtml = "";
+        function openCollection(index) {
+            const p = projects[index];
+            modalTitle.innerText = p.title;
 
-            for (
-                j = 0;
-                j < projects[Number(project)].album.photo_index;
-                j++
-            ) {
-                projectPhotosHtml =
-                    projectPhotosHtml +
-                    `
-                <li>
-                    <a href="/assets/images/${projects[Number(project)].album.folder}/${projects[Number(project)].album.photo_prefix}${j}.jpg"><img src="/assets/images/${projects[Number(project)].album.folder}/${projects[Number(project)].album.photo_prefix}${j}.jpg" alt="Image ${j}" loading="lazy"></a>
-                </li>
-                `;
+            var photosHtml = "";
+            for (var j = 0; j < p.album.photo_index; j++) {
+                photosHtml += `
+                <div class="photo-grid-item">
+                    <a href="/assets/images/${p.album.folder}/${p.album.photo_prefix}${j}.jpg">
+                        <img src="/assets/images/${p.album.folder}/${p.album.photo_prefix}${j}.jpg" alt="Image ${j}" loading="lazy" decoding="async">
+                    </a>
+                </div>`;
             }
+            modalImages.innerHTML = photosHtml;
 
-            projectPhotosHtml = projectPhotosHtml + "<li></li>";
-
-            document.getElementById("collection_images").innerHTML =
-                projectPhotosHtml;
+            modal.style.display = 'block';
+            modal.scrollTop = 0;
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    modal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                });
+            });
         }
+
+        function closeModal() {
+            modal.classList.add('closing');
+            modal.classList.remove('active');
+            setTimeout(() => {
+                modal.classList.remove('closing');
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+                modalImages.innerHTML = '';
+            }, 450);
+        }
+
+        document.getElementById('gallery').addEventListener('click', (e) => {
+            const card = e.target.closest('.collection-card');
+            if (card) {
+                e.preventDefault();
+                openCollection(Number(card.dataset.project));
+            }
+        });
+
+        modalClose.addEventListener('click', closeModal);
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
+        });
+
+        // Image lightbox
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxDownload = document.getElementById('lightbox-download');
+        const lightboxCloseBtn = document.getElementById('lightbox-close');
+
+        function openLightbox(src) {
+            lightboxImg.src = src;
+            lightboxDownload.href = src;
+            lightbox.style.display = 'flex';
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    lightbox.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                });
+            });
+        }
+
+        function closeLightbox() {
+            lightbox.classList.add('closing');
+            lightbox.classList.remove('active');
+            setTimeout(() => {
+                lightbox.classList.remove('closing');
+                lightbox.style.display = 'none';
+                document.body.style.overflow = modal.classList.contains('active') ? 'hidden' : '';
+                lightboxImg.src = '';
+            }, 400);
+        }
+
+        document.addEventListener('click', (e) => {
+            const item = e.target.closest('.photo-grid-item a');
+            if (item) {
+                e.preventDefault();
+                openLightbox(item.href);
+            }
+        });
+
+        lightboxCloseBtn.addEventListener('click', closeLightbox);
+
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) closeLightbox();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && lightbox.classList.contains('active')) closeLightbox();
+        });
+
+        // Scroll fade-in
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
     </script>
 </body>
-
 </html>
