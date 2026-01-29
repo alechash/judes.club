@@ -187,6 +187,48 @@
             font-style: normal;
         }
 
+        .section-title-link {
+            color: inherit;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            padding-bottom: 0.15rem;
+        }
+
+        .section-title-link::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 2px;
+            background: currentColor;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .section-title-link .arrow {
+            display: inline-block;
+            opacity: 0;
+            transform: translateX(-6px);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            font-style: normal;
+        }
+
+        .section-title-link:hover::after,
+        .section-title-link:focus-visible::after {
+            transform: scaleX(1);
+        }
+
+        .section-title-link:hover .arrow,
+        .section-title-link:focus-visible .arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
         .content p {
             font-size: 1.1rem;
             font-weight: 400;
@@ -744,7 +786,11 @@
     <!-- Apps -->
     <section class="section section-2" id="apps">
         <div class="content">
-            <h1 class="fade-in">Software</h1>
+            <h1 class="fade-in">
+                <a class="section-title-link" href="/project">
+                    Software <span class="arrow">&#8594;</span>
+                </a>
+            </h1>
             <p class="subtitle fade-in fade-in-delay-1">Things I build</p>
             <div class="apps-grid">
                 <a href="/projects/spare-pocket" class="app-card fade-in fade-in-delay-2">
@@ -770,7 +816,11 @@
     <!-- Photography -->
     <section class="section section-3" id="photography">
         <div class="content">
-            <h1 class="fade-in">Photography</h1>
+            <h1 class="fade-in">
+                <a class="section-title-link" href="/photo">
+                    Photography <span class="arrow">&#8594;</span>
+                </a>
+            </h1>
             <p class="subtitle fade-in fade-in-delay-1">Places I've been, things I've seen — I shoot on film and digital across Latin America, the US, Europe, Africa, and wherever else I end up.</p>
             <div class="photo-grid fade-in fade-in-delay-3">
                 <div class="photo-grid-item"><img src="/bg.jpeg" alt="Photo" loading="lazy" decoding="async"></div>
