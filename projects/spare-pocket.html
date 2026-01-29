@@ -141,7 +141,7 @@
             overflow: hidden;
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(255, 255, 255, 0.12);
-            margin-bottom: 3rem;
+            margin-bottom: 1.5rem;
         }
 
         .hero-card img {
@@ -202,7 +202,7 @@
             letter-spacing: 0.5px;
             padding: 0.6rem 1.4rem;
             border: 1px solid rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.06);
+            background: rgba(0, 0, 0, 0.2);
             transition: background 0.3s, border-color 0.3s;
         }
 
@@ -266,6 +266,7 @@
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 1.5rem;
             margin-bottom: 3rem;
+            margin-top: 1.5rem;
         }
 
         .highlight-card {
@@ -420,6 +421,40 @@
                 align-items: flex-start;
             }
         }
+
+                .page-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 3rem;
+        }
+
+        .page-links a {
+            display: inline-block;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 0.9rem;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            padding: 0.6rem 1.25rem;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .page-links a:hover {
+            background: rgba(255, 255, 255, 0.14);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .page-links a.active {
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.12);
+        }
     </style>
 </head>
 <body>
@@ -435,69 +470,68 @@
     </nav>
 
     <div class="page-content">
-        <h1 class="fade-in">Latitude Notes</h1>
-        <p class="page-subtitle fade-in fade-in-delay-1">A lightweight project journal that helps remote teams track launches, rituals, and the momentum between milestones.</p>
-
         <div class="hero-card fade-in fade-in-delay-2">
-            <img src="/background4.jpg" alt="Project hero" loading="lazy" decoding="async">
+            <img src="/projects/spare-pocket.png" alt="Project hero" loading="lazy" decoding="async">
             <div class="hero-overlay"></div>
             <div class="hero-details">
-                <div class="hero-tags">
-                    <span class="hero-tag">Product</span>
-                    <span class="hero-tag">UI/UX</span>
-                    <span class="hero-tag">2026</span>
-                </div>
                 <div class="hero-actions">
-                    <a href="#">View prototype</a>
-                    <a href="#">Read notes</a>
+                    <a href="https://testflight.apple.com/join/vq6MUgC2" target="_blank">Download on TestFlight</a>
+                </div>
+                <div class="hero-tags">
+                    <span class="hero-tag">iOS</span>
+                    <span class="hero-tag">Swift</span>
+                    <span class="hero-tag">SwiftUI</span>
+                    <span class="hero-tag">SwiftData</span>
+                    <span class="hero-tag">2026</span>
                 </div>
             </div>
         </div>
+
+        <h1 class="fade-in">Spare Pocket</h1>
+        <p class="page-subtitle fade-in fade-in-delay-1">A universal capture app that lets you store links, notes, files, and ideas in one organized place so nothing important gets lost.</p>
 
         <div class="meta-grid fade-in">
             <div class="meta-card">
                 <span>Role</span>
-                <strong>Design + Engineering</strong>
-            </div>
-            <div class="meta-card">
-                <span>Timeline</span>
-                <strong>8 weeks</strong>
+                <strong>Engineering + Marketing</strong>
             </div>
             <div class="meta-card">
                 <span>Stack</span>
-                <strong>React, Node, Supabase</strong>
+                <strong>Swift, SwiftUI, SwiftData</strong>
             </div>
             <div class="meta-card">
                 <span>Status</span>
-                <strong>In exploration</strong>
+                <strong>On TestFlight</strong>
             </div>
         </div>
-
+        
         <h2 class="section-heading fade-in">Overview</h2>
-        <p class="section-text fade-in fade-in-delay-1">Latitude Notes was designed for distributed teams that need a shared sense of progress without heavyweight tooling. The product pairs a calm writing surface with just-enough structure: daily prompts, launch check-ins, and a highlight reel of momentum.</p>
+        <p class="section-text fade-in fade-in-delay-1">
+        Spare Pocket is a universal collection app for everything you don’t want to lose but don’t know where to put. Links, notes, files, ideas, screenshots, lists — if it matters later, it goes here. No rigid structure required, just fast capture and flexible organization when you need it.
+        </p>
 
         <div class="section-split fade-in fade-in-delay-2">
             <div class="highlight-card">
                 <h3>Challenge</h3>
-                <p>Teams were losing context between meetings. The goal was to build a space that felt intentional, but never overwhelming.</p>
+                <p>Important stuff ends up scattered across notes apps, screenshots, downloads folders, and random tabs. Retrieval becomes a treasure hunt you didn’t sign up for.</p>
             </div>
             <div class="highlight-card">
                 <h3>Approach</h3>
-                <p>Start with writing first, layer in rituals second. The UI uses soft gradients, glassy surfaces, and slow motion.</p>
+                <p>Capture first, organize later. Spare Pocket lets you quickly save anything, then sort it with lightweight categories, tags, and lists that evolve with how you think — not against it.</p>
             </div>
             <div class="highlight-card">
                 <h3>Outcome</h3>
-                <p>Early testers reported higher clarity in weekly planning, with a calmer end-of-week recap workflow.</p>
+                <p>Users stop losing ideas, links, and files in the chaos of daily life, and finally have one reliable place to check when they think, “I know I saved that somewhere.”</p>
             </div>
         </div>
 
-        <h2 class="section-heading fade-in">Gallery</h2>
+        <!--<h2 class="section-heading fade-in">Gallery</h2>
         <div class="gallery-grid fade-in fade-in-delay-1">
             <div class="gallery-item"><img src="/background.jpeg" alt="Project screen" loading="lazy" decoding="async"></div>
             <div class="gallery-item"><img src="/background2.jpeg" alt="Project screen" loading="lazy" decoding="async"></div>
             <div class="gallery-item"><img src="/background3.jpeg" alt="Project screen" loading="lazy" decoding="async"></div>
             <div class="gallery-item"><img src="/bg.png" alt="Project screen" loading="lazy" decoding="async"></div>
-        </div>
+        </div>-->
 
         <div class="next-project fade-in">
             <div>

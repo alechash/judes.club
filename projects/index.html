@@ -226,6 +226,20 @@
             text-shadow: 0 1px 10px rgba(0, 0, 0, 0.6);
         }
 
+        .project-card .project-title .project-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1.25rem;
+            font-family: 'Instrument Serif', serif;
+            font-size: 0.8rem;
+            font-weight: 400;
+            font-style: normal;
+            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+            text-shadow: 0 1px 10px rgba(0, 0, 0, 0.6);
+        }
+
         .project-card .project-meta {
             position: absolute;
             top: 1rem;
@@ -408,8 +422,7 @@
         <div class="nav-container">
             <a href="/" class="logo">Alec (Jude) Wilson</a>
             <ul class="nav-menu">
-                <li><a href="/">Home</a></li>
-                <li><a href="/projects" class="active">Projects</a></li>
+                <li><a href="/projects">Software</a></li>
                 <li><a href="/photo">Photography</a></li>
                 <li><a href="/#contact">Contact</a></li>
             </ul>
@@ -417,31 +430,32 @@
     </nav>
 
     <div class="page-content">
-        <h1 class="fade-in">Projects</h1>
+        <h1 class="fade-in">Software</h1>
         <p class="page-subtitle fade-in fade-in-delay-1">Product experiments, client collaborations, and side quests. Each project blends software, storytelling, and a love for tactile details.</p>
 
+        <p class="section-heading fade-in">Follow me</p>
         <div class="page-links fade-in fade-in-delay-2">
-            <a href="/projects" class="active">Overview</a>
-            <a href="/projects/template.html">Template Project</a>
-            <a href="/photo">Photography</a>
+            <a href="https://github.com/alechash" target="_blank">on GitHub</a>
+            <a href="https://news.ycombinator.com/user?id=alechash" target="_blank">on Hacker News</a>
+            <a href="https://x.com/alechash" target="_blank">on X</a>
         </div>
 
-        <h2 class="section-heading fade-in">Featured Projects</h2>
+        <h2 class="section-heading fade-in">Projects</h2>
         <div class="projects-grid fade-in fade-in-delay-1">
-            <a href="/projects/template.html" class="project-card">
-                <img src="/background.jpeg" alt="Project cover" loading="lazy" decoding="async">
-                <span class="project-meta">Web · 2025</span>
-                <div class="project-title">Latitude Notes</div>
+            <a href="/projects/spare-pocket.html" class="project-card">
+                <img src="/projects/spare-pocket.png" alt="Project cover" loading="lazy" decoding="async">
+                <span class="project-meta">iOS · 2026</span>
+                <div class="project-title">Spare Pocket</div>
             </a>
-            <a href="/projects/template.html" class="project-card">
-                <img src="/background2.jpeg" alt="Project cover" loading="lazy" decoding="async">
-                <span class="project-meta">Mobile · 2024</span>
-                <div class="project-title">Crescent Studio</div>
+            <a href="/projects/antifragile.html" class="project-card">
+                <img src="/projects/antifragile.png" alt="Project cover" loading="lazy" decoding="async">
+                <span class="project-meta">Full Stack · 2025</span>
+                <div class="project-title">Antifragile</div>
             </a>
-            <a href="/projects/template.html" class="project-card">
-                <img src="/background3.jpeg" alt="Project cover" loading="lazy" decoding="async">
-                <span class="project-meta">Tooling · 2023</span>
-                <div class="project-title">Signal Watch</div>
+            <a href="/projects/belayer.html" class="project-card">
+                <img src="/projects/belayer.png" alt="Project cover" loading="lazy" decoding="async">
+                <span class="project-meta">Company · 2025</span>
+                <div class="project-title">Belayer Development</div>
             </a>
         </div>
 
@@ -467,8 +481,7 @@
                 <p>Each project page walks through the process, the decisions, and the visuals behind the build.</p>
             </div>
             <div class="cta-actions">
-                <a href="/projects/template.html">View a case study</a>
-                <a href="/about.html">About me</a>
+                <a href="/">About me</a>
             </div>
         </div>
     </div>
