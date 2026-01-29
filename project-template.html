@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Template | Alec (Jude) Wilson</title>
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+    <meta name="description" content="Project template for Alec (Jude) Wilson. A detailed look at the goals, process, and outcome of a featured build.">
+    <meta property="og:title" content="Project Template | Alec (Jude) Wilson">
+    <meta property="og:description" content="Project template for Alec (Jude) Wilson. A detailed look at the goals, process, and outcome of a featured build.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="/bg.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Instrument Serif', serif;
+            font-style: italic;
+            min-height: 100vh;
+            background: #111;
+            color: white;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            z-index: 1000;
+            padding: 1.5rem 2rem;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            color: white;
+            font-family: 'Instrument Serif', serif;
+            font-style: italic;
+            padding: 0.5rem 1.5rem;
+            background: radial-gradient(ellipse 150% 100% at center, rgba(10, 61, 44, 0.4) 0%, transparent 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 0.5rem;
+        }
+
+        .nav-menu a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            transition: opacity 0.3s;
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            padding: 0.5rem 0.5rem;
+            display: block;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transform: scaleX(0.8);
+            background: radial-gradient(ellipse 150% 100% at center, rgba(10, 61, 44, 0.4) 0%, transparent 100%);
+        }
+
+        .nav-menu a:hover {
+            opacity: 0.6;
+        }
+
+        @media (max-width: 500px) {
+            .navbar {
+                padding: 1.5rem 1.5rem;
+            }
+
+            .nav-container {
+                align-items: flex-start;
+            }
+
+            .nav-menu {
+                flex-direction: column;
+                gap: 0.5rem;
+                text-align: right;
+            }
+
+            .nav-menu a {
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Page content */
+        .page-content {
+            padding: 8rem 2rem 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .page-content h1 {
+            font-size: 3rem;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.5px;
+            font-style: normal;
+        }
+
+        .page-subtitle {
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 1rem;
+            font-weight: 300;
+            opacity: 0.5;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            max-width: 640px;
+        }
+
+        .page-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 3rem;
+        }
+
+        .page-links a {
+            display: inline-block;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 0.9rem;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            padding: 0.6rem 1.25rem;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .page-links a:hover {
+            background: rgba(255, 255, 255, 0.14);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .page-links a.active {
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .project-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .meta-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 1.25rem;
+        }
+
+        .meta-card span {
+            display: block;
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 0.75rem;
+            font-weight: 300;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            opacity: 0.6;
+            margin-bottom: 0.5rem;
+        }
+
+        .meta-card strong {
+            font-size: 1.1rem;
+            font-style: normal;
+            font-weight: 400;
+        }
+
+        .section-heading {
+            font-size: 1.6rem;
+            font-weight: 400;
+            font-style: normal;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.3px;
+        }
+
+        .project-body {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .project-body p {
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 0.95rem;
+            font-weight: 300;
+            line-height: 1.7;
+            opacity: 0.6;
+        }
+
+        .project-gallery {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding-bottom: 0.75rem;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .project-gallery::-webkit-scrollbar {
+            display: none;
+        }
+
+        .project-shot {
+            flex: 0 0 clamp(220px, 32vw, 360px);
+            height: clamp(170px, 28vh, 240px);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.04);
+            scroll-snap-align: start;
+        }
+
+        .project-shot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .project-highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1rem;
+            margin-top: 2.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .highlight-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 1.25rem;
+        }
+
+        .highlight-card h3 {
+            font-size: 1.1rem;
+            font-style: normal;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-card p {
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 0.9rem;
+            font-weight: 300;
+            opacity: 0.6;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        .footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer span {
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 0.85rem;
+            font-weight: 300;
+            opacity: 0.4;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.25rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 0.85rem;
+            font-weight: 300;
+            transition: opacity 0.3s;
+        }
+
+        .footer-links a:hover {
+            opacity: 0.6;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fade-in-delay-1 { transition-delay: 0.1s; }
+        .fade-in-delay-2 { transition-delay: 0.2s; }
+        .fade-in-delay-3 { transition-delay: 0.3s; }
+
+        @media (max-width: 768px) {
+            .page-content h1 {
+                font-size: 2rem;
+            }
+
+            .page-links {
+                gap: 0.5rem;
+            }
+
+            .project-shot {
+                flex: 0 0 80vw;
+                height: 40vw;
+            }
+
+            .footer {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">Alec (Jude) Wilson</a>
+            <ul class="nav-menu">
+                <li><a href="/projects">Projects</a></li>
+                <li><a href="/photo">Photography</a></li>
+                <li><a href="/#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="page-content">
+        <h1 class="fade-in">Project Template</h1>
+        <p class="page-subtitle fade-in fade-in-delay-1">A closer look at how I approach building thoughtful, lightweight digital products from concept to launch.</p>
+
+        <div class="page-links fade-in fade-in-delay-2">
+            <a href="/projects">Back to Projects</a>
+            <a href="#" class="active">Live Demo</a>
+            <a href="#">GitHub</a>
+        </div>
+
+        <div class="project-meta fade-in fade-in-delay-3">
+            <div class="meta-card">
+                <span>Role</span>
+                <strong>Product + Engineering</strong>
+            </div>
+            <div class="meta-card">
+                <span>Timeline</span>
+                <strong>6 Weeks</strong>
+            </div>
+            <div class="meta-card">
+                <span>Stack</span>
+                <strong>Next.js · Supabase · Figma</strong>
+            </div>
+        </div>
+
+        <h2 class="section-heading fade-in">Overview</h2>
+        <div class="project-body fade-in fade-in-delay-1">
+            <p>The goal was to build a lightweight operating system for creative teams that live in async. The product needed to feel calm, to work offline, and to be shippable in a single quarter.</p>
+            <p>I designed a modular layout system, set up the data architecture, and built the core dashboard experience with an emphasis on speed and clarity.</p>
+        </div>
+
+        <h2 class="section-heading fade-in">Snapshots</h2>
+        <div class="project-gallery fade-in fade-in-delay-2">
+            <div class="project-shot"><img src="/background2.jpeg" alt="Dashboard layout" loading="lazy" decoding="async"></div>
+            <div class="project-shot"><img src="/background3.jpeg" alt="Calendar overlay" loading="lazy" decoding="async"></div>
+            <div class="project-shot"><img src="/background.jpeg" alt="Project cards view" loading="lazy" decoding="async"></div>
+            <div class="project-shot"><img src="/background4.jpg" alt="Analytics screen" loading="lazy" decoding="async"></div>
+        </div>
+
+        <div class="project-highlights fade-in fade-in-delay-3">
+            <div class="highlight-card">
+                <h3>Clear Goals</h3>
+                <p>Define the minimum set of features that would let teams onboard, collaborate, and share updates within days.</p>
+            </div>
+            <div class="highlight-card">
+                <h3>Deliberate UI</h3>
+                <p>Typography-led design with a strict spacing system keeps the experience calm even with dense data.</p>
+            </div>
+            <div class="highlight-card">
+                <h3>Measured Impact</h3>
+                <p>Shipped in six weeks, with a 30% increase in weekly active usage over the previous prototype.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <span>&copy; 2026 Alec (Jude) Wilson</span>
+        <div class="footer-links">
+            <a href="/">Home</a>
+            <a href="/projects">Projects</a>
+            <a href="mailto:hi@judes.club">hi@judes.club</a>
+        </div>
+    </footer>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
