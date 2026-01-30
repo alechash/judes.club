@@ -421,35 +421,45 @@
         }
 
         .quote-rotator {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            justify-content: center;
             text-align: center;
-            gap: 0.35rem;
-            margin: 1.25rem auto 2rem;
-            max-width: 520px;
+            max-width: min(560px, 80vw);
             padding: 0 1rem;
             font-family: 'Instrument Serif', serif;
             font-style: italic;
             text-shadow: 0 1px 12px rgba(0, 0, 0, 0.5);
-            transition: opacity 0.4s ease, transform 0.4s ease;
+            z-index: 1;
         }
 
-        .quote-rotator.is-fading {
+        .quote-rotator-inner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.35rem;
+            transition: opacity 0.5s ease, transform 0.5s ease, filter 0.5s ease;
+        }
+
+        .quote-rotator.is-fading .quote-rotator-inner {
             opacity: 0;
-            transform: translateY(6px);
+            transform: translateY(8px) scale(0.98);
+            filter: blur(2px);
         }
 
         .quote-rotator .quote-text {
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             opacity: 0.92;
         }
 
         .quote-rotator .quote-author {
             font-family: 'Inter', sans-serif;
             font-style: normal;
-            font-size: 0.8rem;
-            letter-spacing: 1px;
+            font-size: 0.78rem;
+            letter-spacing: 1.4px;
             text-transform: uppercase;
             opacity: 0.6;
         }
@@ -931,12 +941,12 @@
             }
 
             .quote-rotator {
-                margin-bottom: 1.5rem;
+                max-width: 85vw;
             }
         }
 
         @media (prefers-reduced-motion: reduce) {
-            .quote-rotator {
+            .quote-rotator-inner {
                 transition: none;
             }
         }
@@ -1059,17 +1069,19 @@
     <section class="section section-5">
         <div class="footer-content">
             <h1 class="fade-in" style="font-size: 2rem; font-weight: 400; font-style: normal;">Links</h1>
-            <div class="quote-rotator fade-in fade-in-delay-1" id="quote-rotator" aria-live="polite">
-                <span class="quote-text" id="quote-text">“Stay curious. Stay kind. Stay building.”</span>
-                <span class="quote-author" id="quote-author">— Alec Jude Wilson</span>
-            </div>
-            <div class="social-links fade-in fade-in-delay-2">
+            <div class="social-links fade-in fade-in-delay-1">
                 <a href="https://github.com/alechash" target="_blank">GitHub</a>
                 <a href="https://instagram.com/wil.tography" target="_blank">Instagram</a>
                 <a href="https://x.com/alechash" target="_blank">X</a>
             </div>
-            <div class="footer-bottom fade-in fade-in-delay-3">
+            <div class="footer-bottom fade-in fade-in-delay-2">
                 &copy; 2026 Alec Jude Wilson
+            </div>
+        </div>
+        <div class="quote-rotator fade-in" id="quote-rotator" aria-live="polite">
+            <div class="quote-rotator-inner">
+                <span class="quote-text" id="quote-text">“Stay hungry, stay foolish.”</span>
+                <span class="quote-author" id="quote-author">— Steve Jobs</span>
             </div>
         </div>
         <span class="photo-caption">The Sky, Earth</span>
@@ -1298,10 +1310,16 @@
             if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
             const quotes = [
-                { text: '“Stay curious. Stay kind. Stay building.”', author: '— Alec Jude Wilson' },
-                { text: '“Make the ordinary feel cinematic.”', author: '— A.J.W.' },
-                { text: '“Ship, learn, repeat.”', author: '— Belayer Notes' },
-                { text: '“Light is a collaborator.”', author: '— Photo Journal' },
+                { text: '“Stay hungry, stay foolish.”', author: '— Steve Jobs' },
+                { text: '“Simplicity is the ultimate sophistication.”', author: '— Leonardo da Vinci' },
+                { text: '“The best way out is always through.”', author: '— Robert Frost' },
+                { text: '“What we see depends mainly on what we look for.”', author: '— John Lubbock' },
+                { text: '“In the middle of difficulty lies opportunity.”', author: '— Albert Einstein' },
+                { text: '“The details are not the details. They make the design.”', author: '— Charles Eames' },
+                { text: '“It is not the mountain we conquer but ourselves.”', author: '— Edmund Hillary' },
+                { text: '“Creativity is intelligence having fun.”', author: '— Albert Einstein' },
+                { text: '“Perfection is achieved, not when there is nothing more to add, but when there is nothing left to take away.”', author: '— Antoine de Saint-Exupéry' },
+                { text: '“You miss 100% of the shots you don’t take.”', author: '— Wayne Gretzky' },
             ];
 
             let index = 0;
@@ -1318,11 +1336,11 @@
                     index = (index + 1) % quotes.length;
                     setQuote(index);
                     rotator.classList.remove('is-fading');
-                }, 400);
+                }, 500);
             }
 
             setQuote(index);
-            setInterval(rotateQuote, 7000);
+            setInterval(rotateQuote, 8000);
         })();
 
         // Section navigation — transform-based, no scrolling
