@@ -421,27 +421,21 @@
         }
 
         .quote-rotator {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            transform: translateY(-50%);
             display: flex;
-            justify-content: center;
-            text-align: center;
-            max-width: min(560px, 80vw);
-            padding: 0 1rem;
+            justify-content: flex-start;
+            text-align: left;
+            max-width: 520px;
+            padding: 0;
             font-family: 'Instrument Serif', serif;
             font-style: italic;
             color: white;
             text-shadow: 0 1px 12px rgba(0, 0, 0, 0.5);
-            z-index: 1;
         }
 
         .quote-rotator-inner {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: flex-start;
             gap: 0.35rem;
             transition: opacity 0.5s ease, transform 0.5s ease, filter 0.5s ease;
         }
@@ -1071,19 +1065,19 @@
     <section class="section section-5">
         <div class="footer-content">
             <h1 class="fade-in" style="font-size: 2rem; font-weight: 400; font-style: normal;">Links</h1>
-            <div class="social-links fade-in fade-in-delay-1">
+            <div class="quote-rotator fade-in fade-in-delay-1" id="quote-rotator" aria-live="polite">
+                <div class="quote-rotator-inner">
+                    <span class="quote-text" id="quote-text">“Stay hungry, stay foolish.”</span>
+                    <span class="quote-author" id="quote-author">— Steve Jobs</span>
+                </div>
+            </div>
+            <div class="social-links fade-in fade-in-delay-2">
                 <a href="https://github.com/alechash" target="_blank">GitHub</a>
                 <a href="https://instagram.com/wil.tography" target="_blank">Instagram</a>
                 <a href="https://x.com/alechash" target="_blank">X</a>
             </div>
-            <div class="footer-bottom fade-in fade-in-delay-2">
+            <div class="footer-bottom fade-in fade-in-delay-3">
                 &copy; 2026 Alec Jude Wilson
-            </div>
-        </div>
-        <div class="quote-rotator fade-in" id="quote-rotator" aria-live="polite">
-            <div class="quote-rotator-inner">
-                <span class="quote-text" id="quote-text">“Stay hungry, stay foolish.”</span>
-                <span class="quote-author" id="quote-author">— Steve Jobs</span>
             </div>
         </div>
         <span class="photo-caption">The Sky, Earth</span>
