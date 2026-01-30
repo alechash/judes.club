@@ -195,7 +195,7 @@
             text-decoration: none;
             color: white;
             overflow: hidden;
-            aspect-ratio: 16 / 10;
+            aspect-ratio: 16 / 6;
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(255, 255, 255, 0.08);
             transition: border-color 0.3s, transform 0.3s;
@@ -237,6 +237,16 @@
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 0.75rem;
             margin-bottom: 4rem;
+        }
+
+        .photo-loader {
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 0.9rem;
+            font-weight: 300;
+            opacity: 0.6;
+            text-align: center;
+            padding: 1.5rem 0 3rem;
         }
 
         .photo-grid-item {
@@ -539,7 +549,7 @@
             }
 
             .collection-card {
-                aspect-ratio: 5 / 2;
+                aspect-ratio: 5 / 1.6;
             }
 
             .photo-grid {
@@ -587,6 +597,7 @@
 
         <h2 class="section-heading fade-in">All Photos</h2>
         <div class="photo-grid fade-in" id="images"></div>
+        <div class="photo-loader" id="photo-loader">Loading photos...</div>
     </div>
 
     <footer class="footer">
@@ -623,6 +634,7 @@
         const API_BASE = "https://judes-club-photos.hi-eab.workers.dev";
         const gallery = document.getElementById("gallery");
         const imagesGrid = document.getElementById("images");
+        const photoLoader = document.getElementById("photo-loader");
         const modal = document.getElementById('collection-modal');
         const modalTitle = document.getElementById('collection_title');
         const modalImages = document.getElementById('collection_images');
@@ -633,6 +645,10 @@
         const lightboxDownload = document.getElementById('lightbox-download');
         const lightboxCloseBtn = document.getElementById('lightbox-close');
         const lightboxAttribution = document.getElementById('lightbox-attribution');
+        let currentPage = 1;
+        const pageSize = 24;
+        let isLoadingPhotos = false;
+        let hasMorePhotos = true;
 
         async function fetchJson(url) {
             const response = await fetch(url);
@@ -657,14 +673,38 @@
             container.innerHTML = photos.map(renderPhotoCard).join("");
         }
 
-        async function loadAllPhotos() {
-            imagesGrid.innerHTML = "<p>Loading photos...</p>";
+        function appendPhotos(photos, container) {
+            container.insertAdjacentHTML('beforeend', photos.map(renderPhotoCard).join(""));
+        }
+
+        async function loadAllPhotos({ reset = false } = {}) {
+            if (isLoadingPhotos || (!hasMorePhotos && !reset)) {
+                return;
+            }
+            isLoadingPhotos = true;
+            photoLoader.textContent = "Loading photos...";
+            if (reset) {
+                currentPage = 1;
+                hasMorePhotos = true;
+                imagesGrid.innerHTML = "";
+            }
             try {
-                const data = await fetchJson(`${API_BASE}/photos`);
-                renderPhotos(data.results || [], imagesGrid);
+                const data = await fetchJson(`${API_BASE}/photos?page=${currentPage}&limit=${pageSize}`);
+                const photos = data.results || [];
+                appendPhotos(photos, imagesGrid);
+                currentPage += 1;
+                if (photos.length < pageSize) {
+                    hasMorePhotos = false;
+                    photoLoader.textContent = "You're all caught up.";
+                }
             } catch (error) {
-                imagesGrid.innerHTML = "<p>Unable to load photos right now.</p>";
+                if (!imagesGrid.innerHTML) {
+                    imagesGrid.innerHTML = "<p>Unable to load photos right now.</p>";
+                }
+                photoLoader.textContent = "Unable to load more photos.";
                 console.error(error);
+            } finally {
+                isLoadingPhotos = false;
             }
         }
 
@@ -819,7 +859,17 @@
 
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-        loadAllPhotos();
+        const infiniteObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    loadAllPhotos();
+                }
+            });
+        }, { rootMargin: '300px' });
+
+        infiniteObserver.observe(photoLoader);
+
+        loadAllPhotos({ reset: true });
         loadCollections();
     </script>
 </body>
