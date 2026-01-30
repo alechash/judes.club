@@ -21,8 +21,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@100..900&display=swap" rel="stylesheet">
     <style>
-        html {
-            scroll-behavior: smooth;
+        html, body {
+            overflow: hidden;
+            height: 100vh;
         }
 
         * {
@@ -51,8 +52,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
+            padding: 0 2rem;
         }
 
         .logo {
@@ -102,6 +104,7 @@
 
             .nav-container {
                 align-items: flex-start;
+                padding: 0;
             }
 
             .nav-menu {
@@ -116,49 +119,27 @@
         }
 
         .section {
-            position: relative;
-            min-height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
             background-color: #111;
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
+            will-change: transform;
         }
 
-        .section-1 {
-            background-image: url('/bg.jpeg');
-            background-position: center right;
-            position: sticky;
-            top: 0;
-            z-index: 1;
-        }
-
-        .section-2 {
-            background-image: url('/background.jpeg');
-            position: sticky;
-            top: 0;
-            z-index: 2;
-        }
-
-        .section-3 {
-            background-image: url('/background2.jpeg');
-            position: sticky;
-            top: 0;
-            z-index: 3;
-        }
-
-        .section-4 {
-            background-image: url('/background3.jpeg');
-            position: sticky;
-            top: 0;
-            z-index: 4;
-        }
-
-        .section-5 {
-            background-image: url('/background4.jpeg');
-            z-index: 5;
-        }
+        .section-1 { background-image: url('/bg.jpeg'); background-position: center right; z-index: 1; }
+        .section-2 { background-image: url('/background.jpeg'); z-index: 2; transform: translateY(100%); }
+        .section-3 { background-image: url('/background2.jpeg'); z-index: 3; transform: translateY(100%); }
+        .section-4 { background-image: url('/background3.jpeg'); z-index: 4; transform: translateY(100%); }
+        .section-5 { background-image: url('/background4.jpeg'); z-index: 5; transform: translateY(100%); }
 
         /* Dark overlay for readability */
+        .section-1::before,
         .section-2::before,
         .section-3::before,
         .section-4::before,
@@ -168,6 +149,10 @@
             inset: 0;
             background: rgba(0, 0, 0, 0.45);
             z-index: 0;
+        }
+
+        .section-1::before {
+            background: linear-gradient(to right, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.35) 60%, rgba(0, 0, 0, 0.15) 100%);
         }
 
         .content {
@@ -416,14 +401,16 @@
 
         /* Footer section */
         .section-5 {
-            min-height: auto;
             padding-bottom: 0;
         }
 
         .footer-content {
-            position: relative;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
             z-index: 1;
-            padding: 6rem 2rem 3rem;
+            padding: 3rem 2rem;
             max-width: 1200px;
             margin: 0 auto;
             color: white;
@@ -575,13 +562,50 @@
             -webkit-backdrop-filter: blur(10px);
         }
 
+        /* Photo carousel */
+        .photo-carousel {
+            position: relative;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            font-size: 1.5rem;
+            width: 2.5rem;
+            height: 2.5rem;
+            cursor: pointer;
+            z-index: 2;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s, border-color 0.3s;
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            line-height: 1;
+            padding: 0;
+        }
+
+        .carousel-btn:hover {
+            background: rgba(0, 0, 0, 0.6);
+            border-color: rgba(255, 255, 255, 0.35);
+        }
+
+        .carousel-prev { left: 0.5rem; }
+        .carousel-next { right: 0.5rem; }
+
         /* Photo grid */
         .photo-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(4, 1fr);
             gap: 0.75rem;
-            margin-top: 2.5rem;
-            margin-bottom: 1rem;
         }
 
         .photo-grid-item {
@@ -646,6 +670,14 @@
         }
 
         @media (max-width: 768px) {
+            .navbar {
+                padding: 1.5rem 1.5rem;
+            }
+
+            .nav-container {
+                padding: 0;
+            }
+
             .content {
                 padding: 6rem 1.5rem 2rem;
             }
@@ -675,6 +707,13 @@
                 margin-bottom: 0.3rem;
             }
 
+            .app-card p {
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+
             .app-card .app-tag {
                 margin-bottom: 0.4rem;
             }
@@ -684,42 +723,40 @@
                 gap: 2rem;
             }
 
-            /* Photography section: horizontal scroller on mobile */
-            .photo-grid {
-                display: flex;
-                overflow-x: auto;
-                scroll-snap-type: x mandatory;
-                -webkit-overflow-scrolling: touch;
-                gap: 0.75rem;
+            /* Photography section: single image carousel on mobile */
+            .photo-carousel {
                 margin-top: 1.5rem;
                 margin-bottom: 0.75rem;
-                padding-bottom: 0.5rem;
-                scrollbar-width: none;
+                overflow: hidden;
             }
 
-            .photo-grid::-webkit-scrollbar {
-                display: none;
+            .carousel-btn {
+                display: flex;
+            }
+
+            .photo-grid {
+                display: flex;
+                grid-template-columns: none;
+                gap: 0;
+                overflow: visible;
+                position: relative;
+                transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             }
 
             .photo-grid-item {
-                flex: 0 0 72vw;
-                aspect-ratio: 3 / 2;
-                max-height: 45vh;
+                flex: 0 0 100%;
+                min-width: 100%;
+                aspect-ratio: 16 / 9;
                 height: auto;
-                scroll-snap-align: start;
-                border-radius: 8px;
-            }
-
-            .photo-grid-item:first-child {
-                margin-left: 0;
-            }
-
-            .photo-grid-item:last-child {
-                margin-right: 0;
+                background: none;
+                border: none;
+                display: block;
             }
 
             .photo-grid-item img {
-                border-radius: 8px;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
             }
 
             .photo-links {
@@ -758,10 +795,10 @@
     <!-- About Me -->
     <section class="section section-1" id="about">
         <div class="content">
-            <h1 class="fade-in">Designed with <i>logic</i>. Composed with <i>light</i>.</h1>
+            <h1 class="fade-in">I build software and photograph the world.</h1>
             <div class="hero-intro">
                 <div class="hero-blurb fade-in fade-in-delay-1">
-                    <p>Developer and photographer splitting time between writing code and chasing light. I build tools that I want to exist and photograph places that make me feel something.</p>
+                    <p>I design and develop web and mobile applications — from iOS apps to full-stack platforms. I also run a software consultancy helping companies ship digital products. When I'm not coding, I'm shooting travel and street photography.</p>
                 </div>
 
                 <div class="hero-details fade-in fade-in-delay-2">
@@ -771,11 +808,11 @@
                     </div>
                     <div class="hero-detail">
                         <span class="label">Focus</span>
-                        <span class="value">Web & Mobile</span>
+                        <span class="value">Web, Mobile & AI</span>
                     </div>
                     <div class="hero-detail">
-                        <span class="label">Currently</span>
-                        <span class="value">Building things</span>
+                        <span class="label">Consultancy</span>
+                        <span class="value">Belayer Development</span>
                     </div>
                 </div>
             </div>
@@ -793,7 +830,7 @@
                     Software <span class="arrow">⭢</span>
                 </a>
             </h1>
-            <p class="subtitle fade-in fade-in-delay-1">Things I build</p>
+            <p class="subtitle fade-in fade-in-delay-1">Things I've built</p>
             <div class="apps-grid">
                 <a href="/projects/spare-pocket" class="app-card fade-in fade-in-delay-2">
                     <span class="app-tag">iOS</span>
@@ -824,11 +861,10 @@
                 </a>
             </h1>
             <p class="subtitle fade-in fade-in-delay-1">Places I've been, things I've seen</p>
-            <div class="photo-grid fade-in fade-in-delay-3">
-                <div class="photo-grid-item"><img src="/bg.jpeg" alt="Photo" loading="lazy" decoding="async"></div>
-                <div class="photo-grid-item"><img src="/background.jpeg" alt="Photo" loading="lazy" decoding="async"></div>
-                <div class="photo-grid-item"><img src="/background2.jpeg" alt="Photo" loading="lazy" decoding="async"></div>
-                <div class="photo-grid-item"><img src="/background3.jpeg" alt="Photo" loading="lazy" decoding="async"></div>
+            <div class="photo-carousel fade-in fade-in-delay-3">
+                <div class="photo-grid" id="photo-grid"></div>
+                <button class="carousel-btn carousel-prev" id="carousel-prev" aria-label="Previous">&#8249;</button>
+                <button class="carousel-btn carousel-next" id="carousel-next" aria-label="Next">&#8250;</button>
             </div>
             <div class="photo-links fade-in fade-in-delay-4">
                 <a href="https://instagram.com/wil.tography" class="photo-link" target="_blank">Instagram</a>
@@ -873,16 +909,52 @@
     </section>
 
     <script>
-        // Scroll fade-in
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, { threshold: 0.1 });
+        // Build pool of all site photos and pick 4 random unique ones
+        (function() {
+            const photos = [
+                '/bg.jpeg', '/background.jpeg', '/background2.jpeg', '/background3.jpeg', '/background4.jpeg',
+                '/img_1.jpg', '/img_2.jpeg', '/img_3.jpeg', '/img_4.jpeg',
+                '/assets/main.jpg',
+            ];
+            for (let i = 0; i <= 26; i++) photos.push(`/assets/images/ecuador/img-${i}.jpg`);
+            for (let i = 0; i <= 29; i++) photos.push(`/assets/images/home/image_${i}.jpg`);
+            for (let i = 0; i <= 5; i++) photos.push(`/assets/images/rocket/img-${i}.jpg`);
 
-        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+            // Fisher-Yates shuffle, pick first 8
+            for (let i = photos.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [photos[i], photos[j]] = [photos[j], photos[i]];
+            }
+
+            const grid = document.getElementById('photo-grid');
+            photos.slice(0, 8).forEach((src, i) => {
+                const div = document.createElement('div');
+                div.className = 'photo-grid-item';
+                const img = document.createElement('img');
+                img.src = src;
+                img.alt = 'Photo';
+                img.loading = 'lazy';
+                img.decoding = 'async';
+                div.appendChild(img);
+                grid.appendChild(div);
+            });
+
+            // Carousel buttons — slide via translateX
+            var count = grid.querySelectorAll('.photo-grid-item').length;
+            var ci = 0;
+            function slideTo(i) {
+                ci = ((i % count) + count) % count;
+                grid.style.transform = 'translateX(-' + (ci * 100) + '%)';
+            }
+            document.getElementById('carousel-prev').addEventListener('click', function() { slideTo(ci - 1); });
+            document.getElementById('carousel-next').addEventListener('click', function() { slideTo(ci + 1); });
+        })();
+
+        // Fade-in: trigger when section becomes active
+        function revealSection(el) {
+            el.querySelectorAll('.fade-in').forEach(function(f) { f.classList.add('visible'); });
+        }
+        revealSection(document.querySelector('.section-1'));
 
         // Contact form submission
         const form = document.getElementById('contact-form');
@@ -915,6 +987,99 @@
             btn.textContent = 'Send';
             btn.disabled = false;
         });
+
+        // Section navigation — transform-based, no scrolling
+        (function() {
+            var sections = document.querySelectorAll('.section');
+            var count = sections.length;
+            var current = 0;
+            var animating = false;
+
+            function go(index) {
+                index = Math.max(0, Math.min(index, count - 1));
+                if (index === current || animating) return;
+                var dir = index > current ? 1 : -1;
+                var moving = dir > 0 ? sections[index] : sections[current];
+                animating = true;
+
+                moving.style.transition = 'transform 0.8s cubic-bezier(0.65, 0, 0.35, 1)';
+                moving.style.transform = dir > 0 ? 'translateY(0%)' : 'translateY(100%)';
+
+                revealSection(sections[index]);
+
+                moving.addEventListener('transitionend', function done() {
+                    moving.removeEventListener('transitionend', done);
+                    moving.style.transition = '';
+                    current = index;
+                    animating = false;
+                }, { once: true });
+            }
+
+            // Wheel — absorb momentum, allow new gesture only if accelerating
+            var lastDir = 0;
+            var peakDelta = 0;
+            window.addEventListener('wheel', function(e) {
+                e.preventDefault();
+                var delta = Math.abs(e.deltaY);
+                if (animating) {
+                    lastDir = e.deltaY > 0 ? 1 : -1;
+                    if (delta > peakDelta) peakDelta = delta;
+                    return;
+                }
+                var dir = e.deltaY > 0 ? 1 : -1;
+                if (lastDir) {
+                    // Direction reversed — new gesture
+                    if (dir !== lastDir) { lastDir = 0; peakDelta = 0; go(current + dir); return; }
+                    // Same direction — only allow if delta exceeds previous peak (real new gesture)
+                    if (delta > peakDelta * 1.5) { lastDir = 0; peakDelta = 0; go(current + dir); return; }
+                    // Still decaying momentum, absorb it
+                    if (delta < peakDelta) peakDelta = delta;
+                    return;
+                }
+                go(current + dir);
+            }, { passive: false });
+
+            // Touch
+            var tx = 0, ty = 0, isHorizontal = null;
+            window.addEventListener('touchstart', function(e) {
+                tx = e.touches[0].clientX;
+                ty = e.touches[0].clientY;
+                isHorizontal = null;
+            }, { passive: true });
+            window.addEventListener('touchmove', function(e) {
+                if (e.target.closest('.contact-form, .photo-grid')) return;
+                if (isHorizontal === null) {
+                    var dx = Math.abs(e.touches[0].clientX - tx);
+                    var dy = Math.abs(e.touches[0].clientY - ty);
+                    if (dx + dy > 10) isHorizontal = dx > dy;
+                }
+                if (!isHorizontal) e.preventDefault();
+            }, { passive: false });
+            window.addEventListener('touchend', function(e) {
+                if (animating || isHorizontal) return;
+                var d = ty - e.changedTouches[0].clientY;
+                if (Math.abs(d) > 30) go(current + (d > 0 ? 1 : -1));
+            }, { passive: true });
+
+            // Keyboard
+            window.addEventListener('keydown', function(e) {
+                if (animating) return;
+                if (e.key === 'ArrowDown' || e.key === 'PageDown') { e.preventDefault(); go(current + 1); }
+                else if (e.key === 'ArrowUp' || e.key === 'PageUp') { e.preventDefault(); go(current - 1); }
+            });
+
+            // Hash links (e.g. /#contact)
+            document.querySelectorAll('a[href^="/#"]').forEach(function(a) {
+                a.addEventListener('click', function(e) {
+                    var target = document.querySelector(a.getAttribute('href').replace('/', ''));
+                    if (target) {
+                        e.preventDefault();
+                        var idx = Array.from(sections).indexOf(target);
+                        if (idx >= 0) go(idx);
+                    }
+                });
+            });
+        })();
     </script>
 </body>
 </html>
