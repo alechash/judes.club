@@ -420,12 +420,53 @@
             color: white;
         }
 
+        .quote-rotator {
+            display: flex;
+            justify-content: flex-start;
+            text-align: left;
+            max-width: 520px;
+            padding: 0;
+            font-family: 'Instrument Serif', serif;
+            margin-top: -1rem;
+            margin-bottom: 3rem;
+            color: white;
+            text-shadow: 0 1px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .quote-rotator-inner {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.35rem;
+            transition: opacity 0.5s ease, transform 0.5s ease, filter 0.5s ease;
+        }
+
+        .quote-rotator.is-fading .quote-rotator-inner {
+            opacity: 0;
+            transform: translateY(8px) scale(0.98);
+            filter: blur(2px);
+        }
+
+        .quote-rotator .quote-text {
+            font-size: 1.25rem;
+            opacity: 0.92;
+        }
+
+        .quote-rotator .quote-author {
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 0.78rem;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+            opacity: 0.6;
+        }
+
         .social-links {
             display: flex;
             flex-wrap: wrap;
             gap: 1.5rem;
             margin-top: 2rem;
-            margin-bottom: 4rem;
+            margin-bottom: 3rem;
         }
 
         .social-links a {
@@ -452,6 +493,10 @@
             font-weight: 300;
             opacity: 0.5;
             text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .footer-bottom p {
+            float: right;
         }
 
         /* Hero section */
@@ -788,6 +833,15 @@
         }
 
         @media (max-width: 768px) {
+            .footer-bottom p {
+                float: none;
+                display: block;
+            }
+
+            .footer-bottom div {
+                margin-top: 1rem;
+            }
+
             .navbar {
                 padding: 1.5rem 1.5rem;
             }
@@ -894,6 +948,16 @@
 
             .contact-email {
                 margin-top: 1rem;
+            }
+
+            .quote-rotator {
+                max-width: 85vw;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .quote-rotator-inner {
+                transition: none;
             }
         }
     </style>
@@ -1015,13 +1079,19 @@
     <section class="section section-5">
         <div class="footer-content">
             <h1 class="fade-in" style="font-size: 2rem; font-weight: 400; font-style: normal;">Links</h1>
-            <div class="social-links fade-in fade-in-delay-1">
+            <div class="social-links fade-in fade-in-delay-2">
                 <a href="https://github.com/alechash" target="_blank">GitHub</a>
                 <a href="https://instagram.com/wil.tography" target="_blank">Instagram</a>
-                <a href="https://x.com/alechash" target="_blank">X</a>
+                <a href="https://x.com/alechash" target="_blank">X</a><br>
             </div>
-            <div class="footer-bottom fade-in fade-in-delay-2">
-                &copy; 2026 Alec Jude Wilson
+            <div class="footer-bottom fade-in fade-in-delay-3">
+                <p>&copy; 2026 Alec Jude Wilson</p>
+                <div class="quote-rotator fade-in fade-in-delay-1" id="quote-rotator" aria-live="polite">
+                    <div class="quote-rotator-inner">
+                        <span class="quote-text" id="quote-text">“Stay hungry, stay foolish.”</span>
+                        <span class="quote-author" id="quote-author">— Steve Jobs</span>
+                    </div>
+                </div>
             </div>
         </div>
         <span class="photo-caption">The Sky, Earth</span>
@@ -1240,6 +1310,48 @@
             btn.textContent = 'Send';
             btn.disabled = false;
         });
+
+        // Quote rotation for Links section
+        (function() {
+            const rotator = document.getElementById('quote-rotator');
+            const textEl = document.getElementById('quote-text');
+            const authorEl = document.getElementById('quote-author');
+            if (!rotator || !textEl || !authorEl) return;
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+            const quotes = [
+                { text: '“Stay hungry, stay foolish.”', author: '— Steve Jobs' },
+                { text: '“Simplicity is the ultimate sophistication.”', author: '— Leonardo da Vinci' },
+                { text: '“The best way out is always through.”', author: '— Robert Frost' },
+                { text: '“What we see depends mainly on what we look for.”', author: '— John Lubbock' },
+                { text: '“In the middle of difficulty lies opportunity.”', author: '— Albert Einstein' },
+                { text: '“The details are not the details. They make the design.”', author: '— Charles Eames' },
+                { text: '“It is not the mountain we conquer but ourselves.”', author: '— Edmund Hillary' },
+                { text: '“Creativity is intelligence having fun.”', author: '— Albert Einstein' },
+                { text: '“Perfection is achieved, not when there is nothing more to add, but when there is nothing left to take away.”', author: '— Antoine de Saint-Exupéry' },
+                { text: '“You miss 100% of the shots you don’t take.”', author: '— Wayne Gretzky' },
+            ];
+
+            let index = 0;
+
+            function setQuote(nextIndex) {
+                const quote = quotes[nextIndex];
+                textEl.textContent = quote.text;
+                authorEl.textContent = quote.author;
+            }
+
+            function rotateQuote() {
+                rotator.classList.add('is-fading');
+                setTimeout(() => {
+                    index = (index + 1) % quotes.length;
+                    setQuote(index);
+                    rotator.classList.remove('is-fading');
+                }, 500);
+            }
+
+            setQuote(index);
+            setInterval(rotateQuote, 8000);
+        })();
 
         // Section navigation — transform-based, no scrolling
         (function() {
