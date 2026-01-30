@@ -427,8 +427,8 @@
             max-width: 520px;
             padding: 0;
             font-family: 'Instrument Serif', serif;
-            margin-top: 1.5rem;
-            margin-bottom: 1rem;
+            margin-top: -1rem;
+            margin-bottom: 3rem;
             color: white;
             text-shadow: 0 1px 12px rgba(0, 0, 0, 0.5);
         }
@@ -466,7 +466,7 @@
             flex-wrap: wrap;
             gap: 1.5rem;
             margin-top: 2rem;
-            margin-bottom: 4rem;
+            margin-bottom: 3rem;
         }
 
         .social-links a {
@@ -493,6 +493,10 @@
             font-weight: 300;
             opacity: 0.5;
             text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .footer-bottom p {
+            float: right;
         }
 
         /* Hero section */
@@ -829,6 +833,15 @@
         }
 
         @media (max-width: 768px) {
+            .footer-bottom p {
+                float: none;
+                display: block;
+            }
+
+            .footer-bottom div {
+                margin-top: 1rem;
+            }
+
             .navbar {
                 padding: 1.5rem 1.5rem;
             }
@@ -1066,19 +1079,19 @@
     <section class="section section-5">
         <div class="footer-content">
             <h1 class="fade-in" style="font-size: 2rem; font-weight: 400; font-style: normal;">Links</h1>
-            <div class="quote-rotator fade-in fade-in-delay-1" id="quote-rotator" aria-live="polite">
-                <div class="quote-rotator-inner">
-                    <span class="quote-text" id="quote-text">“Stay hungry, stay foolish.”</span>
-                    <span class="quote-author" id="quote-author">— Steve Jobs</span>
-                </div>
-            </div>
             <div class="social-links fade-in fade-in-delay-2">
                 <a href="https://github.com/alechash" target="_blank">GitHub</a>
                 <a href="https://instagram.com/wil.tography" target="_blank">Instagram</a>
-                <a href="https://x.com/alechash" target="_blank">X</a>
+                <a href="https://x.com/alechash" target="_blank">X</a><br>
             </div>
             <div class="footer-bottom fade-in fade-in-delay-3">
-                &copy; 2026 Alec Jude Wilson
+                <p>&copy; 2026 Alec Jude Wilson</p>
+                <div class="quote-rotator fade-in fade-in-delay-1" id="quote-rotator" aria-live="polite">
+                    <div class="quote-rotator-inner">
+                        <span class="quote-text" id="quote-text">“Stay hungry, stay foolish.”</span>
+                        <span class="quote-author" id="quote-author">— Steve Jobs</span>
+                    </div>
+                </div>
             </div>
         </div>
         <span class="photo-caption">The Sky, Earth</span>
