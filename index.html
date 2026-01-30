@@ -914,45 +914,103 @@
     </section>
 
     <script>
-        // Build pool of all site photos and pick 4 random unique ones
+        // Build pool of Unsplash photos and pick 8 random ones
         (function() {
-            const photos = [
-                '/bg.jpeg', '/background.jpeg', '/background2.jpeg', '/background3.jpeg', '/background4.jpeg',
-                '/img_1.jpg', '/img_2.jpeg', '/img_3.jpeg', '/img_4.jpeg',
-                '/assets/main.jpg',
-            ];
-            for (let i = 0; i <= 26; i++) photos.push(`/assets/images/ecuador/img-${i}.jpg`);
-            for (let i = 0; i <= 29; i++) photos.push(`/assets/images/home/image_${i}.jpg`);
-            for (let i = 0; i <= 5; i++) photos.push(`/assets/images/rocket/img-${i}.jpg`);
+            const API_BASE = "https://judes-club-photos.hi-eab.workers.dev";
+            const CACHE_TTL = 24 * 60 * 60 * 1000;
+            const grid = document.getElementById('photo-grid');
+            const prevBtn = document.getElementById('carousel-prev');
+            const nextBtn = document.getElementById('carousel-next');
+            let count = 0;
+            let ci = 0;
 
-            // Fisher-Yates shuffle, pick first 8
-            for (let i = photos.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [photos[i], photos[j]] = [photos[j], photos[i]];
+            function getCacheKey(key) {
+                return `judes-home-cache:${key}`;
             }
 
-            const grid = document.getElementById('photo-grid');
-            photos.slice(0, 8).forEach((src, i) => {
-                const div = document.createElement('div');
-                div.className = 'photo-grid-item';
-                const img = document.createElement('img');
-                img.src = src;
-                img.alt = 'Photo';
-                img.loading = 'lazy';
-                img.decoding = 'async';
-                div.appendChild(img);
-                grid.appendChild(div);
-            });
+            function getCachedData(key) {
+                try {
+                    const raw = localStorage.getItem(getCacheKey(key));
+                    if (!raw) return null;
+                    const cached = JSON.parse(raw);
+                    if (Date.now() - cached.timestamp > CACHE_TTL) {
+                        localStorage.removeItem(getCacheKey(key));
+                        return null;
+                    }
+                    return cached.data;
+                } catch (error) {
+                    console.error(error);
+                    return null;
+                }
+            }
 
-            // Carousel buttons — slide via translateX
-            var count = grid.querySelectorAll('.photo-grid-item').length;
-            var ci = 0;
+            function setCachedData(key, data) {
+                try {
+                    localStorage.setItem(getCacheKey(key), JSON.stringify({
+                        timestamp: Date.now(),
+                        data,
+                    }));
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+
+            async function fetchJson(url) {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`Request failed: ${response.status}`);
+                }
+                return response.json();
+            }
+
+            async function fetchJsonCached(url, cacheKey) {
+                const cached = getCachedData(cacheKey);
+                if (cached) {
+                    return cached;
+                }
+                const data = await fetchJson(url);
+                setCachedData(cacheKey, data);
+                return data;
+            }
+
             function slideTo(i) {
+                if (!count) return;
                 ci = ((i % count) + count) % count;
                 grid.style.transform = 'translateX(-' + (ci * 100) + '%)';
             }
-            document.getElementById('carousel-prev').addEventListener('click', function() { slideTo(ci - 1); });
-            document.getElementById('carousel-next').addEventListener('click', function() { slideTo(ci + 1); });
+
+            prevBtn.addEventListener('click', function() { slideTo(ci - 1); });
+            nextBtn.addEventListener('click', function() { slideTo(ci + 1); });
+
+            async function loadPhotos() {
+                const data = await fetchJsonCached(`${API_BASE}/photos?page=1&limit=50`, 'home-photos');
+                const photos = data.results || [];
+                if (!photos.length) return;
+
+                // Fisher-Yates shuffle, pick first 8
+                for (let i = photos.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [photos[i], photos[j]] = [photos[j], photos[i]];
+                }
+
+                grid.innerHTML = "";
+                photos.slice(0, 8).forEach((photo) => {
+                    const div = document.createElement('div');
+                    div.className = 'photo-grid-item';
+                    const img = document.createElement('img');
+                    img.src = photo.url_small || photo.url_regular;
+                    img.alt = photo.alt_description || 'Photo';
+                    img.loading = 'lazy';
+                    img.decoding = 'async';
+                    div.appendChild(img);
+                    grid.appendChild(div);
+                });
+
+                count = grid.querySelectorAll('.photo-grid-item').length;
+                slideTo(0);
+            }
+
+            loadPhotos().catch((error) => console.error(error));
         })();
 
         // Fade-in: trigger when section becomes active

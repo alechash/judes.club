@@ -632,6 +632,7 @@
 
     <script>
         const API_BASE = "https://judes-club-photos.hi-eab.workers.dev";
+        const CACHE_TTL = 24 * 60 * 60 * 1000;
         const gallery = document.getElementById("gallery");
         const imagesGrid = document.getElementById("images");
         const photoLoader = document.getElementById("photo-loader");
@@ -650,12 +651,53 @@
         let isLoadingPhotos = false;
         let hasMorePhotos = true;
 
+        function getCacheKey(key) {
+            return `judes-photo-cache:${key}`;
+        }
+
+        function getCachedData(key) {
+            try {
+                const raw = localStorage.getItem(getCacheKey(key));
+                if (!raw) return null;
+                const cached = JSON.parse(raw);
+                if (Date.now() - cached.timestamp > CACHE_TTL) {
+                    localStorage.removeItem(getCacheKey(key));
+                    return null;
+                }
+                return cached.data;
+            } catch (error) {
+                console.error(error);
+                return null;
+            }
+        }
+
+        function setCachedData(key, data) {
+            try {
+                localStorage.setItem(getCacheKey(key), JSON.stringify({
+                    timestamp: Date.now(),
+                    data,
+                }));
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
         async function fetchJson(url) {
             const response = await fetch(url);
             if (!response.ok) {
                 throw new Error(`Request failed: ${response.status}`);
             }
             return response.json();
+        }
+
+        async function fetchJsonCached(url, cacheKey) {
+            const cached = getCachedData(cacheKey);
+            if (cached) {
+                return cached;
+            }
+            const data = await fetchJson(url);
+            setCachedData(cacheKey, data);
+            return data;
         }
 
         function renderPhotoCard(photo) {
@@ -689,7 +731,10 @@
                 imagesGrid.innerHTML = "";
             }
             try {
-                const data = await fetchJson(`${API_BASE}/photos?page=${currentPage}&limit=${pageSize}`);
+                const data = await fetchJsonCached(
+                    `${API_BASE}/photos?page=${currentPage}&limit=${pageSize}`,
+                    `photos-page-${currentPage}`
+                );
                 const photos = data.results || [];
                 appendPhotos(photos, imagesGrid);
                 currentPage += 1;
@@ -711,14 +756,17 @@
         async function loadCollections() {
             gallery.innerHTML = "<p>Loading collections...</p>";
             try {
-                const data = await fetchJson(`${API_BASE}/collections`);
+                const data = await fetchJsonCached(`${API_BASE}/collections`, "collections");
                 const collections = data.results || [];
                 const enrichedCollections = await Promise.all(collections.map(async (collection) => {
                     if (!collection.cover_photo_id) {
                         return { ...collection, coverPhoto: null };
                     }
                     try {
-                        const coverPhoto = await fetchJson(`${API_BASE}/photos/${collection.cover_photo_id}`);
+                        const coverPhoto = await fetchJsonCached(
+                            `${API_BASE}/photos/${collection.cover_photo_id}`,
+                            `photo-${collection.cover_photo_id}`
+                        );
                         return { ...collection, coverPhoto };
                     } catch (error) {
                         console.error(error);
@@ -754,7 +802,10 @@
             });
 
             try {
-                const data = await fetchJson(`${API_BASE}/collections/${collectionId}/photos`);
+                const data = await fetchJsonCached(
+                    `${API_BASE}/collections/${collectionId}/photos`,
+                    `collection-${collectionId}-photos`
+                );
                 const photos = data.results || [];
                 modalTitle.innerText = collectionTitle || "Collection";
                 renderPhotos(photos, modalImages);
