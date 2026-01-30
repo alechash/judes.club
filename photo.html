@@ -376,19 +376,6 @@
             transform: scale(1.05);
         }
 
-        .photo-grid.animating .photo-grid-item {
-            opacity: 0;
-            transform: translateY(12px);
-            animation: photoGridIn 0.4s ease forwards;
-        }
-
-        @keyframes photoGridIn {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
         .photo-stats {
             position: absolute;
             bottom: 0;
@@ -752,6 +739,7 @@
                 <span class="sr-only">Sort all photos</span>
                 <select class="sort-select" id="photos-sort">
                     <option value="views">Sort by Views</option>
+                    <option value="likes">Sort by Likes</option>
                     <option value="downloads">Sort by Downloads</option>
                     <option value="latest">Sort by Latest</option>
                 </select>
@@ -905,6 +893,16 @@
             container.innerHTML = photos.map(renderPhotoCard).join("");
         }
 
+        function animateSortedGrid(container) {
+            const items = container.querySelectorAll('.photo-grid-item');
+            items.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(12px)';
+                item.style.animation = `modalItemIn 0.4s ease forwards`;
+                item.style.animationDelay = `${Math.min(index * 0.05, 0.4)}s`;
+            });
+        }
+
         function appendPhotos(photos, container) {
             container.insertAdjacentHTML('beforeend', photos.map(renderPhotoCard).join(""));
         }
@@ -1008,6 +1006,9 @@
                 );
                 const photos = data.results || [];
                 appendPhotos(photos, imagesGrid);
+                if (reset) {
+                    animateSortedGrid(imagesGrid);
+                }
                 currentPage += 1;
                 if (photos.length < pageSize) {
                     hasMorePhotos = false;
