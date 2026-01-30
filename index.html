@@ -420,6 +420,36 @@
             color: white;
         }
 
+        .footer-quote {
+            margin: 1.5rem auto 2rem;
+            max-width: 520px;
+            text-align: center;
+            font-size: 1.15rem;
+            font-weight: 400;
+            font-style: italic;
+            letter-spacing: 0.3px;
+            opacity: 0.85;
+            text-shadow: 0 1px 12px rgba(0, 0, 0, 0.55);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .footer-quote .quote-author {
+            display: block;
+            margin-top: 0.6rem;
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 0.8rem;
+            font-weight: 300;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            opacity: 0.6;
+        }
+
+        .footer-quote.is-fading {
+            opacity: 0;
+            transform: translateY(8px);
+        }
+
         .social-links {
             display: flex;
             flex-wrap: wrap;
@@ -895,6 +925,11 @@
             .contact-email {
                 margin-top: 1rem;
             }
+
+            .footer-quote {
+                font-size: 1rem;
+                margin: 1.25rem auto 1.5rem;
+            }
         }
     </style>
 </head>
@@ -1015,6 +1050,10 @@
     <section class="section section-5">
         <div class="footer-content">
             <h1 class="fade-in" style="font-size: 2rem; font-weight: 400; font-style: normal;">Links</h1>
+            <div class="footer-quote fade-in fade-in-delay-1" id="footer-quote" aria-live="polite">
+                <span class="quote-text">"Collect moments, then let them shine."</span>
+                <span class="quote-author">— Alec Jude Wilson</span>
+            </div>
             <div class="social-links fade-in fade-in-delay-1">
                 <a href="https://github.com/alechash" target="_blank">GitHub</a>
                 <a href="https://instagram.com/wil.tography" target="_blank">Instagram</a>
@@ -1201,6 +1240,37 @@
             }
 
             loadPhotos().catch((error) => console.error(error));
+        })();
+
+        // Footer quote rotation
+        (function() {
+            const quotes = [
+                { text: "Collect moments, then let them shine.", author: "Alec Jude Wilson" },
+                { text: "Make something small feel endless.", author: "Studio Note" },
+                { text: "Build with care, ship with confidence.", author: "Product Maxim" },
+                { text: "Light is just a story finding its way out.", author: "Photo Journal" },
+                { text: "Elegance lives in the edit.", author: "Design Reminder" },
+            ];
+            const quoteEl = document.getElementById('footer-quote');
+            if (!quoteEl) return;
+            const textEl = quoteEl.querySelector('.quote-text');
+            const authorEl = quoteEl.querySelector('.quote-author');
+            let index = 0;
+
+            function showQuote(nextIndex) {
+                const quote = quotes[nextIndex];
+                quoteEl.classList.add('is-fading');
+                window.setTimeout(() => {
+                    textEl.textContent = `"${quote.text}"`;
+                    authorEl.textContent = `— ${quote.author}`;
+                    quoteEl.classList.remove('is-fading');
+                }, 500);
+            }
+
+            window.setInterval(() => {
+                index = (index + 1) % quotes.length;
+                showQuote(index);
+            }, 5000);
         })();
 
         // Fade-in: trigger when section becomes active
