@@ -610,6 +610,7 @@
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 0.75rem;
+            row-gap: 0;
         }
 
         .photo-grid-item {
@@ -634,6 +635,15 @@
             transform: scale(1.05);
         }
 
+        .photo-grid-item button {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: transparent;
+            padding: 0;
+            cursor: pointer;
+        }
+
         .photo-grid-placeholder {
             width: 100%;
             height: 100%;
@@ -647,6 +657,110 @@
             color: rgba(255, 255, 255, 0.25);
             letter-spacing: 1px;
             text-transform: uppercase;
+        }
+
+        /* Home lightbox */
+        .home-lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            background: rgba(0, 0, 0, 0);
+            backdrop-filter: blur(0px);
+            -webkit-backdrop-filter: blur(0px);
+            opacity: 0;
+            transition: opacity 0.35s ease, background 0.35s ease, backdrop-filter 0.35s ease, -webkit-backdrop-filter 0.35s ease;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .home-lightbox.active {
+            opacity: 1;
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+        }
+
+        .home-lightbox.closing {
+            opacity: 0;
+            background: rgba(0, 0, 0, 0);
+            backdrop-filter: blur(0px);
+            -webkit-backdrop-filter: blur(0px);
+        }
+
+        .home-lightbox-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            transform: scale(0.95) translateY(10px);
+            opacity: 0;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+            max-width: 90vw;
+            max-height: 90vh;
+        }
+
+        .home-lightbox.active .home-lightbox-content {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
+        .home-lightbox.closing .home-lightbox-content {
+            transform: scale(0.95) translateY(10px);
+            opacity: 0;
+        }
+
+        .home-lightbox-content img {
+            max-width: 90vw;
+            max-height: 75vh;
+            object-fit: contain;
+        }
+
+        .home-lightbox-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .home-lightbox-btn {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 0.9rem;
+            font-weight: 300;
+            padding: 0.6rem 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .home-lightbox-btn:hover {
+            background: rgba(255, 255, 255, 0.14);
+            border-color: rgba(255, 255, 255, 0.45);
+            color: white;
+        }
+
+        .home-lightbox-attribution {
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 0.85rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+        }
+
+        .home-lightbox-attribution a {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+        }
+
+        .home-lightbox-attribution a:hover {
+            opacity: 0.7;
         }
 
         /* Form status */
@@ -913,46 +1027,180 @@
         <span class="photo-caption">The Sky, Earth</span>
     </section>
 
-    <script>
-        // Build pool of all site photos and pick 4 random unique ones
-        (function() {
-            const photos = [
-                '/bg.jpeg', '/background.jpeg', '/background2.jpeg', '/background3.jpeg', '/background4.jpeg',
-                '/img_1.jpg', '/img_2.jpeg', '/img_3.jpeg', '/img_4.jpeg',
-                '/assets/main.jpg',
-            ];
-            for (let i = 0; i <= 26; i++) photos.push(`/assets/images/ecuador/img-${i}.jpg`);
-            for (let i = 0; i <= 29; i++) photos.push(`/assets/images/home/image_${i}.jpg`);
-            for (let i = 0; i <= 5; i++) photos.push(`/assets/images/rocket/img-${i}.jpg`);
+    <div class="home-lightbox" id="home-lightbox">
+        <div class="home-lightbox-content">
+            <img id="home-lightbox-img" src="" alt="Photo">
+            <div class="home-lightbox-actions">
+                <a id="home-lightbox-download" class="home-lightbox-btn" href="" download>Download</a>
+                <a class="home-lightbox-btn" href="/photo">View More</a>
+                <button class="home-lightbox-btn" id="home-lightbox-close">Close</button>
+            </div>
+            <p class="home-lightbox-attribution" id="home-lightbox-attribution"></p>
+        </div>
+    </div>
 
-            // Fisher-Yates shuffle, pick first 8
-            for (let i = photos.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [photos[i], photos[j]] = [photos[j], photos[i]];
+    <script>
+        // Build pool of Unsplash photos and pick 8 random ones
+        (function() {
+            const API_BASE = "https://judes-club-photos.hi-eab.workers.dev";
+            const CACHE_TTL = 24 * 60 * 60 * 1000;
+            const grid = document.getElementById('photo-grid');
+            const prevBtn = document.getElementById('carousel-prev');
+            const nextBtn = document.getElementById('carousel-next');
+            const lightbox = document.getElementById('home-lightbox');
+            const lightboxImg = document.getElementById('home-lightbox-img');
+            const lightboxDownload = document.getElementById('home-lightbox-download');
+            const lightboxClose = document.getElementById('home-lightbox-close');
+            const lightboxAttribution = document.getElementById('home-lightbox-attribution');
+            let count = 0;
+            let ci = 0;
+
+            function getCacheKey(key) {
+                return `judes-home-cache:${key}`;
             }
 
-            const grid = document.getElementById('photo-grid');
-            photos.slice(0, 8).forEach((src, i) => {
-                const div = document.createElement('div');
-                div.className = 'photo-grid-item';
-                const img = document.createElement('img');
-                img.src = src;
-                img.alt = 'Photo';
-                img.loading = 'lazy';
-                img.decoding = 'async';
-                div.appendChild(img);
-                grid.appendChild(div);
-            });
+            function getCachedData(key) {
+                try {
+                    const raw = localStorage.getItem(getCacheKey(key));
+                    if (!raw) return null;
+                    const cached = JSON.parse(raw);
+                    if (Date.now() - cached.timestamp > CACHE_TTL) {
+                        localStorage.removeItem(getCacheKey(key));
+                        return null;
+                    }
+                    return cached.data;
+                } catch (error) {
+                    console.error(error);
+                    return null;
+                }
+            }
 
-            // Carousel buttons — slide via translateX
-            var count = grid.querySelectorAll('.photo-grid-item').length;
-            var ci = 0;
+            function setCachedData(key, data) {
+                try {
+                    localStorage.setItem(getCacheKey(key), JSON.stringify({
+                        timestamp: Date.now(),
+                        data,
+                    }));
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+
+            async function fetchJson(url) {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`Request failed: ${response.status}`);
+                }
+                return response.json();
+            }
+
+            async function fetchJsonCached(url, cacheKey) {
+                const cached = getCachedData(cacheKey);
+                if (cached) {
+                    return cached;
+                }
+                const data = await fetchJson(url);
+                setCachedData(cacheKey, data);
+                return data;
+            }
+
             function slideTo(i) {
+                if (!count) return;
                 ci = ((i % count) + count) % count;
                 grid.style.transform = 'translateX(-' + (ci * 100) + '%)';
             }
-            document.getElementById('carousel-prev').addEventListener('click', function() { slideTo(ci - 1); });
-            document.getElementById('carousel-next').addEventListener('click', function() { slideTo(ci + 1); });
+
+            prevBtn.addEventListener('click', function() { slideTo(ci - 1); });
+            nextBtn.addEventListener('click', function() { slideTo(ci + 1); });
+
+            function openLightbox(data) {
+                lightboxImg.src = data.src;
+                lightboxImg.alt = data.alt || 'Photo';
+                lightboxDownload.href = data.src;
+                lightboxAttribution.innerHTML = `
+                    Photo by <a href="${data.userProfile}" target="_blank" rel="noopener">${data.userName}</a>
+                    on <a href="${data.attributionUrl}" target="_blank" rel="noopener">Unsplash</a>
+                `;
+                lightbox.style.display = 'flex';
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        lightbox.classList.add('active');
+                        document.body.style.overflow = 'hidden';
+                    });
+                });
+            }
+
+            function closeLightbox() {
+                lightbox.classList.add('closing');
+                lightbox.classList.remove('active');
+                setTimeout(() => {
+                    lightbox.classList.remove('closing');
+                    lightbox.style.display = 'none';
+                    document.body.style.overflow = '';
+                    lightboxImg.src = '';
+                    lightboxAttribution.innerHTML = '';
+                }, 400);
+            }
+
+            lightboxClose.addEventListener('click', closeLightbox);
+            lightbox.addEventListener('click', (event) => {
+                if (event.target === lightbox) closeLightbox();
+            });
+
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && lightbox.classList.contains('active')) closeLightbox();
+            });
+
+            grid.addEventListener('click', (event) => {
+                const button = event.target.closest('button[data-src]');
+                if (!button) return;
+                event.preventDefault();
+                openLightbox({
+                    src: button.dataset.src,
+                    alt: button.dataset.alt,
+                    userName: button.dataset.userName,
+                    userProfile: button.dataset.userProfile,
+                    attributionUrl: button.dataset.attributionUrl,
+                });
+            });
+
+            async function loadPhotos() {
+                const data = await fetchJsonCached(`${API_BASE}/photos?page=1&limit=50`, 'home-photos');
+                const photos = data.results || [];
+                if (!photos.length) return;
+
+                // Fisher-Yates shuffle, pick first 8
+                for (let i = photos.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [photos[i], photos[j]] = [photos[j], photos[i]];
+                }
+
+                grid.innerHTML = "";
+                photos.slice(0, 8).forEach((photo) => {
+                    const div = document.createElement('div');
+                    div.className = 'photo-grid-item';
+                    const button = document.createElement('button');
+                    button.type = 'button';
+                    button.dataset.src = photo.url_regular;
+                    button.dataset.alt = photo.alt_description || 'Photo';
+                    button.dataset.userName = photo.user_name;
+                    button.dataset.userProfile = photo.user_profile;
+                    button.dataset.attributionUrl = photo.attribution_url;
+                    const img = document.createElement('img');
+                    img.src = photo.url_small || photo.url_regular;
+                    img.alt = photo.alt_description || 'Photo';
+                    img.loading = 'lazy';
+                    img.decoding = 'async';
+                    button.appendChild(img);
+                    div.appendChild(button);
+                    grid.appendChild(div);
+                });
+
+                count = grid.querySelectorAll('.photo-grid-item').length;
+                slideTo(0);
+            }
+
+            loadPhotos().catch((error) => console.error(error));
         })();
 
         // Fade-in: trigger when section becomes active
