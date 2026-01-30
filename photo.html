@@ -149,6 +149,34 @@
             line-height: 1.6;
         }
 
+        .summary-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 3rem;
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 0.9rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.75);
+        }
+
+        .summary-stat {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.4rem 0.75rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .summary-stat svg {
+            width: 0.9rem;
+            height: 0.9rem;
+            display: block;
+        }
+
         .page-links {
             display: flex;
             flex-wrap: wrap;
@@ -333,6 +361,19 @@
 
         .photo-grid-item:hover img {
             transform: scale(1.05);
+        }
+
+        .photo-grid.animating .photo-grid-item {
+            opacity: 0;
+            transform: translateY(12px);
+            animation: photoGridIn 0.4s ease forwards;
+        }
+
+        @keyframes photoGridIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .photo-stats {
@@ -678,6 +719,7 @@
     <div class="page-content">
         <h1 class="fade-in">Photography</h1>
         <p class="page-subtitle fade-in fade-in-delay-1">Film and digital across Latin America, the US, Europe, Africa, and wherever else I end up.</p>
+        <div class="summary-stats fade-in fade-in-delay-2" id="summary-stats"></div>
         
         <p class="section-heading fade-in">Follow me</p>
         <div class="page-links fade-in fade-in-delay-2">
@@ -755,6 +797,7 @@
         const photoLoader = document.getElementById("photo-loader");
         const photosSort = document.getElementById("photos-sort");
         const collectionsSort = document.getElementById("collections-sort");
+        const summaryStats = document.getElementById("summary-stats");
         const modal = document.getElementById('collection-modal');
         const modalTitle = document.getElementById('collection_title');
         const modalImages = document.getElementById('collection_images');
@@ -771,6 +814,7 @@
         let hasMorePhotos = true;
         let activePhotoSort = "views";
         let activeCollectionSort = "views";
+        const numberFormatter = new Intl.NumberFormat();
 
         function getCacheKey(key) {
             return `judes-photo-cache:${key}`;
@@ -824,9 +868,9 @@
         function renderPhotoCard(photo) {
             const imageUrl = photo.url_small || photo.url_regular;
             const alt = photo.alt_description || photo.description || "Photo";
-            const likes = photo.likes ?? 0;
-            const views = photo.views ?? 0;
-            const downloads = photo.downloads ?? 0;
+            const likes = numberFormatter.format(photo.likes ?? 0);
+            const views = numberFormatter.format(photo.views ?? 0);
+            const downloads = numberFormatter.format(photo.downloads ?? 0);
             return `
                 <div class="photo-grid-item">
                     <a href="${photo.url_regular}" data-src="${photo.url_regular}" data-alt="${alt}" data-user-name="${photo.user_name}" data-user-profile="${photo.user_profile}" data-attribution-url="${photo.attribution_url}">
@@ -865,6 +909,83 @@
             container.insertAdjacentHTML('beforeend', photos.map(renderPhotoCard).join(""));
         }
 
+        function renderSummaryStats(totals) {
+            summaryStats.innerHTML = `
+                <span class="summary-stat" aria-label="Total likes ${totals.likes}">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" role="img">
+                        <path fill="#FF6B6B" d="M12 21s-7.2-4.7-9.5-9C.7 8.4 2 5.3 4.7 4.4c2.1-.7 4.2.1 5.6 1.8C11.7 4.5 13.8 3.7 16 4.4 18.7 5.3 20 8.4 19.5 12c-2.3 4.3-9.5 9-9.5 9z"/>
+                    </svg>
+                    ${totals.likes}
+                </span>
+                <span class="summary-stat" aria-label="Total views ${totals.views}">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" role="img">
+                        <path fill="#7BDFF2" d="M12 5C6.5 5 2 9.1 1 12c1 2.9 5.5 7 11 7s10-4.1 11-7c-1-2.9-5.5-7-11-7zm0 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/>
+                        <circle fill="#7BDFF2" cx="12" cy="12" r="2.2"/>
+                    </svg>
+                    ${totals.views}
+                </span>
+                <span class="summary-stat" aria-label="Total downloads ${totals.downloads}">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" role="img">
+                        <path fill="#B6E388" d="M12 3a1 1 0 0 1 1 1v9.2l2.6-2.6a1 1 0 1 1 1.4 1.4l-4.3 4.3a1 1 0 0 1-1.4 0L7 12a1 1 0 1 1 1.4-1.4L11 13.2V4a1 1 0 0 1 1-1z"/>
+                        <path fill="#B6E388" d="M5 19a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H6a1 1 0 0 1-1-1z"/>
+                    </svg>
+                    ${totals.downloads}
+                </span>
+            `;
+        }
+
+        async function loadSummaryStats() {
+            summaryStats.innerHTML = "<span class=\"summary-stat\">Loading stats...</span>";
+            try {
+                const cacheKey = "summary-stats";
+                const cached = getCachedData(cacheKey);
+                if (cached) {
+                    renderSummaryStats(cached);
+                    return;
+                }
+                let page = 1;
+                let hasMore = true;
+                let totalLikes = 0;
+                let totalViews = 0;
+                let totalDownloads = 0;
+
+                while (hasMore) {
+                    const data = await fetchJson(`${API_BASE}/photos?page=${page}&limit=${pageSize}`);
+                    const photos = data.results || [];
+                    photos.forEach((photo) => {
+                        totalLikes += photo.likes ?? 0;
+                        totalViews += photo.views ?? 0;
+                        totalDownloads += photo.downloads ?? 0;
+                    });
+                    if (photos.length < pageSize) {
+                        hasMore = false;
+                    } else {
+                        page += 1;
+                    }
+                }
+
+                const totals = {
+                    likes: numberFormatter.format(totalLikes),
+                    views: numberFormatter.format(totalViews),
+                    downloads: numberFormatter.format(totalDownloads),
+                };
+                setCachedData(cacheKey, totals);
+                renderSummaryStats(totals);
+            } catch (error) {
+                summaryStats.innerHTML = "<span class=\"summary-stat\">Unable to load stats.</span>";
+                console.error(error);
+            }
+        }
+
+        function animateGrid(container) {
+            container.classList.remove('animating');
+            void container.offsetWidth;
+            container.classList.add('animating');
+            setTimeout(() => {
+                container.classList.remove('animating');
+            }, 500);
+        }
+
         async function loadAllPhotos({ reset = false } = {}) {
             if (isLoadingPhotos || (!hasMorePhotos && !reset)) {
                 return;
@@ -875,6 +996,7 @@
                 currentPage = 1;
                 hasMorePhotos = true;
                 imagesGrid.innerHTML = "";
+                animateGrid(imagesGrid);
             }
             try {
                 const data = await fetchJsonCached(
@@ -932,6 +1054,7 @@
                             <div class="collection-title">${title}</div>
                         </a>`;
                 }).join("");
+                animateGrid(gallery);
             } catch (error) {
                 gallery.innerHTML = "<p>Unable to load collections right now.</p>";
                 console.error(error);
@@ -958,6 +1081,7 @@
                 const photos = data.results || [];
                 modalTitle.innerText = collectionTitle || "Collection";
                 renderPhotos(photos, modalImages);
+                animateGrid(modalImages);
             } catch (error) {
                 modalTitle.innerText = collectionTitle || "Collection";
                 modalImages.innerHTML = "<p>Unable to load collection photos right now.</p>";
@@ -1083,6 +1207,7 @@
         infiniteObserver.observe(photoLoader);
 
         loadAllPhotos({ reset: true });
+        loadSummaryStats();
         loadCollections();
     </script>
 </body>
