@@ -24,6 +24,17 @@
             box-sizing: border-box;
         }
 
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+
         body {
             font-family: 'Instrument Serif', serif;
             font-style: italic;
@@ -189,6 +200,26 @@
             margin-bottom: 4rem;
         }
 
+        .section-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .sort-select {
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 0.9rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 0.75rem;
+        }
+
         .collection-card {
             position: relative;
             display: block;
@@ -272,6 +303,21 @@
 
         .photo-grid-item:hover img {
             transform: scale(1.05);
+        }
+
+        .photo-stats {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            gap: 0.75rem;
+            padding: 0.5rem 0.75rem;
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 0.75rem;
+            font-weight: 300;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
         }
 
         /* Collection modal */
@@ -592,10 +638,30 @@
             <a href="https://judes.darkroom.com" target="_blank">Buy Prints</a>
         </div>
 
-        <h2 class="section-heading fade-in fade-in-delay-2">Collections</h2>
+        <div class="section-toolbar fade-in fade-in-delay-2">
+            <h2 class="section-heading">Collections</h2>
+            <label>
+                <span class="sr-only">Sort collections</span>
+                <select class="sort-select" id="collections-sort">
+                    <option value="views" selected>Sort by Views</option>
+                    <option value="downloads">Sort by Downloads</option>
+                    <option value="latest">Sort by Latest</option>
+                </select>
+            </label>
+        </div>
         <div class="collections-grid fade-in fade-in-delay-3" id="gallery"></div>
 
-        <h2 class="section-heading fade-in">All Photos</h2>
+        <div class="section-toolbar fade-in">
+            <h2 class="section-heading">All Photos</h2>
+            <label>
+                <span class="sr-only">Sort all photos</span>
+                <select class="sort-select" id="photos-sort">
+                    <option value="views" selected>Sort by Views</option>
+                    <option value="downloads">Sort by Downloads</option>
+                    <option value="latest">Sort by Latest</option>
+                </select>
+            </label>
+        </div>
         <div class="photo-grid fade-in" id="images"></div>
         <div class="photo-loader" id="photo-loader">Loading photos...</div>
     </div>
@@ -636,6 +702,8 @@
         const gallery = document.getElementById("gallery");
         const imagesGrid = document.getElementById("images");
         const photoLoader = document.getElementById("photo-loader");
+        const photosSort = document.getElementById("photos-sort");
+        const collectionsSort = document.getElementById("collections-sort");
         const modal = document.getElementById('collection-modal');
         const modalTitle = document.getElementById('collection_title');
         const modalImages = document.getElementById('collection_images');
@@ -650,6 +718,8 @@
         const pageSize = 24;
         let isLoadingPhotos = false;
         let hasMorePhotos = true;
+        let activePhotoSort = "views";
+        let activeCollectionSort = "views";
 
         function getCacheKey(key) {
             return `judes-photo-cache:${key}`;
@@ -703,11 +773,19 @@
         function renderPhotoCard(photo) {
             const imageUrl = photo.url_small || photo.url_regular;
             const alt = photo.alt_description || photo.description || "Photo";
+            const likes = photo.likes ?? 0;
+            const views = photo.views ?? 0;
+            const downloads = photo.downloads ?? 0;
             return `
                 <div class="photo-grid-item">
                     <a href="${photo.url_regular}" data-src="${photo.url_regular}" data-alt="${alt}" data-user-name="${photo.user_name}" data-user-profile="${photo.user_profile}" data-attribution-url="${photo.attribution_url}">
                         <img src="${imageUrl}" alt="${alt}" loading="lazy" decoding="async">
                     </a>
+                    <div class="photo-stats">
+                        <span>❤ ${likes}</span>
+                        <span>👁 ${views}</span>
+                        <span>⬇ ${downloads}</span>
+                    </div>
                 </div>`;
         }
 
@@ -732,8 +810,8 @@
             }
             try {
                 const data = await fetchJsonCached(
-                    `${API_BASE}/photos?page=${currentPage}&limit=${pageSize}`,
-                    `photos-page-${currentPage}`
+                    `${API_BASE}/photos?page=${currentPage}&limit=${pageSize}&sort=${activePhotoSort}`,
+                    `photos-page-${activePhotoSort}-${currentPage}`
                 );
                 const photos = data.results || [];
                 appendPhotos(photos, imagesGrid);
@@ -756,7 +834,10 @@
         async function loadCollections() {
             gallery.innerHTML = "<p>Loading collections...</p>";
             try {
-                const data = await fetchJsonCached(`${API_BASE}/collections`, "collections");
+                const data = await fetchJsonCached(
+                    `${API_BASE}/collections?sort=${activeCollectionSort}`,
+                    `collections-${activeCollectionSort}`
+                );
                 const collections = data.results || [];
                 const enrichedCollections = await Promise.all(collections.map(async (collection) => {
                     if (!collection.cover_photo_id) {
@@ -803,8 +884,8 @@
 
             try {
                 const data = await fetchJsonCached(
-                    `${API_BASE}/collections/${collectionId}/photos`,
-                    `collection-${collectionId}-photos`
+                    `${API_BASE}/collections/${collectionId}/photos?sort=${activeCollectionSort}`,
+                    `collection-${collectionId}-photos-${activeCollectionSort}`
                 );
                 const photos = data.results || [];
                 modalTitle.innerText = collectionTitle || "Collection";
@@ -909,6 +990,16 @@
         }, { threshold: 0.1 });
 
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        photosSort.addEventListener('change', () => {
+            activePhotoSort = photosSort.value;
+            loadAllPhotos({ reset: true });
+        });
+
+        collectionsSort.addEventListener('change', () => {
+            activeCollectionSort = collectionsSort.value;
+            loadCollections();
+        });
 
         const infiniteObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
