@@ -363,6 +363,12 @@
             letter-spacing: 0.2px;
         }
 
+        .photo-stat svg {
+            width: 0.85rem;
+            height: 0.85rem;
+            display: block;
+        }
+
         /* Collection modal */
         .modal-overlay {
             display: none;
@@ -827,9 +833,26 @@
                         <img src="${imageUrl}" alt="${alt}" loading="lazy" decoding="async">
                     </a>
                     <div class="photo-stats">
-                        <span class="photo-stat">Likes ${likes}</span>
-                        <span class="photo-stat">Views ${views}</span>
-                        <span class="photo-stat">Downloads ${downloads}</span>
+                        <span class="photo-stat" aria-label="Likes ${likes}">
+                            <svg viewBox="0 0 24 24" aria-hidden="true" role="img">
+                                <path fill="#FF6B6B" d="M12 21s-7.2-4.7-9.5-9C.7 8.4 2 5.3 4.7 4.4c2.1-.7 4.2.1 5.6 1.8C11.7 4.5 13.8 3.7 16 4.4 18.7 5.3 20 8.4 19.5 12c-2.3 4.3-9.5 9-9.5 9z"/>
+                            </svg>
+                            ${likes}
+                        </span>
+                        <span class="photo-stat" aria-label="Views ${views}">
+                            <svg viewBox="0 0 24 24" aria-hidden="true" role="img">
+                                <path fill="#7BDFF2" d="M12 5C6.5 5 2 9.1 1 12c1 2.9 5.5 7 11 7s10-4.1 11-7c-1-2.9-5.5-7-11-7zm0 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/>
+                                <circle fill="#7BDFF2" cx="12" cy="12" r="2.2"/>
+                            </svg>
+                            ${views}
+                        </span>
+                        <span class="photo-stat" aria-label="Downloads ${downloads}">
+                            <svg viewBox="0 0 24 24" aria-hidden="true" role="img">
+                                <path fill="#B6E388" d="M12 3a1 1 0 0 1 1 1v9.2l2.6-2.6a1 1 0 1 1 1.4 1.4l-4.3 4.3a1 1 0 0 1-1.4 0L7 12a1 1 0 1 1 1.4-1.4L11 13.2V4a1 1 0 0 1 1-1z"/>
+                                <path fill="#B6E388" d="M5 19a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H6a1 1 0 0 1-1-1z"/>
+                            </svg>
+                            ${downloads}
+                        </span>
                     </div>
                 </div>`;
         }
