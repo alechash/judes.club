@@ -294,25 +294,73 @@
             opacity: 0.7;
         }
 
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 0.75rem;
+        .demo-video-card {
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03);
+            overflow: hidden;
             margin-bottom: 3rem;
         }
 
-        .gallery-item {
-            position: relative;
-            aspect-ratio: 4 / 3;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(255, 255, 255, 0.04);
+        .demo-video-card video {
+            width: 100%;
+            display: block;
         }
 
-        .gallery-item img {
-            width: 100%;
+        .demo-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 1.2rem 1rem 0.6rem;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.55));
+            opacity: 0;
+            transition: opacity 0.35s ease;
+        }
+
+        .demo-video-card:hover .demo-controls {
+            opacity: 1;
+        }
+
+        .demo-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.7;
+            transition: opacity 0.25s;
+        }
+
+        .demo-btn:hover {
+            opacity: 1;
+        }
+
+        .demo-progress {
+            flex: 1;
+            height: 1.5px;
+            background: rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+        }
+
+        .demo-progress-fill {
             height: 100%;
-            object-fit: cover;
+            background: rgba(255, 255, 255, 0.55);
+            width: 0%;
+        }
+
+        .demo-time {
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 0.65rem;
+            font-weight: 300;
+            letter-spacing: 0.8px;
+            color: rgba(255, 255, 255, 0.45);
         }
 
         .next-project {
@@ -506,7 +554,7 @@
         
         <h2 class="section-heading fade-in">Overview</h2>
         <p class="section-text fade-in fade-in-delay-1">
-        Antifragile is a career security app for software engineers. It tracks your real, measurable impact at work so your value is never invisible. Instead of scrambling to prove yourself when things go sideways, you’re always building a living record of wins, growth, and leverage.
+        Antifragile is a career security app for software engineers. It tracks your real, measurable impact at work so your value is never invisible. Instead of scrambling to prove yourself when things go sideways, you're always building a living record of wins, growth, and leverage.
         </p>
 
         <div class="section-split fade-in fade-in-delay-2">
@@ -520,17 +568,25 @@
             </div>
             <div class="highlight-card">
                 <h3>Outcome</h3>
-                <p>Users walk into performance reviews prepared, navigate layoffs with proof of impact, and apply to new roles with a ready-made story of why they’re worth hiring.</p>
+                <p>Users walk into performance reviews prepared, navigate layoffs with proof of impact, and apply to new roles with a ready-made story of why they're worth hiring.</p>
             </div>
         </div>
 
-        <!--<h2 class="section-heading fade-in">Gallery</h2>
-        <div class="gallery-grid fade-in fade-in-delay-1">
-            <div class="gallery-item"><img src="/background.jpeg" alt="Project screen" loading="lazy" decoding="async"></div>
-            <div class="gallery-item"><img src="/background2.jpeg" alt="Project screen" loading="lazy" decoding="async"></div>
-            <div class="gallery-item"><img src="/background3.jpeg" alt="Project screen" loading="lazy" decoding="async"></div>
-            <div class="gallery-item"><img src="/bg.png" alt="Project screen" loading="lazy" decoding="async"></div>
-        </div>-->
+        <div class="demo-video-card fade-in" id="demo-video-card">
+            <video id="demo-video" autoplay loop muted playsinline>
+                <source src="/assets/Antifragile.mp4" type="video/mp4">
+            </video>
+            <div class="demo-controls" id="demo-controls">
+                <button class="demo-btn" id="demo-play-pause" aria-label="Pause">
+                    <svg id="demo-pause-icon" width="10" height="10" viewBox="0 0 10 10" fill="none"><rect x="1" y="1" width="3" height="8" rx="0.5" fill="white"/><rect x="6" y="1" width="3" height="8" rx="0.5" fill="white"/></svg>
+                    <svg id="demo-play-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" style="display:none"><path d="M2 1v8l7-4z" fill="white"/></svg>
+                </button>
+                <div class="demo-progress" id="demo-progress">
+                    <div class="demo-progress-fill" id="demo-progress-fill"></div>
+                </div>
+                <span class="demo-time" id="demo-time">0:00</span>
+            </div>
+        </div>
 
         <div class="next-project fade-in">
             <div>
@@ -560,6 +616,61 @@
         }, { threshold: 0.1 });
 
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Demo video controls
+        (function() {
+            const video = document.getElementById('demo-video');
+            const playPause = document.getElementById('demo-play-pause');
+            const pauseIcon = document.getElementById('demo-pause-icon');
+            const playIcon = document.getElementById('demo-play-icon');
+            const progress = document.getElementById('demo-progress');
+            const progressFill = document.getElementById('demo-progress-fill');
+            const timeEl = document.getElementById('demo-time');
+
+            function formatTime(s) {
+                const m = Math.floor(s / 60);
+                const sec = Math.floor(s % 60);
+                return m + ':' + (sec < 10 ? '0' : '') + sec;
+            }
+
+            function updateIcons() {
+                const paused = video.paused;
+                pauseIcon.style.display = paused ? 'none' : '';
+                playIcon.style.display = paused ? '' : 'none';
+                playPause.setAttribute('aria-label', paused ? 'Play' : 'Pause');
+            }
+
+            function togglePlay() {
+                if (video.paused) video.play();
+                else video.pause();
+            }
+
+            playPause.addEventListener('click', togglePlay);
+            video.addEventListener('click', togglePlay);
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === ' ' && !e.target.closest('input, textarea, button')) {
+                    e.preventDefault();
+                    togglePlay();
+                }
+            });
+
+            video.addEventListener('play', updateIcons);
+            video.addEventListener('pause', updateIcons);
+
+            video.addEventListener('timeupdate', function() {
+                if (!video.duration) return;
+                progressFill.style.width = (video.currentTime / video.duration * 100) + '%';
+                timeEl.textContent = formatTime(video.currentTime) + ' / ' + formatTime(video.duration);
+            });
+
+            progress.addEventListener('click', function(e) {
+                if (!video.duration) return;
+                var rect = progress.getBoundingClientRect();
+                var ratio = (e.clientX - rect.left) / rect.width;
+                video.currentTime = ratio * video.duration;
+            });
+        })();
     </script>
 </body>
 </html>
