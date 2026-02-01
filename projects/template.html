@@ -38,7 +38,7 @@
             right: 0;
             left: 0;
             z-index: 1000;
-            padding: 1.5rem 2rem;
+            padding: 1rem 1.5rem;
             pointer-events: none;
         }
 
@@ -48,67 +48,122 @@
             align-items: center;
             max-width: 1400px;
             margin: 0 auto;
+            padding: 0.6rem 1.5rem;
             pointer-events: auto;
+            background: rgba(17, 17, 17, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
         }
 
         .logo {
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             font-weight: 400;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
             color: white;
             font-family: 'Instrument Serif', serif;
-            font-style: italic;
-            padding: 0.5rem 1.5rem;
-            background: radial-gradient(ellipse 150% 100% at center, rgba(10, 61, 44, 0.4) 0%, transparent 100%);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            font-style: normal;
             text-decoration: none;
+        }
+
+        .logo-first {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.6em;
+            font-weight: 200;
+            opacity: 0.4;
         }
 
         .nav-menu {
             display: flex;
             list-style: none;
-            gap: 0.5rem;
+            gap: 0.15rem;
         }
 
         .nav-menu a {
-            color: rgba(255, 255, 255, 0.9);
+            color: rgba(255, 255, 255, 0.5);
             text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 300;
-            letter-spacing: 0.5px;
-            transition: opacity 0.3s;
+            font-size: 0.85rem;
+            font-weight: 400;
+            letter-spacing: 0.2px;
+            transition: color 0.3s;
             font-family: 'Inter', sans-serif;
             font-style: normal;
-            padding: 0.5rem 0.5rem;
+            padding: 0.35rem 0.7rem;
             display: block;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            transform: scaleX(0.8);
-            background: radial-gradient(ellipse 150% 100% at center, rgba(10, 61, 44, 0.4) 0%, transparent 100%);
         }
 
         .nav-menu a:hover {
-            opacity: 0.6;
+            color: white;
+        }
+
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .nav-toggle span {
+            display: block;
+            width: 18px;
+            height: 1.5px;
+            background: rgba(255, 255, 255, 0.7);
+            transition: transform 0.3s, opacity 0.3s;
+        }
+
+        .nav-toggle span + span {
+            margin-top: 4px;
+        }
+
+        .nav-container.nav-open .nav-toggle span:nth-child(1) {
+            transform: translateY(5.5px) rotate(45deg);
+        }
+
+        .nav-container.nav-open .nav-toggle span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .nav-container.nav-open .nav-toggle span:nth-child(3) {
+            transform: translateY(-5.5px) rotate(-45deg);
         }
 
         @media (max-width: 660px) {
             .navbar {
-                padding: 1.5rem 1.5rem;
+                padding: 0.75rem 0.75rem;
             }
 
             .nav-container {
-                align-items: flex-start;
+                flex-wrap: wrap;
+                padding: 0.75rem 1rem;
+            }
+
+            .nav-toggle {
+                display: flex;
             }
 
             .nav-menu {
+                display: flex;
+                width: 100%;
                 flex-direction: column;
-                gap: 0.5rem;
-                text-align: right;
+                gap: 0;
+                padding-top: 0;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.35s ease, padding-top 0.35s ease;
+            }
+
+            .nav-container.nav-open .nav-menu {
+                max-height: 300px;
+                padding-top: 0.75rem;
             }
 
             .nav-menu a {
-                font-size: 0.85rem;
+                font-size: 0.8rem;
+                padding: 0.5rem 0.5rem;
             }
         }
 
@@ -427,7 +482,10 @@
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <a href="/" class="logo">Alec Jude Wilson</a>
+            <a href="/" class="logo"><span class="logo-first">Alec</span> Jude Wilson</a>
+            <button class="nav-toggle" aria-label="Menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
             <ul class="nav-menu">
                 <li><a href="/projects">Software</a></li>
                 <li><a href="/photo">Photography</a></li>
@@ -436,6 +494,13 @@
             </ul>
         </div>
     </nav>
+    <script>
+        document.querySelector('.nav-toggle').addEventListener('click', function() {
+            var c = this.closest('.nav-container');
+            var open = c.classList.toggle('nav-open');
+            this.setAttribute('aria-expanded', open);
+        });
+    </script>
 
     <div class="page-content">
         <h1 class="fade-in">Latitude Notes</h1>
