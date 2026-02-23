@@ -92,8 +92,9 @@
             display: block;
         }
 
-        .nav-menu a:hover {
-            color: white;
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: rgba(255, 255, 255, 0.85);
         }
 
         .nav-toggle {
@@ -495,6 +496,12 @@
             var open = c.classList.toggle('nav-open');
             this.setAttribute('aria-expanded', open);
         });
+        (function() {
+            var path = window.location.pathname.replace(/\/$/, '') || '/';
+            document.querySelectorAll('.nav-menu a').forEach(function(a) {
+                if (a.getAttribute('href').split('#')[0] === path) a.classList.add('active');
+            });
+        })();
     </script>
 
     <div class="page-content">
