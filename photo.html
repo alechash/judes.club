@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Photography | Alec Jude Wilson</title>
     <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-    <meta name="description" content="Photography by Alec Jude Wilson. Film and digital across Latin America, the US, Europe, Africa, and.">
+    <meta name="description" content="Photography by Alec Jude Wilson. Film and digital across Latin America, the US, Europe, Africa, and beyond.">
     <meta property="og:title" content="Photography | Alec Jude Wilson">
     <meta property="og:description" content="Photography by Alec Jude Wilson. Film and digital across Latin America, the US, Europe, Africa, and beyond.">
     <meta property="og:type" content="website">
@@ -104,8 +104,9 @@
             display: block;
         }
 
-        .nav-menu a:hover {
-            color: white;
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: rgba(255, 255, 255, 0.85);
         }
 
         .nav-toggle {
@@ -582,7 +583,6 @@
             -webkit-backdrop-filter: blur(0px);
             opacity: 0;
             transition: opacity 0.35s ease, background 0.35s ease, backdrop-filter 0.35s ease, -webkit-backdrop-filter 0.35s ease;
-            display: none;
             align-items: center;
             justify-content: center;
         }
@@ -779,6 +779,12 @@
             var open = c.classList.toggle('nav-open');
             this.setAttribute('aria-expanded', open);
         });
+        (function() {
+            var path = window.location.pathname.replace(/\/$/, '') || '/';
+            document.querySelectorAll('.nav-menu a').forEach(function(a) {
+                if (a.getAttribute('href').split('#')[0] === path) a.classList.add('active');
+            });
+        })();
     </script>
 
     <div class="page-content">
