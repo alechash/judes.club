@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Software Projects | Alec Jude Wilson</title>
+    <title>Tracktide | Alec Jude Wilson</title>
     <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-    <meta name="description" content="Projects by Alec Jude Wilson. Product experiments, prototypes, and live apps.">
-    <meta property="og:title" content="Software Projects | Alec Jude Wilson">
-    <meta property="og:description" content="Projects by Alec Jude Wilson. Product experiments, prototypes, and live apps.">
+    <meta name="description" content="An iOS app for tracking peptide protocols — cycles, doses, vials, injection sites, and schedules in one place.">
+    <meta property="og:title" content="Tracktide | Alec Jude Wilson">
+    <meta property="og:description" content="An iOS app for tracking peptide protocols — cycles, doses, vials, injection sites, and schedules in one place.">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="/bg.jpeg">
+    <meta property="og:image" content="/projects/tracktide.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@100..900&display=swap" rel="stylesheet">
@@ -168,15 +168,15 @@
         }
 
         .page-content {
-            padding: 8rem 2rem 4rem;
-            max-width: 1400px;
+            padding: 2.5rem 2rem 4rem;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
         .page-content h1 {
             font-size: 3rem;
             font-weight: 400;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
             letter-spacing: 0.5px;
             font-style: normal;
         }
@@ -186,21 +186,71 @@
             font-style: normal;
             font-size: 1rem;
             font-weight: 300;
-            opacity: 0.5;
-            margin-bottom: 3rem;
+            opacity: 0.6;
+            margin-bottom: 2.5rem;
             line-height: 1.6;
-            max-width: 700px;
+            max-width: 720px;
         }
 
-        .page-links {
+        .hero-card {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .hero-card img {
+            width: 100%;
+            height: 420px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.75) 100%);
+        }
+
+        .hero-details {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
             display: flex;
-            flex-wrap: wrap;
+            flex-direction: column;
             gap: 0.75rem;
-            margin-bottom: 3rem;
+            z-index: 1;
         }
 
-        .page-links a {
-            display: inline-block;
+        .hero-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-tag {
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            padding: 0.35rem 0.8rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(17, 17, 17, 0.5);
+            backdrop-filter: blur(12px);
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+
+        .hero-actions a {
             color: rgba(255, 255, 255, 0.9);
             text-decoration: none;
             font-family: 'Inter', sans-serif;
@@ -208,118 +258,25 @@
             font-size: 0.9rem;
             font-weight: 300;
             letter-spacing: 0.5px;
-            padding: 0.6rem 1.25rem;
-            background: rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 0.6rem 1.4rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.2);
             transition: background 0.3s, border-color 0.3s;
         }
 
-        .page-links a:hover {
+        .hero-actions a:hover {
             background: rgba(255, 255, 255, 0.14);
-            border-color: rgba(255, 255, 255, 0.4);
+            border-color: rgba(255, 255, 255, 0.45);
         }
 
-        .page-links a.active {
-            border-color: rgba(255, 255, 255, 0.5);
-            background: rgba(255, 255, 255, 0.12);
-        }
-
-        .section-heading {
-            font-size: 1.6rem;
-            font-weight: 400;
-            font-style: normal;
-            margin-bottom: 1.5rem;
-            letter-spacing: 0.3px;
-        }
-
-        .projects-grid {
+        .meta-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.25rem;
-            margin-bottom: 4rem;
-        }
-
-        .project-card {
-            position: relative;
-            display: block;
-            text-decoration: none;
-            color: white;
-            overflow: hidden;
-            aspect-ratio: 16 / 10;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            transition: border-color 0.3s, transform 0.3s;
-        }
-
-        .project-card:hover {
-            border-color: rgba(255, 255, 255, 0.25);
-            transform: translateY(-2px);
-        }
-
-        .project-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .project-card:hover img {
-            transform: scale(1.03);
-        }
-
-        .project-card .project-title {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 1.25rem;
-            font-family: 'Instrument Serif', serif;
-            font-size: 1.3rem;
-            font-weight: 400;
-            font-style: normal;
-            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
-            text-shadow: 0 1px 10px rgba(0, 0, 0, 0.6);
-        }
-
-        .project-card .project-title .project-caption {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 1.25rem;
-            font-family: 'Instrument Serif', serif;
-            font-size: 0.8rem;
-            font-weight: 400;
-            font-style: normal;
-            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
-            text-shadow: 0 1px 10px rgba(0, 0, 0, 0.6);
-        }
-
-        .project-card .project-meta {
-            position: absolute;
-            top: 1rem;
-            left: 1rem;
-            font-family: 'Inter', sans-serif;
-            font-style: normal;
-            font-size: 0.75rem;
-            letter-spacing: 0.6px;
-            text-transform: uppercase;
-            padding: 0.35rem 0.7rem;
-            background: rgba(17, 17, 17, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(14px);
-        }
-
-        .project-notes {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1rem;
-            margin-bottom: 3.5rem;
+            margin-bottom: 3rem;
         }
 
-        .note-card {
+        .meta-card {
             padding: 1.5rem;
             border: 1px solid rgba(255, 255, 255, 0.12);
             background: rgba(255, 255, 255, 0.04);
@@ -327,57 +284,120 @@
             -webkit-backdrop-filter: blur(12px);
         }
 
-        .note-card h3 {
+        .meta-card span {
+            display: block;
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 0.75rem;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            opacity: 0.5;
+            margin-bottom: 0.4rem;
+        }
+
+        .meta-card strong {
+            font-size: 1.1rem;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        .section-heading {
+            font-size: 1.6rem;
+            font-weight: 400;
+            font-style: normal;
+            margin-bottom: 1.25rem;
+            letter-spacing: 0.3px;
+        }
+
+        .section-text {
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 1rem;
+            font-weight: 300;
+            line-height: 1.7;
+            opacity: 0.7;
+            max-width: 820px;
+            margin-bottom: 3rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .feature-card {
+            padding: 1.4rem 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .feature-card h3 {
+            font-size: 1rem;
+            font-weight: 400;
+            font-style: normal;
+            margin-bottom: 0.45rem;
+            letter-spacing: 0.2px;
+        }
+
+        .feature-card p {
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 0.875rem;
+            font-weight: 300;
+            line-height: 1.6;
+            opacity: 0.6;
+        }
+
+        .section-split {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+            margin-top: 1.5rem;
+        }
+
+        .highlight-card {
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .highlight-card h3 {
             font-size: 1.1rem;
             font-weight: 400;
             font-style: normal;
             margin-bottom: 0.5rem;
         }
 
-        .note-card p {
+        .highlight-card p {
             font-family: 'Inter', sans-serif;
             font-style: normal;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             font-weight: 300;
             line-height: 1.6;
             opacity: 0.7;
         }
 
-        .cta-strip {
+        .next-project {
             display: flex;
             flex-wrap: wrap;
+            justify-content: space-between;
             gap: 1rem;
             align-items: center;
-            justify-content: space-between;
             padding: 2rem;
             border: 1px solid rgba(255, 255, 255, 0.12);
             background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
         }
 
-        .cta-strip h3 {
+        .next-project h3 {
             font-size: 1.4rem;
             font-weight: 400;
             font-style: normal;
         }
 
-        .cta-strip p {
-            font-family: 'Inter', sans-serif;
-            font-style: normal;
-            font-size: 0.95rem;
-            font-weight: 300;
-            opacity: 0.7;
-            max-width: 520px;
-        }
-
-        .cta-actions {
-            display: flex;
-            gap: 0.75rem;
-            flex-wrap: wrap;
-        }
-
-        .cta-actions a {
+        .next-project a {
             color: rgba(255, 255, 255, 0.9);
             text-decoration: none;
             font-family: 'Inter', sans-serif;
@@ -391,7 +411,7 @@
             transition: background 0.3s, border-color 0.3s;
         }
 
-        .cta-actions a:hover {
+        .next-project a:hover {
             background: rgba(255, 255, 255, 0.14);
             border-color: rgba(255, 255, 255, 0.45);
         }
@@ -399,7 +419,7 @@
         .footer {
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             padding: 2rem;
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             display: flex;
             justify-content: space-between;
@@ -455,16 +475,12 @@
                 font-size: 2rem;
             }
 
-            .projects-grid {
-                grid-template-columns: 1fr;
+            .hero-card img {
+                height: 300px;
             }
 
-            .project-card {
-                aspect-ratio: 5 / 2;
-            }
-
-            .cta-strip {
-                align-items: flex-start;
+            .hero-details {
+                padding: 1.5rem;
             }
 
             .footer {
@@ -497,65 +513,107 @@
         });
     </script>
 
+    <div class="hero-card fade-in fade-in-delay-2">
+        <img src="/projects/tracktide.png" alt="Tracktide hero" loading="lazy" decoding="async">
+        <div class="hero-overlay"></div>
+        <div class="hero-details">
+            <div class="hero-tags">
+                <span class="hero-tag">iOS</span>
+                <span class="hero-tag">Swift</span>
+                <span class="hero-tag">SwiftUI</span>
+                <span class="hero-tag">SwiftData</span>
+                <span class="hero-tag">WidgetKit</span>
+                <span class="hero-tag">2026</span>
+            </div>
+        </div>
+    </div>
+
     <div class="page-content">
-        <h1 class="fade-in">Software</h1>
-        <p class="page-subtitle fade-in fade-in-delay-1">Product experiments, client collaborations, and side quests. Each project blends software, storytelling, and a love for tactile details.</p>
+        <h1 class="fade-in">Tracktide</h1>
+        <p class="page-subtitle fade-in fade-in-delay-1">An iOS app for tracking peptide protocols — cycles, doses, vials, injection sites, and schedules, all in one place.</p>
 
-        <p class="section-heading fade-in">Follow me</p>
-        <div class="page-links fade-in fade-in-delay-2">
-            <a href="https://github.com/alechash" target="_blank">on GitHub</a>
-            <a href="https://news.ycombinator.com/user?id=alechash" target="_blank">on Hacker News</a>
-            <a href="https://x.com/alechash" target="_blank">on X</a>
-        </div>
-
-        <h2 class="section-heading fade-in">Projects</h2>
-        <div class="projects-grid fade-in fade-in-delay-1">
-            <a href="/projects/tracktide" class="project-card">
-                <img src="/projects/tracktide.png" alt="Project cover" loading="lazy" decoding="async">
-                <span class="project-meta">iOS · 2026</span>
-                <div class="project-title">Tracktide</div>
-            </a>
-            <a href="/projects/spare-pocket" class="project-card">
-                <img src="/projects/spare-pocket.png" alt="Project cover" loading="lazy" decoding="async">
-                <span class="project-meta">iOS · 2026</span>
-                <div class="project-title">Spare Pocket</div>
-            </a>
-            <a href="/projects/antifragile" class="project-card">
-                <img src="/projects/antifragile.png" alt="Project cover" loading="lazy" decoding="async">
-                <span class="project-meta">Full Stack · 2025</span>
-                <div class="project-title">Antifragile</div>
-            </a>
-            <a href="/projects/belayer" class="project-card">
-                <img src="/projects/belayer.png" alt="Project cover" loading="lazy" decoding="async">
-                <span class="project-meta">Company · 2025</span>
-                <div class="project-title">Belayer Development</div>
-            </a>
-        </div>
-
-        <h2 class="section-heading fade-in">Project Notes</h2>
-        <div class="project-notes fade-in fade-in-delay-1">
-            <div class="note-card">
-                <h3>Guiding principles</h3>
-                <p>Build calm interfaces, reinforce clarity, and let each decision ladder up to a story users can feel.</p>
+        <div class="meta-grid fade-in">
+            <div class="meta-card">
+                <span>Role</span>
+                <strong>Engineering + Design</strong>
             </div>
-            <div class="note-card">
-                <h3>Collaboration</h3>
-                <p>Partnering with founders and teams to map what success looks like before shipping a single screen.</p>
+            <div class="meta-card">
+                <span>Stack</span>
+                <strong>Swift, SwiftUI, SwiftData</strong>
             </div>
-            <div class="note-card">
-                <h3>Current focus</h3>
-                <p>Fast prototypes, design systems, and lightweight automations that keep creative teams moving.</p>
+            <div class="meta-card">
+                <span>Platform</span>
+                <strong>iOS</strong>
+            </div>
+            <div class="meta-card">
+                <span>Status</span>
+                <strong>In Development</strong>
             </div>
         </div>
 
-        <div class="cta-strip fade-in">
+        <h2 class="section-heading fade-in">Overview</h2>
+        <p class="section-text fade-in fade-in-delay-1">
+            Peptide protocols involve a lot of moving parts. Multiple compounds, different dosing frequencies, injection sites that need rotating, vials that run out at different times, and cycles that need a full history to make sense of. Tracktide is purpose-built for this workflow — a focused iOS app that pulls all of it into one place without the spreadsheet overhead. Log a dose in seconds, know exactly how much is left in your vial, stay on top of reminders, and review your full cycle history whenever you need it. Home and lock screen widgets keep your next dose visible at a glance, without opening the app.
+        </p>
+
+        <h2 class="section-heading fade-in">Features</h2>
+        <div class="features-grid fade-in fade-in-delay-1">
+            <div class="feature-card">
+                <h3>Cycle Tracking</h3>
+                <p>Set up named cycles with start dates, compounds, and notes. Pause, resume, or close out a cycle with a full record intact.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Dose Logging</h3>
+                <p>Log each dose with compound, amount, time, and injection site. Quick-log from the home screen or a widget tap.</p>
+            </div>
+            <div class="feature-card">
+                <h3>History</h3>
+                <p>Browse a complete timeline of doses and cycles. Filter by compound, date range, or site to find exactly what you're looking for.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Reminders</h3>
+                <p>Flexible scheduling for daily, weekly, or custom-interval doses. Notifications fire at the right time and clear once logged.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Stock Management</h3>
+                <p>Track vials by compound and batch. The app watches remaining volume and alerts you before you run short mid-cycle.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Vial Volume Tracking</h3>
+                <p>Enter the starting volume and concentration, then let Tracktide subtract automatically with every logged dose.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Injection Site Tracking</h3>
+                <p>Log the site used for each injection and get rotation suggestions based on your history to avoid overuse.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Home & Lock Screen Widgets</h3>
+                <p>See your next scheduled dose and vial status from the home screen or lock screen without ever opening the app.</p>
+            </div>
+        </div>
+
+        <h2 class="section-heading fade-in">Design thinking</h2>
+        <div class="section-split fade-in fade-in-delay-1">
+            <div class="highlight-card">
+                <h3>The problem</h3>
+                <p>Protocols get tracked across notes apps, screenshots, and memory. When something goes wrong, or you just want to review progress, there's no reliable record to look back at.</p>
+            </div>
+            <div class="highlight-card">
+                <h3>The approach</h3>
+                <p>Every screen is designed around a real step in the protocol workflow. Logging is fast by default, with detail available when you want it. The app earns its place by staying out of the way.</p>
+            </div>
+            <div class="highlight-card">
+                <h3>The result</h3>
+                <p>A complete, reliable log that takes seconds per session and gives you confidence that nothing was missed, skipped, or forgotten between cycles.</p>
+            </div>
+        </div>
+
+        <div class="next-project fade-in">
             <div>
-                <h3>Want the deeper story?</h3>
-                <p>Each project page walks through the process, the decisions, and the visuals behind the build.</p>
+                <h3>Other projects</h3>
+                <p class="page-subtitle" style="margin-bottom: 0;">See how the other builds evolve in the full projects overview.</p>
             </div>
-            <div class="cta-actions">
-                <a href="/">About me</a>
-            </div>
+            <a href="/projects">Back to projects</a>
         </div>
     </div>
 
