@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Policy | Alec Jude Wilson</title>
+    <title>Legal | Alec Jude Wilson</title>
     <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-    <meta name="description" content="Privacy policy for apps by Alec Jude Wilson. We don't collect any data — everything stays on your device or in your private iCloud.">
+    <meta name="description" content="Legal documents for apps and services by Alec Jude Wilson.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@100..900&display=swap" rel="stylesheet">
@@ -199,87 +199,69 @@
             line-height: 1.7;
         }
 
-        .policy-section {
-            margin-bottom: 2.5rem;
-            padding-bottom: 2.5rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        .doc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
         }
 
-        .policy-section:last-of-type {
-            border-bottom: none;
+        .doc-card {
+            display: block;
+            padding: 1.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.03);
+            text-decoration: none;
+            transition: background 0.3s, border-color 0.3s, transform 0.3s;
         }
 
-        .policy-section h2 {
+        .doc-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .doc-card-label {
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.25);
+            margin-bottom: 0.6rem;
+        }
+
+        .doc-card-title {
             font-size: 1.4rem;
             font-weight: 400;
             font-style: normal;
-            letter-spacing: 0.3px;
-            margin-bottom: 0.9rem;
             color: white;
+            margin-bottom: 0.6rem;
+            letter-spacing: 0.2px;
         }
 
-        .policy-section p {
+        .doc-card-desc {
             font-family: 'Inter', sans-serif;
             font-style: normal;
-            font-size: 0.95rem;
+            font-size: 0.88rem;
             font-weight: 300;
-            color: rgba(255, 255, 255, 0.6);
-            line-height: 1.75;
-            margin-bottom: 0.75rem;
+            color: rgba(255, 255, 255, 0.45);
+            line-height: 1.65;
         }
 
-        .policy-section p:last-child {
-            margin-bottom: 0;
-        }
-
-        .policy-list {
-            list-style: none;
-            margin-top: 0.75rem;
-        }
-
-        .policy-list li {
+        .doc-card-arrow {
+            display: inline-block;
+            margin-top: 1.25rem;
             font-family: 'Inter', sans-serif;
             font-style: normal;
-            font-size: 0.95rem;
-            font-weight: 300;
-            color: rgba(255, 255, 255, 0.6);
-            line-height: 1.75;
-            padding: 0.35rem 0;
-            padding-left: 1.2rem;
-            position: relative;
-        }
-
-        .policy-list li::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0.85rem;
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.25);
-        }
-
-        .contact-link {
-            color: rgba(255, 255, 255, 0.75);
-            text-decoration: none;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-            transition: color 0.3s, border-color 0.3s;
-        }
-
-        .contact-link:hover {
-            color: white;
-            border-color: rgba(255, 255, 255, 0.5);
-        }
-
-        .effective-date {
-            font-family: 'Inter', sans-serif;
-            font-style: normal;
-            font-size: 0.78rem;
+            font-size: 0.8rem;
             font-weight: 400;
-            color: rgba(255, 255, 255, 0.25);
-            margin-top: 3rem;
-            letter-spacing: 0.3px;
+            color: rgba(255, 255, 255, 0.3);
+            transition: color 0.3s;
+        }
+
+        .doc-card:hover .doc-card-arrow {
+            color: rgba(255, 255, 255, 0.7);
         }
 
         .footer {
@@ -368,48 +350,24 @@
     </script>
 
     <div class="page-content">
-        <p class="page-label fade-in">Legal</p>
-        <h1 class="fade-in fade-in-delay-1">Privacy Policy</h1>
-        <p class="page-subtitle fade-in fade-in-delay-2">A straightforward promise: your data is yours. We don't see it, store it, or touch it.</p>
+        <p class="page-label fade-in">judes.club</p>
+        <h1 class="fade-in fade-in-delay-1">Legal</h1>
+        <p class="page-subtitle fade-in fade-in-delay-2">Documents governing the use of apps and services by Alec Jude Wilson.</p>
 
-        <div class="policy-section fade-in fade-in-delay-3">
-            <h2>We collect no data</h2>
-            <p>Our apps do not collect, transmit, or store any personal information on our servers — because we don't have any. There are no accounts, no sign-ups, and no tracking of any kind.</p>
-            <ul class="policy-list">
-                <li>No account required to use any of our apps</li>
-                <li>No usage analytics or behavioral tracking</li>
-                <li>No personal information is ever sent to us</li>
-                <li>No advertising identifiers or third-party SDKs</li>
-            </ul>
+        <div class="doc-grid fade-in fade-in-delay-3">
+            <a href="/legal/privacy-policy" class="doc-card">
+                <p class="doc-card-label">Document</p>
+                <h2 class="doc-card-title">Privacy Policy</h2>
+                <p class="doc-card-desc">We collect no data. Everything stays on your device or in your private iCloud.</p>
+                <span class="doc-card-arrow">Read &rarr;</span>
+            </a>
+            <a href="/legal/tos" class="doc-card">
+                <p class="doc-card-label">Document</p>
+                <h2 class="doc-card-title">Terms of Service</h2>
+                <p class="doc-card-desc">The terms that apply when you use any of our apps. Short and fair.</p>
+                <span class="doc-card-arrow">Read &rarr;</span>
+            </a>
         </div>
-
-        <div class="policy-section fade-in">
-            <h2>Your device, your iCloud</h2>
-            <p>Any data you create in our apps — notes, entries, settings, or anything else — lives on your device or in your personal iCloud account if you have iCloud sync enabled. That storage is managed entirely by Apple and governed by <a href="https://www.apple.com/legal/privacy/" class="contact-link" target="_blank">Apple's Privacy Policy</a>.</p>
-            <p>We have no access to your iCloud data. We never will.</p>
-        </div>
-
-        <div class="policy-section fade-in">
-            <h2>No ads, no tracking</h2>
-            <p>We don't use advertising networks, third-party analytics tools, or any service that monitors how you use our apps. Your activity is never observed, profiled, shared, or sold.</p>
-        </div>
-
-        <div class="policy-section fade-in">
-            <h2>Children's privacy</h2>
-            <p>Because we collect no data at all, our apps are safe for users of any age. We have no mechanism to collect information from anyone, including children.</p>
-        </div>
-
-        <div class="policy-section fade-in">
-            <h2>Changes to this policy</h2>
-            <p>If we ever change how our apps handle data, we'll update this page and revise the effective date below. The current version always lives at <a href="/legal/privacy-policy" class="contact-link">judes.club/legal/privacy-policy</a>.</p>
-        </div>
-
-        <div class="policy-section fade-in">
-            <h2>Questions</h2>
-            <p>If you have any questions about this privacy policy, reach out at <a href="mailto:hi@judes.club" class="contact-link">hi@judes.club</a>.</p>
-        </div>
-
-        <p class="effective-date fade-in">Last updated: February 2026</p>
     </div>
 
     <footer class="footer">
