@@ -32,11 +32,15 @@
         els.forEach(function (e) { e.classList.add('in'); });
         return;
       }
+      // threshold:0 fires as soon as any part of the element enters, so it
+      // works regardless of element height (a 12% threshold is unreachable on
+      // elements taller than ~8 viewports, e.g. a long post body). The negative
+      // bottom rootMargin still gives lower-page elements a scroll-into-view cue.
       var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (e) {
           if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
         });
-      }, { threshold: 0.12 });
+      }, { threshold: 0, rootMargin: '0px 0px -12% 0px' });
       els.forEach(function (e) { io.observe(e); });
     })();
 
