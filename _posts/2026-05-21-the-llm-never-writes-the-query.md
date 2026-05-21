@@ -70,6 +70,33 @@ SearchField.ObjectCollection<DepartmentAssignment>("departments")
 
 From that one block we derive: the description the model reads, the rules its input is validated against, how the criterion gets pushed into the upstream search, what data we're allowed to pull back, and how the match is finally decided. Add a field, and all five fall out for free. There's no second place to forget.
 
+Concretely, the builder produces one object behind a small interface — and the interface *is* those five jobs:
+
+```csharp
+public interface ISearchField
+{
+    string Name { get; }
+
+    // 1 — what the model is told this field is
+    void DescribeForLlm(StringBuilder text);
+
+    // 2 — is a given { operator, value } even legal here?
+    //     null means fine; otherwise it's the error handed back to the model
+    string? Validate(SearchOperator op, JsonElement value);
+
+    // 3 — push this criterion into the Phase-1 server query, if it can be
+    bool TryContributeToPhase1(SearchOperator op, JsonElement value, Phase1Query query);
+
+    // 4 — what to pull back from the full record in Phase 2
+    string? GraphQlSelection { get; }
+
+    // 5 — the final, authoritative yes/no for one person
+    bool Evaluate(PersonRecord person, SearchOperator op, JsonElement value);
+}
+```
+
+Two implementations cover every field we have: a *scalar* field — one value on the record, a name or a date or a status — and an *object-collection* field — a list of sub-records, like assignments or languages, each with its own little shape. The registry is just a dictionary of these, keyed by name. Validating the model's input, generating the prompt text, building the query, choosing what to fetch, deciding the match — every one of those is the same loop over the same objects.
+
 That matters for sensitive data more than it sounds like it should. When "what's searchable" and "what's fetchable" come from the same definition, you can't accidentally pull a field you never meant to expose. The blast radius of a mistake is one definition.
 
 ## Two phases, and a hard limit
@@ -88,15 +115,59 @@ You couldn't fold this into one phase if you tried. You can't index hundreds of 
 
 The two phases have one rule between them that I care about more than speed: a Phase-1 narrowing must be **sound**. It's allowed to return too much. It is never allowed to drop a real match. If we can't push a criterion down without risking a false exclusion, we don't push it — Phase 2 verifies it instead. A search that quietly misses someone is worse than a slow one.
 
+That rule is why `TryContributeToPhase1` returns a `bool`. It doesn't mean "did this field contribute something" — it means "did it *fully* express this criterion server-side." The tool tracks that across every criterion:
+
+```csharp
+var needsPhase2 = false;
+foreach (var criterion in criteria)
+{
+    bool fullyPushed = criterion.Field.TryContributeToPhase1(
+        criterion.Operator, criterion.Value, phase1Query);
+    needsPhase2 |= !fullyPushed;
+}
+```
+
+If every criterion pushes cleanly into the indexed query, `needsPhase2` stays `false` and Phase 2 is skipped outright — the Phase-1 result *is* the answer, and nothing gets enriched at all. The moment one criterion can't be fully expressed server-side — a temporal check, an un-indexed field, a compound object match — Phase 2 switches on, but only as a verification pass over an already-small set. The expensive path is opt-in, and the criteria themselves decide whether you're on it.
+
 And there's a ceiling. If Phase 1 still comes back with more than **2,000 candidates**, the tool doesn't fetch them. It stops and asks for a narrower search. Refusing to over-fetch is the feature. An assistant that will happily drag ten thousand people's full records into memory because the question was vague is not an assistant you want pointed at this data.
 
 ## "Currently"
 
 The piece I'm happiest with is how ordinary words became precise.
 
-"Who's in the translation department" and "who *used* to be in it" are different questions, and the difference is two dates on an assignment. So temporal scope is just an operator — `current`, `past`, `future`, `ever`, `never` — and any object field with a start and end date gets all five, evaluated the same way every time.
+"Who's in the translation department" and "who *used* to be in it" are different questions, and the entire difference is two dates on an assignment. So temporal scope is just an operator, and every object field with a start/end date gets the same five — `current`, `past`, `future`, `ever`, `never` — decided by one function:
 
-The model doesn't reason about dates. It picks the word. The system owns what the word means. That's the division of labour I want everywhere in this thing: the LLM handles language, the code handles truth.
+```csharp
+bool InScope(Assignment a, SearchOperator op, DateOnly today) => op switch
+{
+    Current => (a.Start is null || a.Start <= today)
+            && (a.End   is null || a.End   >= today),
+    Past    => a.End   is { } end   && end   <  today,
+    Future  => a.Start is { } start && start >  today,
+    Ever    => true,
+    _       => false,   // Never: every item is in scope, negated after the match
+};
+```
+
+The model never reasons about a date. It picks the word `current`. The function owns what the word means.
+
+The other half of a match is the *value*. For an object field the value isn't a scalar — it's a partial object, and matching is subset containment: the criterion holds if every member it *names* matches the item, and members it doesn't name are ignored.
+
+```csharp
+bool Contains(Assignment item, JsonElement value)
+{
+    foreach (var member in value.EnumerateObject())
+        if (!field.Members[member.Name].Matches(item, member.Value))
+            return false;   // a named member disagreed
+    return true;            // everything named agreed
+}
+```
+
+That's what lets one field cover a whole family of questions. `{ departmentId: X }` is "in department X, any role." Add `isManager: true` and it tightens to "managing department X." Pick the operator `current` and it's "managing department X *right now*." Same field, same two functions — the model just names more members, or picks a different word.
+
+Evaluating the field end to end is then exactly what you'd expect: take the person's assignments, keep the ones `InScope` for the operator, and check whether any of them `Contains` the value. `Never` runs the identical check and flips the answer.
+
+The LLM handles language. The code handles truth. That's the division of labour I want everywhere in this thing.
 
 ## Read-only by construction
 
