@@ -11,7 +11,7 @@ description: >-
 
 We have an internal assistant. Among other things, it finds people.
 
-Not "people" as in users of a website. People as in a system of record — names, contacts, where someone lives, what they're assigned to, personal details that exist in exactly one place and actually matter. It's the most sensitive data we hold. And the assistant lets staff search it by just *asking*: "find translators in the France branch who speak Spanish."
+Not "people" as in users of a website. People as in a system of record — names, contacts, where someone lives, what they're assigned to, personal details that exist in exactly one place and actually matter. It's the most sensitive data we hold. And the assistant lets staff search it by just *asking*: "find translators in France who speak Spanish."
 
 The interesting problem was never the asking. It's everything between the question and the answer.
 
@@ -31,6 +31,16 @@ Every criterion it can express is a small, declared object — a field, an opera
 ```
 
 It can't invent a field. It can't invent an operator. Anything it sends is validated against a registry of things we explicitly decided are searchable, *before* a single record is touched. The model is powerful at the edge — turning "translators in France" into the right criteria — and deliberately powerless about the shape of the search itself.
+
+## Not everyone sees the same person
+
+There's a second reason the model can't have a query language, and it's the one that really settles it.
+
+Not everyone who uses the assistant sees the same things. Permissions here aren't "can you search people — yes or no." They're finer than that. Two people can run the *same* search and get back different fields on the same person, because a record is authorized piece by piece against the claims of whoever's asking. Some details are simply not yours to see — and which details depends entirely on who you are.
+
+A free-form query language has nowhere to put that. It lets any caller name any field, and then leans on the backend to quietly drop whatever they weren't cleared for — query shape by query shape, forever — while the model reasons in a vocabulary that isn't even valid for the person it's working for.
+
+A declared registry is the chokepoint that fixes it. The fields are finite and known, so "what can *this* caller search?" is a question with an answer. You hand each user only the fields their claims allow, and the model can't form a criterion for a field that isn't in the vocabulary it was handed. The fields someone can't see aren't filtered out of their results after the fact. They were never offered to the model in the first place.
 
 ## One definition, five jobs
 
@@ -56,7 +66,7 @@ That matters for sensitive data more than it sounds like it should. When "what's
 
 Searching runs in two phases, and the split is a privacy decision as much as a performance one.
 
-**Phase 1** is a real query against the upstream service. It does the heavy narrowing — branch, department, team — server-side, where the index lives. You never want to pull a haystack of sensitive personal records into your own process to sift them. So Phase 1's job is to make the haystack small first.
+**Phase 1** is a real query against the upstream service. It does the heavy narrowing — location, department, team — server-side, where the index lives. You never want to pull a haystack of sensitive personal records into your own process to sift them. So Phase 1's job is to make the haystack small first.
 
 **Phase 2** takes that narrowed set, fetches the enriched records, and evaluates the remaining criteria in memory — the things the upstream query can't express, like "*currently* in this department" with its start and end dates.
 
