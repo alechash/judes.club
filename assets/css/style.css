@@ -30,7 +30,7 @@
 }
 
 /* --- Base ---------------------------------------------------------------- */
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: clip; }
 
 body {
   font-family: var(--sans);
@@ -360,7 +360,7 @@ h1, h2, h3, h4 {
    ========================================================================= */
 .feature-post {
   display: grid;
-  grid-template-columns: 1.05fr 1fr;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
   gap: 0;
   border: 1px solid var(--line);
   background: var(--glass);
@@ -457,9 +457,10 @@ h1, h2, h3, h4 {
 /* =========================================================================
    Side pieces — projects + photography
    ========================================================================= */
-.side-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
+.side-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1.1rem; }
 
 .side-card {
+  min-width: 0;
   border: 1px solid var(--line);
   background: var(--glass);
   padding: 2.1rem;
@@ -475,11 +476,12 @@ h1, h2, h3, h4 {
 .side-card h3 { font-size: 1.6rem; }
 
 /* mini project rows */
-.mini-list { display: flex; flex-direction: column; gap: 0.2rem; }
+.mini-list { display: flex; flex-direction: column; gap: 0.2rem; min-width: 0; }
 .mini-row {
   display: flex;
   align-items: center;
   gap: 1rem;
+  min-width: 0;
   padding: 0.85rem 0.7rem;
   text-decoration: none;
   color: var(--text);
@@ -519,7 +521,7 @@ h1, h2, h3, h4 {
 /* photo strip */
 .photo-strip {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.5rem;
   margin-bottom: 1.3rem;
 }
@@ -562,7 +564,7 @@ h1, h2, h3, h4 {
 /* =========================================================================
    About + contact
    ========================================================================= */
-.closer { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 3.5rem; align-items: start; }
+.closer { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: 3.5rem; align-items: start; }
 .closer .about-text p { color: var(--muted); margin-bottom: 1.1rem; max-width: 50ch; }
 .closer .about-text p:last-child { margin-bottom: 0; }
 .closer h2 { font-size: clamp(2rem, 3.6vw, 2.9rem); margin-bottom: 1.6rem; }
@@ -772,7 +774,7 @@ h1, h2, h3, h4 {
 .projects-index { padding: 3.5rem 0 6rem; }
 .project-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1.1rem;
 }
 .project-tile {
@@ -1080,12 +1082,12 @@ h1, h2, h3, h4 {
    ========================================================================= */
 @media (max-width: 900px) {
   .section { padding: 5rem 0; }
-  .feature-post { grid-template-columns: 1fr; }
+  .feature-post { grid-template-columns: minmax(0, 1fr); }
   .feature-post .fp-side { border-left: 0; border-top: 1px solid var(--line); min-height: 150px; }
-  .side-grid { grid-template-columns: 1fr; }
-  .closer { grid-template-columns: 1fr; gap: 2.4rem; }
-  .project-grid { grid-template-columns: 1fr; }
-  .meta-strip { grid-template-columns: repeat(2, 1fr); }
+  .side-grid { grid-template-columns: minmax(0, 1fr); }
+  .closer { grid-template-columns: minmax(0, 1fr); gap: 2.4rem; }
+  .project-grid { grid-template-columns: minmax(0, 1fr); }
+  .meta-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 600px) {
@@ -1096,10 +1098,21 @@ h1, h2, h3, h4 {
   .post-row { grid-template-columns: 1fr; gap: 0.35rem; }
   .post-row .pr-meta { display: none; }
   .post-row .pr-date { order: -1; }
-  .photo-strip { grid-template-columns: repeat(3, 1fr); }
+  .photo-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .meta-strip { grid-template-columns: 1fr; }
   .section-head { margin-bottom: 2rem; }
   .article-nav .next { text-align: left; }
+
+  /* Side cards: roomier mini-rows */
+  .side-card { padding: 1.8rem 1.4rem; }
+  .mini-row { padding: 0.85rem 0.35rem; gap: 0.9rem; }
+  .mini-row .mr-meta { display: none; }
+  .mini-row .mr-desc {
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
