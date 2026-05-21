@@ -15,6 +15,16 @@ Not "people" as in users of a website. People as in a system of record — names
 
 The interesting problem was never the asking. It's everything between the question and the answer.
 
+## The setup
+
+Worth thirty seconds on what this actually is, because the rest leans on it.
+
+The assistant is an internal chat tool. A staff member opens it, types a request in plain language, and gets an answer back. Under the hood it's an LLM wired up with a set of *tools* — small, well-defined functions it's allowed to call. It has no direct line to a database. If it wants data, it calls a tool, and a tool is the only thing that ever touches a real record.
+
+Finding people is one of those tools. Type "find translators in France who speak Spanish" and the LLM doesn't go searching anything itself — it reads the request, works out the criteria, and calls the person-search tool with them. The tool runs the actual query against the records and hands back the matches. The LLM just presents what comes back.
+
+So there are two jobs here, and they belong to two different things. The LLM turns language into criteria. The tool turns criteria into people. This post is about the second half — that tool, the interface it exposes, and how it runs a query — because that's where every hard part lives.
+
 ## The model doesn't get a query language
 
 The obvious way to build this is to hand the model a flexible search tool and let it improvise — give it something query-shaped, let it filter.
@@ -64,11 +74,17 @@ That matters for sensitive data more than it sounds like it should. When "what's
 
 ## Two phases, and a hard limit
 
-Searching runs in two phases, and the split is a privacy decision as much as a performance one.
+The two-phase split isn't a preference. The data forces it.
 
-**Phase 1** is a real query against the upstream service. It does the heavy narrowing — location, department, team — server-side, where the index lives. You never want to pull a haystack of sensitive personal records into your own process to sift them. So Phase 1's job is to make the haystack small first.
+There are somewhere around **8–10 million** person records, and each one carries **hundreds of fields**. Nothing queries that shape in a single shot. The search index — the thing that can scan all ten million quickly — only covers a *slice* of those fields: the common ones, the ones worth indexing. Everything else lives in the full record, invisible to a fast query.
 
-**Phase 2** takes that narrowed set, fetches the enriched records, and evaluates the remaining criteria in memory — the things the upstream query can't express, like "*currently* in this department" with its start and end dates.
+So the search runs in two phases, split exactly along that line.
+
+**Phase 1** is a real query against the upstream service. It narrows on the indexed fields — location, department, team — server-side, across all ten million records at once. Its only job is to turn ten million into a small candidate set. It's also the only honest place to do that: you never want to pull a haystack of sensitive personal records into your own process to sift them.
+
+**Phase 2** takes that narrowed set, fetches the *full* records — un-indexed fields included — and evaluates the rest of the criteria in memory: the things the index can't express, like "*currently* in this department," with its start and end dates.
+
+You couldn't fold this into one phase if you tried. You can't index hundreds of fields across ten million records and keep it fast, and you can't drag ten million full records into a process to sift them by hand. Each phase does the part it's actually capable of, and nothing else.
 
 The two phases have one rule between them that I care about more than speed: a Phase-1 narrowing must be **sound**. It's allowed to return too much. It is never allowed to drop a real match. If we can't push a criterion down without risking a false exclusion, we don't push it — Phase 2 verifies it instead. A search that quietly misses someone is worse than a slow one.
 
