@@ -1,0 +1,72 @@
+# --- Site ---------------------------------------------------------------
+title: Alec Jude Wilson
+tagline: Software Engineer
+description: >-
+  Alec Jude Wilson is a software engineer in New York building web and mobile
+  software. Writing on engineering and craft, selected projects, and photography.
+url: "https://judes.club"
+baseurl: ""
+lang: en
+
+author:
+  name: Alec Jude Wilson
+  email: hi@judes.club
+
+# --- Build --------------------------------------------------------------
+permalink: /writing/:title/
+timezone: America/New_York
+markdown: kramdown
+highlighter: rouge
+
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+# --- Collections --------------------------------------------------------
+collections:
+  projects:
+    output: true
+    permalink: /projects/:name/
+
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+  - scope:
+      path: ""
+      type: projects
+    values:
+      layout: project
+
+# --- Plugins ------------------------------------------------------------
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+feed:
+  path: /feed.xml
+
+# --- Social (used in footer / SEO) -------------------------------------
+social:
+  github: https://github.com/alechash
+  instagram: https://instagram.com/wil.tography
+  x: https://x.com/alechash
+  unsplash: https://unsplash.com/@alechash
+
+# --- Photography API ----------------------------------------------------
+photos_api: "https://judes-club-photos.hi-eab.workers.dev"
+
+# --- Exclude from build -------------------------------------------------
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+  - .bundle
+  - .gitignore
+  - README.md
+  - .vscode
+  - old.html
+  - about.html

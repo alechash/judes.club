@@ -1,0 +1,15 @@
+{% assign p = page.url %}
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="/" class="brand"><span class="brand-mark">Alec</span>Jude Wilson</a>
+    <button class="nav-toggle" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links">
+      <li><a href="/writing/" class="{% if p contains '/writing' %}active{% endif %}">Writing</a></li>
+      <li><a href="/projects/" class="{% if p contains '/projects' %}active{% endif %}">Projects</a></li>
+      <li><a href="/photo/" class="{% if p contains '/photo' %}active{% endif %}">Photography</a></li>
+      <li><a href="/#contact" class="nav-cta">Contact</a></li>
+    </ul>
+  </div>
+</nav>

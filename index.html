@@ -1,1707 +1,275 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#111111">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Alec Jude Wilson</title>
-    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-    <meta name="description" content="Developer and photographer based in New York. I build software and take photos.">
-    <meta property="og:title" content="Alec Jude Wilson">
-    <meta property="og:description" content="Developer and photographer based in New York. I build software and take photos.">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content="/bg.jpeg">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Alec Jude Wilson">
-    <meta name="twitter:description" content="Developer and photographer based in New York. I build software and take photos.">
-    <meta name="twitter:image" content="/bg.jpeg">
-    <link rel="preload" href="/bg.jpeg" as="image">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@100..900&display=swap" rel="stylesheet">
-    <style>
-        html, body {
-            overflow: hidden;
-            height: 100vh;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Instrument Serif', serif;
-            font-style: italic;
-            min-height: 100vh;
-            background: #111;
-        }
-
-        .navbar {
-            position: fixed;
-            top: 0;
-            right: 0;
-            left: 0;
-            z-index: 1000;
-            padding: 1rem 1.5rem;
-            pointer-events: none;
-        }
-
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0.6rem 1.5rem;
-            pointer-events: auto;
-            background: rgba(17, 17, 17, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-        }
-
-        .logo {
-            font-size: 1.25rem;
-            font-weight: 400;
-            letter-spacing: 0.3px;
-            color: white;
-            font-family: 'Instrument Serif', serif;
-            font-style: normal;
-            text-decoration: none;
-        }
-
-        .logo-first {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.6em;
-            font-weight: 200;
-            opacity: 0.4;
-        }
-
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            gap: 0.15rem;
-        }
-
-        .nav-menu a {
-            color: rgba(255, 255, 255, 0.5);
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 400;
-            letter-spacing: 0.2px;
-            transition: color 0.3s;
-            font-family: 'Inter', sans-serif;
-            font-style: normal;
-            padding: 0.35rem 0.7rem;
-            display: block;
-        }
-
-        .nav-menu a:hover {
-            color: white;
-        }
-
-        .nav-toggle {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0.5rem;
-        }
-
-        .nav-toggle span {
-            display: block;
-            width: 18px;
-            height: 1.5px;
-            background: rgba(255, 255, 255, 0.7);
-            transition: transform 0.3s, opacity 0.3s;
-        }
-
-        .nav-toggle span + span {
-            margin-top: 4px;
-        }
-
-        .nav-container.nav-open .nav-toggle span:nth-child(1) {
-            transform: translateY(5.5px) rotate(45deg);
-        }
-
-        .nav-container.nav-open .nav-toggle span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .nav-container.nav-open .nav-toggle span:nth-child(3) {
-            transform: translateY(-5.5px) rotate(-45deg);
-        }
-
-        @media (max-width: 660px) {
-            .navbar {
-                padding: 0.75rem 0.75rem;
-            }
-
-            .nav-container {
-                flex-wrap: wrap;
-                padding: 0.75rem 1rem;
-            }
-
-            .nav-toggle {
-                display: flex;
-            }
-
-            .nav-menu {
-                display: flex;
-                width: 100%;
-                flex-direction: column;
-                gap: 0;
-                padding-top: 0;
-                max-height: 0;
-                overflow: hidden;
-                transition: max-height 0.35s ease, padding-top 0.35s ease;
-            }
-
-            .nav-container.nav-open .nav-menu {
-                max-height: 300px;
-                padding-top: 0.75rem;
-            }
-
-            .nav-menu a {
-                font-size: 0.8rem;
-                padding: 0.5rem 0.5rem;
-            }
-        }
-
-        .section {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            overflow: hidden;
-            background-color: #111;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            will-change: transform;
-        }
-
-        .section-1 { background-image: url('/bg.jpeg'); background-position: center right; z-index: 1; }
-        .section-2 { background-image: url('/background.jpeg'); z-index: 2; transform: translateY(100%); }
-        .section-3 { background-image: url('/background2.jpeg'); z-index: 3; transform: translateY(100%); }
-        .section-4 { background-image: url('/background3.jpeg'); z-index: 4; transform: translateY(100%); }
-        .section-5 { background-image: url('/background4.jpeg'); z-index: 5; transform: translateY(100%); }
-
-        /* Dark overlay for readability */
-        .section-1::before,
-        .section-2::before,
-        .section-3::before,
-        .section-4::before,
-        .section-5::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.45);
-            z-index: 0;
-        }
-
-        .section-1::before {
-            background: linear-gradient(to right, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.35) 60%, rgba(0, 0, 0, 0.15) 100%);
-        }
-
-        .content {
-            position: relative;
-            z-index: 1;
-            padding: 8rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-            color: white;
-        }
-
-        .content h1 {
-            font-size: 3rem;
-            font-weight: 400;
-            margin-bottom: 1rem;
-            letter-spacing: 0.5px;
-            font-style: normal;
-        }
-
-        .section-title-link {
-            color: inherit;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            position: relative;
-            padding-bottom: 0.15rem;
-        }
-
-        .section-title-link::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            height: 2px;
-            background: currentColor;
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.3s ease;
-        }
-
-        .section-title-link .arrow {
-            padding-left: 15px;
-            padding-top: 8px;
-            display: inline-block;
-            opacity: 0;
-            transform: translateX(-6px);
-            transition: transform 0.3s ease, opacity 0.3s ease;
-            font-style: normal;
-        }
-
-        .section-title-link:hover::after,
-        .section-title-link:focus-visible::after {
-            transform: scaleX(1);
-        }
-
-        .section-title-link:hover .arrow,
-        .section-title-link:focus-visible .arrow {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .content p {
-            font-size: 1.1rem;
-            font-weight: 400;
-            font-style: normal;
-            line-height: 1.6;
-            opacity: 0.9;
-            max-width: 600px;
-            text-shadow: 0 1px 10px rgba(0, 0, 0, 0.5);
-        }
-
-        .content .subtitle {
-            font-size: 1.4rem;
-            opacity: 0.7;
-            margin-bottom: 2rem;
-            font-style: italic;
-            text-shadow: 0 1px 12px rgba(0, 0, 0, 0.5);
-        }
-
-        /* Apps grid */
-        .apps-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2.5rem;
-        }
-
-        .app-card {
-            display: block;
-            background: rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-left: 2px solid rgba(255, 255, 255, 0.35);
-            padding: 2rem 2rem 1.75rem;
-            transition: background 0.35s ease, border-color 0.35s ease, border-left-color 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
-            text-decoration: none;
-            color: white;
-        }
-
-        .app-card:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.2);
-            border-left-color: rgba(255, 255, 255, 0.7);
-            transform: translateY(-4px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        .app-card .app-tag {
-            display: inline-block;
-            font-family: 'Inter', sans-serif;
-            font-style: normal;
-            font-size: 0.7rem;
-            font-weight: 400;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            opacity: 0.45;
-            margin-bottom: 0.75rem;
-        }
-
-        .app-card h3 {
-            font-size: 1.4rem;
-            font-weight: 400;
-            margin-bottom: 0.6rem;
-            font-style: normal;
-            letter-spacing: 0.3px;
-        }
-
-        .app-card p {
-            font-size: 0.9rem;
-            opacity: 0.65;
-            font-family: 'Inter', sans-serif;
-            line-height: 1.5;
-        }
-
-        /* Photography links */
-        .photo-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-top: 2.5rem;
-        }
-
-        .photo-link {
-            display: inline-block;
-            color: rgba(255, 255, 255, 0.9);
-            text-decoration: none;
-            font-family: 'Inter', sans-serif;
-            font-style: normal;
-            font-size: 1rem;
-            font-weight: 300;
-            letter-spacing: 0.5px;
-            padding: 0.75rem 1.75rem;
-            background: rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: background 0.3s, border-color 0.3s;
-        }
-
-        .photo-link:hover {
-            background: rgba(255, 255, 255, 0.14);
-            border-color: rgba(255, 255, 255, 0.45);
-        }
-
-        /* Contact form */
-        .contact-form {
-            margin-top: 2.5rem;
-            max-width: 500px;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .contact-form input,
-        .contact-form textarea {
-            width: 100%;
-            padding: 0.85rem 1rem;
-            background: rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: white;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.9rem;
-            font-weight: 300;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-
-        .contact-form input::placeholder,
-        .contact-form textarea::placeholder {
-            color: rgba(255, 255, 255, 0.4);
-        }
-
-        .contact-form input:focus,
-        .contact-form textarea:focus {
-            border-color: rgba(255, 255, 255, 0.45);
-        }
-
-        .contact-form textarea {
-            resize: vertical;
-            min-height: 130px;
-        }
-
-        .contact-form button {
-            align-self: flex-start;
-            padding: 0.75rem 2rem;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.9rem;
-            font-weight: 300;
-            letter-spacing: 0.5px;
-            cursor: pointer;
-            transition: background 0.3s, border-color 0.3s;
-        }
-
-        .contact-form button:hover {
-            background: rgba(255, 255, 255, 0.18);
-            border-color: rgba(255, 255, 255, 0.45);
-        }
-
-        .contact-email {
-            margin-top: 2rem;
-            font-family: 'Inter', sans-serif;
-            font-style: normal;
-            font-size: 0.9rem;
-            font-weight: 300;
-            opacity: 0.5;
-            text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
-        }
-
-        .contact-email a {
-            color: white;
-            text-decoration: none;
-            transition: opacity 0.3s;
-        }
-
-        .contact-email a:hover {
-            opacity: 0.7;
-        }
-
-        /* Footer section */
-        .section-5 {
-            padding-bottom: 0;
-        }
-
-        .footer-content {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: 1;
-            padding: 3rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-            color: white;
-        }
-
-        .quote-rotator {
-            display: flex;
-            justify-content: flex-start;
-            text-align: left;
-            max-width: 520px;
-            padding: 0;
-            font-family: 'Instrument Serif', serif;
-            margin-top: -1rem;
-            margin-bottom: 3rem;
-            color: white;
-            text-shadow: 0 1px 12px rgba(0, 0, 0, 0.5);
-        }
-
-        .quote-rotator-inner {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 0.35rem;
-            transition: opacity 0.5s ease, transform 0.5s ease, filter 0.5s ease;
-        }
-
-        .quote-rotator.is-fading .quote-rotator-inner {
-            opacity: 0;
-            transform: translateY(8px) scale(0.98);
-            filter: blur(2px);
-        }
-
-        .quote-rotator .quote-text {
-            font-size: 1.25rem;
-            opacity: 0.92;
-        }
-
-        .quote-rotator .quote-author {
-            font-family: 'Inter', sans-serif;
-            font-style: normal;
-            font-size: 0.78rem;
-            letter-spacing: 1.4px;
-            text-transform: uppercase;
-            opacity: 0.6;
-        }
-
-        .social-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-            margin-top: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .social-links a {
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            font-family: 'Inter', sans-serif;
-            font-style: normal;
-            font-size: 0.95rem;
-            font-weight: 300;
-            transition: opacity 0.3s;
-        }
-
-        .social-links a:hover {
-            opacity: 0.6;
-        }
-
-        .footer-bottom {
-            border-top: 1px solid rgba(255, 255, 255, 0.15);
-            padding-top: 2rem;
-            padding-bottom: 2rem;
-            font-family: 'Inter', sans-serif;
-            font-style: normal;
-            font-size: 0.85rem;
-            font-weight: 300;
-            opacity: 0.5;
-            text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
-        }
-
-        .footer-bottom p {
-            float: right;
-        }
-
-        /* Hero section */
-        .hero-intro {
-            margin-top: 3rem;
-            display: flex;
-            gap: 3rem;
-            flex-wrap: wrap;
-        }
-
-        .hero-blurb {
-            max-width: 420px;
-        }
-
-        .hero-blurb p {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 300;
-            line-height: 1.8;
-            opacity: 0.7;
-            text-shadow: 0 1px 10px rgba(0, 0, 0, 0.6);
-        }
-
-        .hero-details {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .hero-detail {
-            display: flex;
-            flex-direction: column;
-            gap: 0.2rem;
-        }
-
-        .hero-detail .label {
-            font-family: 'Inter', sans-serif;
-            font-style: normal;
-            font-size: 0.65rem;
-            font-weight: 400;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            opacity: 0.35;
-            text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6);
-        }
-
-        .hero-detail .value {
-            font-size: 1.15rem;
-            font-style: normal;
-            font-weight: 400;
-            opacity: 0.9;
-            letter-spacing: 0.3px;
-            text-shadow: 0 1px 10px rgba(0, 0, 0, 0.5);
-        }
-
-        .scroll-hint {
-            position: absolute;
-            bottom: 2.5rem;
-            left: 2rem;
-            font-family: 'Inter', sans-serif;
-            font-style: normal;
-            font-size: 0.85rem;
-            font-weight: 400;
-            letter-spacing: 1.5px;
-            opacity: 1;
-            text-shadow: 0 0 20px rgba(0, 0, 0, 0.9), 0 0 40px rgba(0, 0, 0, 0.5);
-            text-transform: uppercase;
-            color: white;
-            animation: drift 2.5s ease-in-out infinite;
-        }
-
-        @keyframes drift {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(6px); }
-        }
-
-        /* Scroll fade-in */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .fade-in-delay-1 { transition-delay: 0.1s; }
-        .fade-in-delay-2 { transition-delay: 0.2s; }
-        .fade-in-delay-3 { transition-delay: 0.3s; }
-        .fade-in-delay-4 { transition-delay: 0.4s; }
-        .fade-in-delay-5 { transition-delay: 0.5s; }
-
-        /* Photo caption */
-        .photo-caption {
-            position: absolute;
-            bottom: 1.5rem;
-            right: 2rem;
-            font-family: 'Inter', sans-serif;
-            font-style: normal;
-            font-size: 0.75rem;
-            font-weight: 300;
-            color: white;
-            opacity: 0.85;
-            letter-spacing: 0.5px;
-            text-shadow: 0 0 20px rgba(0, 0, 0, 0.9), 0 0 40px rgba(0, 0, 0, 0.5);
-            z-index: 1;
-            padding: 0.4rem 0.8rem;
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-        }
-
-        /* Photo carousel */
-        .photo-carousel {
-            position: relative;
-            margin-top: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .carousel-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            font-size: 1.5rem;
-            width: 2.5rem;
-            height: 2.5rem;
-            cursor: pointer;
-            z-index: 2;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.3s, border-color 0.3s;
-            font-family: 'Inter', sans-serif;
-            font-style: normal;
-            line-height: 1;
-            padding: 0;
-        }
-
-        .carousel-btn:hover {
-            background: rgba(0, 0, 0, 0.6);
-            border-color: rgba(255, 255, 255, 0.35);
-        }
-
-        .carousel-prev { left: 0.5rem; }
-        .carousel-next { right: 0.5rem; }
-
-        /* Photo grid */
-        .photo-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 0.75rem;
-            row-gap: 0;
-        }
-
-        .photo-grid-item {
-            aspect-ratio: 4 / 3;
-            height: clamp(160px, 18vw, 220px);
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            overflow: hidden;
-            position: relative;
-        }
-
-        .photo-grid-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .photo-grid-item:hover img {
-            transform: scale(1.05);
-        }
-
-        .photo-grid-item button {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: transparent;
-            padding: 0;
-            cursor: pointer;
-        }
-
-        .photo-grid-placeholder {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Inter', sans-serif;
-            font-style: normal;
-            font-size: 0.7rem;
-            font-weight: 300;
-            color: rgba(255, 255, 255, 0.25);
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        /* Home lightbox */
-        .home-lightbox {
-            display: none;
-            position: fixed;
-            inset: 0;
-            z-index: 2000;
-            background: rgba(0, 0, 0, 0);
-            backdrop-filter: blur(0px);
-            -webkit-backdrop-filter: blur(0px);
-            opacity: 0;
-            transition: opacity 0.35s ease, background 0.35s ease, backdrop-filter 0.35s ease, -webkit-backdrop-filter 0.35s ease;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .home-lightbox.active {
-            opacity: 1;
-            background: rgba(0, 0, 0, 0.92);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-        }
-
-        .home-lightbox.closing {
-            opacity: 0;
-            background: rgba(0, 0, 0, 0);
-            backdrop-filter: blur(0px);
-            -webkit-backdrop-filter: blur(0px);
-        }
-
-        .home-lightbox-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1.5rem;
-            transform: scale(0.95) translateY(10px);
-            opacity: 0;
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
-            max-width: 90vw;
-            max-height: 90vh;
-        }
-
-        .home-lightbox.active .home-lightbox-content {
-            transform: scale(1) translateY(0);
-            opacity: 1;
-        }
-
-        .home-lightbox.closing .home-lightbox-content {
-            transform: scale(0.95) translateY(10px);
-            opacity: 0;
-        }
-
-        .home-lightbox-content img {
-            max-width: 90vw;
-            max-height: 75vh;
-            object-fit: contain;
-        }
-
-        .home-lightbox-actions {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .home-lightbox-btn {
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            font-family: 'Inter', sans-serif;
-            font-style: normal;
-            font-size: 0.9rem;
-            font-weight: 300;
-            padding: 0.6rem 1.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            cursor: pointer;
-            background: rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            transition: background 0.3s, border-color 0.3s;
-        }
-
-        .home-lightbox-btn:hover {
-            background: rgba(255, 255, 255, 0.14);
-            border-color: rgba(255, 255, 255, 0.45);
-            color: white;
-        }
-
-        .home-lightbox-attribution {
-            font-family: 'Inter', sans-serif;
-            font-style: normal;
-            font-size: 0.85rem;
-            font-weight: 300;
-            color: rgba(255, 255, 255, 0.7);
-            text-align: center;
-        }
-
-        .home-lightbox-attribution a {
-            color: rgba(255, 255, 255, 0.85);
-            text-decoration: none;
-        }
-
-        .home-lightbox-attribution a:hover {
-            opacity: 0.7;
-        }
-
-        /* Form status */
-        .form-status {
-            font-family: 'Inter', sans-serif;
-            font-style: normal;
-            font-size: 0.9rem;
-            font-weight: 300;
-            padding: 0.75rem 1rem;
-            display: none;
-        }
-
-        .form-status.success {
-            display: block;
-            color: #8fdfb0;
-            border: 1px solid rgba(143, 223, 176, 0.25);
-            background: rgba(143, 223, 176, 0.06);
-        }
-
-        .form-status.error {
-            display: block;
-            color: #f0a0a0;
-            border: 1px solid rgba(240, 160, 160, 0.25);
-            background: rgba(240, 160, 160, 0.06);
-        }
-
-        @media (max-width: 768px) {
-            .footer-bottom p {
-                float: none;
-                display: block;
-            }
-
-            .footer-bottom div {
-                margin-top: 1rem;
-            }
-
-            .content {
-                padding: 6rem 1.5rem 2rem;
-            }
-
-            .content h1 {
-                font-size: 2rem;
-            }
-
-            .content .subtitle {
-                font-size: 1.15rem;
-                margin-bottom: 1rem;
-            }
-
-            /* Apps section: compact cards */
-            .apps-grid {
-                grid-template-columns: 1fr;
-                gap: 0.75rem;
-                margin-top: 1.5rem;
-            }
-
-            .app-card {
-                padding: 1.25rem 1.5rem 1rem;
-            }
-
-            .app-card h3 {
-                font-size: 1.2rem;
-                margin-bottom: 0.3rem;
-            }
-
-            .app-card p {
-                display: -webkit-box;
-                -webkit-line-clamp: 2;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-            }
-
-            .app-card .app-tag {
-                margin-bottom: 0.4rem;
-            }
-
-            .hero-intro {
-                flex-direction: column;
-                gap: 2rem;
-            }
-
-            /* Photography section: single image carousel on mobile */
-            .photo-carousel {
-                margin-top: 1.5rem;
-                margin-bottom: 0.75rem;
-                overflow: hidden;
-            }
-
-            .carousel-btn {
-                display: flex;
-            }
-
-            .photo-grid {
-                display: flex;
-                grid-template-columns: none;
-                gap: 0;
-                overflow: visible;
-                position: relative;
-                transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            }
-
-            .photo-grid-item {
-                flex: 0 0 100%;
-                min-width: 100%;
-                aspect-ratio: 16 / 9;
-                height: auto;
-                background: none;
-                border: none;
-                display: block;
-            }
-
-            .photo-grid-item img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-            }
-
-            .photo-links {
-                margin-top: 1rem;
-                gap: 0.75rem;
-            }
-
-            /* Contact section: compact form */
-            .contact-form {
-                margin-top: 1.5rem;
-                gap: 0.75rem;
-            }
-
-            .contact-form textarea {
-                min-height: 80px;
-            }
-
-            .contact-email {
-                margin-top: 1rem;
-            }
-
-            .quote-rotator {
-                max-width: 85vw;
-            }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .quote-rotator-inner {
-                transition: none;
-            }
-        }
-
-        /* Active nav link */
-        .nav-menu a.active {
-            color: rgba(255, 255, 255, 0.85);
-        }
-
-        /* Section dot navigator */
-        .section-nav {
-            position: fixed;
-            right: 1.5rem;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 600;
-            display: flex;
-            flex-direction: column;
-            gap: 0.7rem;
-        }
-
-        .section-dot {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.25);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            cursor: pointer;
-            transition: background 0.4s, transform 0.4s;
-            padding: 0;
-            position: relative;
-            outline: none;
-        }
-
-        .section-dot:focus-visible {
-            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.45);
-        }
-
-        .section-dot.active {
-            background: rgba(255, 255, 255, 0.9);
-            transform: scale(1.5);
-        }
-
-        .section-dot::before {
-            content: attr(data-label);
-            position: absolute;
-            right: calc(100% + 0.75rem);
-            top: 50%;
-            transform: translateY(-50%);
-            font-family: 'Inter', sans-serif;
-            font-size: 0.7rem;
-            font-style: normal;
-            font-weight: 300;
-            letter-spacing: 0.5px;
-            color: rgba(255, 255, 255, 0.9);
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 0.25rem 0.6rem;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-        }
-
-        .section-dot:hover::before,
-        .section-dot:focus-visible::before {
-            opacity: 1;
-        }
-
-        @media (max-width: 768px) {
-            .section-nav {
-                display: none;
-            }
-        }
-
-        /* Lightbox arrow nav */
-        .home-lightbox-nav {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .home-lightbox-arrow {
-            color: rgba(255, 255, 255, 0.6);
-            background: rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            width: 2.5rem;
-            height: 2.5rem;
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: background 0.2s, border-color 0.2s, color 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Inter', sans-serif;
-            font-style: normal;
-            padding: 0;
-            flex-shrink: 0;
-        }
-
-        .home-lightbox-arrow:hover {
-            background: rgba(255, 255, 255, 0.14);
-            border-color: rgba(255, 255, 255, 0.35);
-            color: white;
-        }
-    </style>
-</head>
-<body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="/" class="logo"><span class="logo-first">Alec</span> Jude Wilson</a>
-            <button class="nav-toggle" aria-label="Menu" aria-expanded="false">
-                <span></span><span></span><span></span>
-            </button>
-            <ul class="nav-menu">
-                <li><a href="/projects">Software</a></li>
-                <li><a href="/photo">Photography</a></li>
-                <li><a href="https://writing.judes.club">Writing</a></li>
-                <li><a href="/#contact">Contact</a></li>
-            </ul>
-        </div>
-    </nav>
-    <script>
-        document.querySelector('.nav-toggle').addEventListener('click', function() {
-            var c = this.closest('.nav-container');
-            var open = c.classList.toggle('nav-open');
-            this.setAttribute('aria-expanded', open);
-        });
-    </script>
-
-    <!-- About Me -->
-    <section class="section section-1" id="about">
-        <div class="content">
-            <h1 class="fade-in">I build software and photograph the world.</h1>
-            <div class="hero-intro">
-                <div class="hero-blurb fade-in fade-in-delay-1">
-                    <p>I design and develop web and mobile applications — from iOS apps to full-stack platforms. I also run a software consultancy helping companies ship digital products. When I'm not coding, I'm shooting travel and street photography.</p>
-                </div>
-
-                <div class="hero-details fade-in fade-in-delay-2">
-                    <div class="hero-detail">
-                        <span class="label">Location</span>
-                        <span class="value">New York, USA</span>
-                    </div>
-                    <div class="hero-detail">
-                        <span class="label">Focus</span>
-                        <span class="value">Web, Mobile & AI</span>
-                    </div>
-                    <div class="hero-detail">
-                        <span class="label">Consultancy</span>
-                        <span class="value">Belayer Development</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="scroll-hint">&#8595; Scroll</div>
-        <span class="photo-caption">Manta, Ecuador</span>
-    </section>
-
-    <!-- Apps -->
-    <section class="section section-2" id="apps">
-        <div class="content">
-            <h1 class="fade-in">
-                <a class="section-title-link" href="/projects">
-                    Software <span class="arrow">⭢</span>
-                </a>
-            </h1>
-            <p class="subtitle fade-in fade-in-delay-1">Things I've built</p>
-            <div class="apps-grid">
-                <a href="/projects/spare-pocket" class="app-card fade-in fade-in-delay-2">
-                    <span class="app-tag">iOS</span>
-                    <h3>Spare Pocket</h3>
-                    <p>A universal capture app that lets you store links, notes, files, and ideas in one organized place so nothing important gets lost.</p>
-                </a>
-                <a href="/projects/antifragile" class="app-card fade-in fade-in-delay-3">
-                    <span class="app-tag">Full Stack</span>
-                    <h3>Antifragile</h3>
-                    <p>A career tracking platform for software engineers that documents measurable impact over time, making professional value clear, provable, and portable.</p>
-                </a>
-                <a href="/projects/belayer" class="app-card fade-in fade-in-delay-4">
-                    <span class="app-tag">Company</span>
-                    <h3>Belayer Development</h3>
-                    <p>A design-driven software and AI consultancy that helps growing companies plan, build, and launch high-quality digital products with clarity, speed, and technical excellence.</p>
-                </a>
-            </div>
-        </div>
-        <span class="photo-caption">Old San Juan, Puerto Rico</span>
-    </section>
-
-    <!-- Photography -->
-    <section class="section section-3" id="photography">
-        <div class="content">
-            <h1 class="fade-in">
-                <a class="section-title-link" href="/photo">
-                    Photography <span class="arrow">⭢</span>
-                </a>
-            </h1>
-            <p class="subtitle fade-in fade-in-delay-1">Places I've been, things I've seen</p>
-            <div class="photo-carousel fade-in fade-in-delay-3">
-                <div class="photo-grid" id="photo-grid"></div>
-                <button class="carousel-btn carousel-prev" id="carousel-prev" aria-label="Previous">&#8249;</button>
-                <button class="carousel-btn carousel-next" id="carousel-next" aria-label="Next">&#8250;</button>
-            </div>
-            <div class="photo-links fade-in fade-in-delay-4">
-                <a href="https://instagram.com/wil.tography" class="photo-link" target="_blank">Instagram</a>
-                <a href="/photo" class="photo-link">Portfolio</a>
-                <a href="https://judes.darkroom.com" target="_blank" class="photo-link">Prints</a>
-            </div>
-        </div>
-        <span class="photo-caption">مراكش، المغرب · Marrakech, Morocco</span>
-    </section>
-
-    <!-- Contact -->
-    <section class="section section-4" id="contact">
-        <div class="content">
-            <h1 class="fade-in">Contact</h1>
-            <p class="subtitle fade-in fade-in-delay-1">Get in touch</p>
-            <form class="contact-form" id="contact-form" action="" method="POST">
-                <input type="text" name="name" placeholder="Name" required class="fade-in fade-in-delay-2">
-                <input type="email" name="email" placeholder="Email" required class="fade-in fade-in-delay-3">
-                <textarea name="message" placeholder="Message" required class="fade-in fade-in-delay-4"></textarea>
-                <button type="submit" class="fade-in fade-in-delay-5">Send</button>
-                <div class="form-status" id="form-status"></div>
-            </form>
-            <p class="contact-email fade-in fade-in-delay-5">or email me directly at <a href="mailto:hi@judes.club">hi@judes.club</a></p>
-        </div>
-        <span class="photo-caption">Kochel am See, Deutschland · Kochel, Germany</span>
-    </section>
-
-    <!-- Footer -->
-    <section class="section section-5">
-        <div class="footer-content">
-            <h1 class="fade-in" style="font-size: 2rem; font-weight: 400; font-style: normal;">Links</h1>
-            <div class="social-links fade-in fade-in-delay-2">
-                <a href="https://github.com/alechash" target="_blank">GitHub</a>
-                <a href="https://instagram.com/wil.tography" target="_blank">Instagram</a>
-                <a href="https://x.com/alechash" target="_blank">X</a><br>
-            </div>
-            <div class="footer-bottom fade-in fade-in-delay-3">
-                <p>&copy; 2026 Alec Jude Wilson</p>
-                <div class="quote-rotator fade-in fade-in-delay-1" id="quote-rotator" aria-live="polite">
-                    <div class="quote-rotator-inner">
-                        <span class="quote-text" id="quote-text">“Stay hungry, stay foolish.”</span>
-                        <span class="quote-author" id="quote-author">— Steve Jobs</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <span class="photo-caption">The Sky, Earth</span>
-    </section>
-
-    <nav class="section-nav" id="section-nav" aria-label="Section navigation">
-        <button class="section-dot active" data-index="0" data-label="About" aria-label="About"></button>
-        <button class="section-dot" data-index="1" data-label="Software" aria-label="Software"></button>
-        <button class="section-dot" data-index="2" data-label="Photography" aria-label="Photography"></button>
-        <button class="section-dot" data-index="3" data-label="Contact" aria-label="Contact"></button>
-        <button class="section-dot" data-index="4" data-label="Links" aria-label="Links"></button>
-    </nav>
-
-    <div class="home-lightbox" id="home-lightbox">
-        <div class="home-lightbox-content">
-            <img id="home-lightbox-img" src="" alt="Photo">
-            <div class="home-lightbox-nav">
-                <button class="home-lightbox-arrow" id="home-lightbox-prev" aria-label="Previous photo">&#8249;</button>
-                <div class="home-lightbox-actions">
-                    <a id="home-lightbox-download" class="home-lightbox-btn" href="" download>Download</a>
-                    <a class="home-lightbox-btn" href="/photo">View More</a>
-                    <button class="home-lightbox-btn" id="home-lightbox-close">Close</button>
-                </div>
-                <button class="home-lightbox-arrow" id="home-lightbox-next" aria-label="Next photo">&#8250;</button>
-            </div>
-            <p class="home-lightbox-attribution" id="home-lightbox-attribution"></p>
-        </div>
+---
+layout: default
+description: >-
+  Alec Jude Wilson is a software engineer in New York. I build web and mobile
+  applications, write about engineering, and photograph the world.
+---
+
+<!-- ===================== HERO ===================== -->
+<header class="hero">
+  <div class="hero-bg" style="background-image:url('/bg.jpeg')"></div>
+  <div class="hero-inner wrap">
+    <p class="eyebrow reveal">Software Engineer &mdash; New York</p>
+    <h1 class="reveal d1">I build software, and write about <span class="em">the craft of building it.</span></h1>
+    <p class="hero-sub reveal d2">
+      I&rsquo;m Alec. I design and ship web and mobile applications, run a small
+      software &amp; AI consultancy, and write here about what I learn building
+      real products.
+    </p>
+    <div class="hero-actions reveal d3">
+      <a href="/writing/" class="btn btn-primary">Read the writing &nbsp;&rarr;</a>
+      <a href="/projects/" class="btn">See the projects</a>
+    </div>
+    <div class="hero-meta reveal d4">
+      <div class="item"><span class="k">Location</span><span class="v">New York, USA</span></div>
+      <div class="item"><span class="k">Focus</span><span class="v">Web, Mobile &amp; AI</span></div>
+      <div class="item"><span class="k">Consultancy</span><span class="v">Belayer Development</span></div>
+    </div>
+  </div>
+  <div class="scroll-cue"><span>Scroll</span><span class="bar"></span></div>
+  <span class="photo-credit">Manta, Ecuador</span>
+</header>
+
+<!-- ===================== WRITING (featured) ===================== -->
+<section class="section" id="writing">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <p class="eyebrow"><span class="num">01</span>Writing</p>
+        <h2>Notes on engineering &amp; craft</h2>
+      </div>
+      <a href="/writing/" class="arrow-link">All writing <span class="ar">&rarr;</span></a>
     </div>
 
-    <script>
-        // Build pool of Unsplash photos and pick 8 random ones
-        (function() {
-            const API_BASE = "https://judes-club-photos.hi-eab.workers.dev";
-            const CACHE_TTL = 24 * 60 * 60 * 1000;
-            const grid = document.getElementById('photo-grid');
-            const prevBtn = document.getElementById('carousel-prev');
-            const nextBtn = document.getElementById('carousel-next');
-            const lightbox = document.getElementById('home-lightbox');
-            const lightboxImg = document.getElementById('home-lightbox-img');
-            const lightboxDownload = document.getElementById('home-lightbox-download');
-            const lightboxClose = document.getElementById('home-lightbox-close');
-            const lightboxPrev = document.getElementById('home-lightbox-prev');
-            const lightboxNext = document.getElementById('home-lightbox-next');
-            const lightboxAttribution = document.getElementById('home-lightbox-attribution');
-            let count = 0;
-            let ci = 0;
-            let lightboxPhotos = [];
-            let lightboxIdx = -1;
-            let autoInterval = null;
+    {% if site.posts.size > 0 %}
+      {% assign featured = site.posts.first %}
+      {% assign fwords = featured.content | number_of_words %}
+      {% assign frt = fwords | divided_by: 200 | plus: 1 %}
+      <a href="{{ featured.url }}" class="feature-post reveal">
+        <div class="fp-body">
+          <span class="fp-tag">Latest</span>
+          <h3>{{ featured.title }}</h3>
+          <p class="fp-excerpt">{{ featured.description | default: featured.excerpt | strip_html | truncate: 180 }}</p>
+          <div class="fp-foot">
+            <span>{{ featured.date | date: "%B %-d, %Y" }}</span>
+            <span>&middot;</span>
+            <span>{{ frt }} min read</span>
+          </div>
+        </div>
+        <div class="fp-side">
+          <span class="fp-mark">&ldquo;</span>
+          <span class="fp-readtime">Read &rarr;</span>
+        </div>
+      </a>
 
-            function getCacheKey(key) {
-                return `judes-home-cache:${key}`;
-            }
+      {% if site.posts.size > 1 %}
+      <div class="post-list">
+        {% for post in site.posts offset:1 limit:3 %}
+          {% assign words = post.content | number_of_words %}
+          {% assign rt = words | divided_by: 200 | plus: 1 %}
+          <a href="{{ post.url }}" class="post-row reveal">
+            <span class="pr-date">{{ post.date | date: "%b %-d, %Y" }}</span>
+            <span class="pr-title">{{ post.title }}
+              <span class="pr-sub">{{ post.description | default: post.excerpt | strip_html | truncate: 110 }}</span>
+            </span>
+            <span class="pr-meta">{{ rt }} min</span>
+          </a>
+        {% endfor %}
+      </div>
+      {% endif %}
+    {% else %}
+      <p class="lead reveal">Writing is on the way &mdash; the first posts land shortly.</p>
+    {% endif %}
+  </div>
+</section>
 
-            function getCachedData(key) {
-                try {
-                    const raw = localStorage.getItem(getCacheKey(key));
-                    if (!raw) return null;
-                    const cached = JSON.parse(raw);
-                    if (Date.now() - cached.timestamp > CACHE_TTL) {
-                        localStorage.removeItem(getCacheKey(key));
-                        return null;
-                    }
-                    return cached.data;
-                } catch (error) {
-                    console.error(error);
-                    return null;
-                }
-            }
+<!-- ===================== PROJECTS + PHOTOGRAPHY (side pieces) ===================== -->
+<section class="section">
+  <div class="wrap">
+    <div class="side-grid">
 
-            function setCachedData(key, data) {
-                try {
-                    localStorage.setItem(getCacheKey(key), JSON.stringify({
-                        timestamp: Date.now(),
-                        data,
-                    }));
-                } catch (error) {
-                    console.error(error);
-                }
-            }
+      <!-- Projects -->
+      <div class="side-card reveal">
+        <div class="sc-head">
+          <div>
+            <p class="eyebrow"><span class="num">02</span>Selected work</p>
+            <h3>Projects</h3>
+          </div>
+          <a href="/projects/" class="arrow-link">All <span class="ar">&rarr;</span></a>
+        </div>
+        <div class="mini-list">
+          {% assign home_projects = site.projects | sort: "order" %}
+          {% for project in home_projects limit:4 %}
+            <a href="{{ project.url }}" class="mini-row">
+              {% if project.cover %}<img src="{{ project.cover }}" alt="{{ project.title }}" class="mr-thumb" loading="lazy">{% endif %}
+              <span class="mr-text">
+                <span class="mr-title">{{ project.title }}</span>
+                <span class="mr-desc">{{ project.tagline }}</span>
+              </span>
+              <span class="mr-meta">{{ project.kind }}</span>
+            </a>
+          {% endfor %}
+        </div>
+        <div class="sc-links">
+          <a href="{{ site.social.github }}" target="_blank" rel="noopener">GitHub &nearr;</a>
+          <a href="/projects/">Full project list &rarr;</a>
+        </div>
+      </div>
 
-            async function fetchJson(url) {
-                const response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error(`Request failed: ${response.status}`);
-                }
-                return response.json();
-            }
+      <!-- Photography -->
+      <div class="side-card reveal d1">
+        <div class="sc-head">
+          <div>
+            <p class="eyebrow"><span class="num">03</span>Off-screen</p>
+            <h3>Photography</h3>
+          </div>
+          <a href="/photo/" class="arrow-link">Gallery <span class="ar">&rarr;</span></a>
+        </div>
+        <div class="photo-strip" id="home-photos">
+          <div class="photo-cell"></div><div class="photo-cell"></div><div class="photo-cell"></div>
+          <div class="photo-cell"></div><div class="photo-cell"></div><div class="photo-cell"></div>
+        </div>
+        <p class="lead" style="font-size:0.9rem;margin-bottom:0.2rem">
+          Travel &amp; street photography. The full gallery carries live view,
+          like, and download counts straight from Unsplash.
+        </p>
+        <div class="sc-links">
+          <a href="/photo/">Open the gallery &rarr;</a>
+          <a href="{{ site.social.instagram }}" target="_blank" rel="noopener">Instagram &nearr;</a>
+          <a href="https://judes.darkroom.com" target="_blank" rel="noopener">Prints &nearr;</a>
+        </div>
+      </div>
 
-            async function fetchJsonCached(url, cacheKey) {
-                const cached = getCachedData(cacheKey);
-                if (cached) {
-                    return cached;
-                }
-                const data = await fetchJson(url);
-                setCachedData(cacheKey, data);
-                return data;
-            }
+    </div>
+  </div>
+</section>
 
-            function slideTo(i) {
-                if (!count) return;
-                ci = ((i % count) + count) % count;
-                grid.style.transform = 'translateX(-' + (ci * 100) + '%)';
-            }
+<!-- ===================== ABOUT + CONTACT ===================== -->
+<section class="section" id="contact">
+  <div class="wrap">
+    <div class="closer">
+      <div class="about-text reveal">
+        <p class="eyebrow"><span class="num">04</span>About</p>
+        <h2>A little about me</h2>
+        <p>
+          I&rsquo;m a software engineer based in New York. Most of my work lives at
+          the intersection of clean engineering and considered design &mdash; web
+          platforms, iOS apps, and AI-assisted tools that try to stay calm and out
+          of the way.
+        </p>
+        <p>
+          Through <strong>Belayer Development</strong>, my software &amp; AI
+          consultancy, I help growing companies plan, build, and ship digital
+          products. On the side I&rsquo;ve put a few of my own apps on the App
+          Store, and I shoot photography wherever I travel.
+        </p>
+        <p>
+          This site is where I keep all of it &mdash; the writing first, then the
+          work behind it.
+        </p>
+      </div>
+      <div class="contact-card reveal d1">
+        <p class="cc-eyebrow">Get in touch</p>
+        <h3>Let&rsquo;s build something.</h3>
+        <p>Have a project, a question, or just want to say hello? The fastest way to reach me is email.</p>
+        <a href="mailto:hi@judes.club" class="contact-email">hi@judes.club</a>
+        <div class="contact-socials">
+          <a href="{{ site.social.github }}" target="_blank" rel="noopener">GitHub</a>
+          <a href="{{ site.social.x }}" target="_blank" rel="noopener">X / Twitter</a>
+          <a href="{{ site.social.instagram }}" target="_blank" rel="noopener">Instagram</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-            function startAutoAdvance() {
-                if (autoInterval) clearInterval(autoInterval);
-                if (count > 1) autoInterval = setInterval(function() { slideTo(ci + 1); }, 5000);
-            }
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <div class="lightbox-inner">
+    <img id="lb-img" src="" alt="Photograph">
+    <div class="lightbox-row">
+      <button class="lightbox-arrow" id="lb-prev" aria-label="Previous">&#8249;</button>
+      <div class="lightbox-actions">
+        <a id="lb-download" class="btn" href="" download>Download</a>
+        <a class="btn" href="/photo/">View gallery</a>
+        <button class="btn" id="lb-close">Close</button>
+      </div>
+      <button class="lightbox-arrow" id="lb-next" aria-label="Next">&#8250;</button>
+    </div>
+    <p class="lightbox-attr" id="lb-attr"></p>
+  </div>
+</div>
 
-            function stopAutoAdvance() {
-                clearInterval(autoInterval);
-                autoInterval = null;
-            }
+<script>
+(function () {
+  var API = "{{ site.photos_api }}";
+  var grid = document.getElementById('home-photos');
+  if (!grid) return;
 
-            prevBtn.addEventListener('click', function() { slideTo(ci - 1); startAutoAdvance(); });
-            nextBtn.addEventListener('click', function() { slideTo(ci + 1); startAutoAdvance(); });
+  var lb = document.getElementById('lightbox');
+  var lbImg = document.getElementById('lb-img');
+  var lbDl = document.getElementById('lb-download');
+  var lbAttr = document.getElementById('lb-attr');
+  var photos = [];
+  var idx = 0;
 
-            const carousel = document.querySelector('.photo-carousel');
-            carousel.addEventListener('mouseenter', stopAutoAdvance);
-            carousel.addEventListener('mouseleave', startAutoAdvance);
+  function showLightbox(i) {
+    idx = (i + photos.length) % photos.length;
+    var p = photos[idx];
+    lbImg.src = p.url_regular;
+    lbImg.alt = p.alt_description || 'Photograph';
+    lbDl.href = p.url_regular;
+    lbAttr.innerHTML = 'Photo by <a href="' + p.user_profile + '" target="_blank" rel="noopener">' + p.user_name +
+      '</a> on <a href="' + p.attribution_url + '" target="_blank" rel="noopener">Unsplash</a>';
+    lb.style.display = 'flex';
+    requestAnimationFrame(function () { requestAnimationFrame(function () {
+      lb.classList.add('active'); document.body.style.overflow = 'hidden';
+    }); });
+  }
+  function closeLightbox() {
+    lb.classList.add('closing'); lb.classList.remove('active');
+    setTimeout(function () {
+      lb.classList.remove('closing'); lb.style.display = 'none';
+      document.body.style.overflow = ''; lbImg.src = '';
+    }, 380);
+  }
+  document.getElementById('lb-close').addEventListener('click', closeLightbox);
+  document.getElementById('lb-prev').addEventListener('click', function () { showLightbox(idx - 1); });
+  document.getElementById('lb-next').addEventListener('click', function () { showLightbox(idx + 1); });
+  lb.addEventListener('click', function (e) { if (e.target === lb) closeLightbox(); });
+  document.addEventListener('keydown', function (e) {
+    if (!lb.classList.contains('active')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowRight') showLightbox(idx + 1);
+    if (e.key === 'ArrowLeft') showLightbox(idx - 1);
+  });
 
-            function populateLightbox(data) {
-                lightboxImg.src = data.src;
-                lightboxImg.alt = data.alt || 'Photo';
-                lightboxDownload.href = data.src;
-                lightboxAttribution.innerHTML = `
-                    Photo by <a href="${data.userProfile}" target="_blank" rel="noopener">${data.userName}</a>
-                    on <a href="${data.attributionUrl}" target="_blank" rel="noopener">Unsplash</a>
-                `;
-            }
+  function render() {
+    grid.innerHTML = '';
+    photos.forEach(function (p, i) {
+      var cell = document.createElement('div');
+      cell.className = 'photo-cell';
+      cell.innerHTML =
+        '<button type="button" aria-label="Open photograph">' +
+          '<img src="' + (p.url_small || p.url_regular) + '" alt="' +
+            (p.alt_description || 'Photograph') + '" loading="lazy" decoding="async">' +
+        '</button>';
+      cell.querySelector('button').addEventListener('click', function () { showLightbox(i); });
+      grid.appendChild(cell);
+    });
+  }
 
-            function openLightbox(data) {
-                populateLightbox(data);
-                lightbox.style.display = 'flex';
-                requestAnimationFrame(() => {
-                    requestAnimationFrame(() => {
-                        lightbox.classList.add('active');
-                        document.body.style.overflow = 'hidden';
-                    });
-                });
-            }
-
-            function navigateLightbox(dir) {
-                if (lightboxPhotos.length < 2) return;
-                lightboxIdx = ((lightboxIdx + dir) + lightboxPhotos.length) % lightboxPhotos.length;
-                const btn = lightboxPhotos[lightboxIdx];
-                lightboxImg.style.opacity = '0';
-                lightboxImg.style.transform = 'scale(0.97)';
-                lightboxImg.style.transition = 'opacity 0.15s ease, transform 0.15s ease';
-                setTimeout(() => {
-                    populateLightbox({
-                        src: btn.dataset.src,
-                        alt: btn.dataset.alt,
-                        userName: btn.dataset.userName,
-                        userProfile: btn.dataset.userProfile,
-                        attributionUrl: btn.dataset.attributionUrl,
-                    });
-                    lightboxImg.style.opacity = '1';
-                    lightboxImg.style.transform = 'scale(1)';
-                }, 150);
-            }
-
-            function closeLightbox() {
-                lightbox.classList.add('closing');
-                lightbox.classList.remove('active');
-                setTimeout(() => {
-                    lightbox.classList.remove('closing');
-                    lightbox.style.display = 'none';
-                    document.body.style.overflow = '';
-                    lightboxImg.src = '';
-                    lightboxImg.style.opacity = '';
-                    lightboxImg.style.transform = '';
-                    lightboxImg.style.transition = '';
-                    lightboxAttribution.innerHTML = '';
-                }, 400);
-            }
-
-            lightboxClose.addEventListener('click', closeLightbox);
-            lightboxPrev.addEventListener('click', () => navigateLightbox(-1));
-            lightboxNext.addEventListener('click', () => navigateLightbox(1));
-
-            lightbox.addEventListener('click', (event) => {
-                if (event.target === lightbox) closeLightbox();
-            });
-
-            document.addEventListener('keydown', (event) => {
-                if (!lightbox.classList.contains('active')) return;
-                if (event.key === 'Escape') { closeLightbox(); return; }
-                if (event.key === 'ArrowRight') { event.preventDefault(); navigateLightbox(1); }
-                if (event.key === 'ArrowLeft') { event.preventDefault(); navigateLightbox(-1); }
-            });
-
-            grid.addEventListener('click', (event) => {
-                const button = event.target.closest('button[data-src]');
-                if (!button) return;
-                event.preventDefault();
-                lightboxIdx = lightboxPhotos.indexOf(button);
-                openLightbox({
-                    src: button.dataset.src,
-                    alt: button.dataset.alt,
-                    userName: button.dataset.userName,
-                    userProfile: button.dataset.userProfile,
-                    attributionUrl: button.dataset.attributionUrl,
-                });
-            });
-
-            async function loadPhotos() {
-                const data = await fetchJsonCached(`${API_BASE}/photos?page=1&limit=50`, 'home-photos');
-                const photos = data.results || [];
-                if (!photos.length) return;
-
-                // Fisher-Yates shuffle, pick first 8
-                for (let i = photos.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [photos[i], photos[j]] = [photos[j], photos[i]];
-                }
-
-                grid.innerHTML = "";
-                photos.slice(0, 8).forEach((photo) => {
-                    const div = document.createElement('div');
-                    div.className = 'photo-grid-item';
-                    const button = document.createElement('button');
-                    button.type = 'button';
-                    button.dataset.src = photo.url_regular;
-                    button.dataset.alt = photo.alt_description || 'Photo';
-                    button.dataset.userName = photo.user_name;
-                    button.dataset.userProfile = photo.user_profile;
-                    button.dataset.attributionUrl = photo.attribution_url;
-                    const img = document.createElement('img');
-                    img.src = photo.url_small || photo.url_regular;
-                    img.alt = photo.alt_description || 'Photo';
-                    img.loading = 'lazy';
-                    img.decoding = 'async';
-                    button.appendChild(img);
-                    div.appendChild(button);
-                    grid.appendChild(div);
-                });
-
-                count = grid.querySelectorAll('.photo-grid-item').length;
-                lightboxPhotos = Array.from(grid.querySelectorAll('button[data-src]'));
-                slideTo(0);
-                startAutoAdvance();
-            }
-
-            loadPhotos().catch((error) => console.error(error));
-        })();
-
-        // Fade-in: trigger when section becomes active
-        function revealSection(el) {
-            el.querySelectorAll('.fade-in').forEach(function(f) { f.classList.add('visible'); });
-        }
-        revealSection(document.querySelector('.section-1'));
-
-        // Contact form submission
-        const form = document.getElementById('contact-form');
-        const status = document.getElementById('form-status');
-
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = form.querySelector('button');
-            btn.textContent = 'Sending...';
-            btn.disabled = true;
-
-            try {
-                const res = await fetch(form.action, {
-                    method: 'POST',
-                    body: new FormData(form),
-                });
-
-                if (res.ok) {
-                    status.textContent = 'Message sent. I\'ll get back to you soon.';
-                    status.className = 'form-status success';
-                    form.reset();
-                } else {
-                    throw new Error();
-                }
-            } catch {
-                status.textContent = 'Something went wrong. Try emailing me directly.';
-                status.className = 'form-status error';
-            }
-
-            btn.textContent = 'Send';
-            btn.disabled = false;
-        });
-
-        // Quote rotation for Links section
-        (function() {
-            const rotator = document.getElementById('quote-rotator');
-            const textEl = document.getElementById('quote-text');
-            const authorEl = document.getElementById('quote-author');
-            if (!rotator || !textEl || !authorEl) return;
-            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-            const quotes = [
-                { text: '“Perfection is procrastination wearing a nice outfit.”', author: '— ChatGPT aka. Stolen' },
-                { text: '“Stay hungry, stay foolish.”', author: '— Steve Jobs' },
-                { text: '“Simplicity is the ultimate sophistication.”', author: '— Leonardo da Vinci' },
-                { text: '“The best way out is always through.”', author: '— Robert Frost' },
-                { text: '“What we see depends mainly on what we look for.”', author: '— John Lubbock' },
-                { text: '“In the middle of difficulty lies opportunity.”', author: '— Albert Einstein' },
-                { text: '“The details are not the details. They make the design.”', author: '— Charles Eames' },
-                { text: '“It is not the mountain we conquer but ourselves.”', author: '— Edmund Hillary' },
-                { text: '“Creativity is intelligence having fun.”', author: '— Albert Einstein' },
-                { text: '“Perfection is achieved, not when there is nothing more to add, but when there is nothing left to take away.”', author: '— Antoine de Saint-Exupéry' },
-                { text: '“You miss 100% of the shots you don’t take.”', author: '— Wayne Gretzky' },
-            ];
-
-            let index = 0;
-
-            function setQuote(nextIndex) {
-                const quote = quotes[nextIndex];
-                textEl.textContent = quote.text;
-                authorEl.textContent = quote.author;
-            }
-
-            function rotateQuote() {
-                rotator.classList.add('is-fading');
-                setTimeout(() => {
-                    index = (index + 1) % quotes.length;
-                    setQuote(index);
-                    rotator.classList.remove('is-fading');
-                }, 500);
-            }
-
-            setQuote(index);
-            setInterval(rotateQuote, 8000);
-        })();
-
-        // Section navigation — transform-based, no scrolling
-        (function() {
-            var sections = document.querySelectorAll('.section');
-            var dots = document.querySelectorAll('.section-dot');
-            var count = sections.length;
-            var current = 0;
-            var animating = false;
-            var sectionHashes = ['about', 'apps', 'photography', 'contact', 'links'];
-            var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-            function syncDots(index) {
-                dots.forEach(function(d, i) { d.classList.toggle('active', i === index); });
-            }
-
-            function go(index) {
-                index = Math.max(0, Math.min(index, count - 1));
-                if (index === current || animating) return;
-                var dir = index > current ? 1 : -1;
-                var moving = dir > 0 ? sections[index] : sections[current];
-                animating = true;
-
-                if (reducedMotion) {
-                    moving.style.transition = 'none';
-                    moving.style.transform = dir > 0 ? 'translateY(0%)' : 'translateY(100%)';
-                    revealSection(sections[index]);
-                    current = index;
-                    animating = false;
-                    syncDots(current);
-                    history.replaceState(null, '', '#' + (sectionHashes[current] || ''));
-                    return;
-                }
-
-                moving.style.transition = 'transform 0.8s cubic-bezier(0.65, 0, 0.35, 1)';
-                moving.style.transform = dir > 0 ? 'translateY(0%)' : 'translateY(100%)';
-
-                revealSection(sections[index]);
-
-                moving.addEventListener('transitionend', function done() {
-                    moving.removeEventListener('transitionend', done);
-                    moving.style.transition = '';
-                    current = index;
-                    animating = false;
-                    syncDots(current);
-                    history.replaceState(null, '', '#' + (sectionHashes[current] || ''));
-                }, { once: true });
-            }
-
-            // Dot click handlers
-            dots.forEach(function(dot) {
-                dot.addEventListener('click', function() {
-                    go(parseInt(this.dataset.index, 10));
-                });
-            });
-
-            // Wheel — absorb momentum, allow new gesture only if accelerating
-            var lastDir = 0;
-            var peakDelta = 0;
-            window.addEventListener('wheel', function(e) {
-                e.preventDefault();
-                var delta = Math.abs(e.deltaY);
-                if (animating) {
-                    lastDir = e.deltaY > 0 ? 1 : -1;
-                    if (delta > peakDelta) peakDelta = delta;
-                    return;
-                }
-                var dir = e.deltaY > 0 ? 1 : -1;
-                if (lastDir) {
-                    // Direction reversed — new gesture
-                    if (dir !== lastDir) { lastDir = 0; peakDelta = 0; go(current + dir); return; }
-                    // Same direction — only allow if delta exceeds previous peak (real new gesture)
-                    if (delta > peakDelta * 1.5) { lastDir = 0; peakDelta = 0; go(current + dir); return; }
-                    // Still decaying momentum, absorb it
-                    if (delta < peakDelta) peakDelta = delta;
-                    return;
-                }
-                go(current + dir);
-            }, { passive: false });
-
-            // Touch
-            var tx = 0, ty = 0, isHorizontal = null;
-            window.addEventListener('touchstart', function(e) {
-                tx = e.touches[0].clientX;
-                ty = e.touches[0].clientY;
-                isHorizontal = null;
-            }, { passive: true });
-            window.addEventListener('touchmove', function(e) {
-                if (e.target.closest('.contact-form, .photo-grid')) return;
-                if (isHorizontal === null) {
-                    var dx = Math.abs(e.touches[0].clientX - tx);
-                    var dy = Math.abs(e.touches[0].clientY - ty);
-                    if (dx + dy > 10) isHorizontal = dx > dy;
-                }
-                if (!isHorizontal) e.preventDefault();
-            }, { passive: false });
-            window.addEventListener('touchend', function(e) {
-                if (animating || isHorizontal) return;
-                var d = ty - e.changedTouches[0].clientY;
-                if (Math.abs(d) > 30) go(current + (d > 0 ? 1 : -1));
-            }, { passive: true });
-
-            // Keyboard — skip if lightbox is open
-            window.addEventListener('keydown', function(e) {
-                if (animating) return;
-                if (document.getElementById('home-lightbox').classList.contains('active')) return;
-                if (e.key === 'ArrowDown' || e.key === 'PageDown') { e.preventDefault(); go(current + 1); }
-                else if (e.key === 'ArrowUp' || e.key === 'PageUp') { e.preventDefault(); go(current - 1); }
-            });
-
-            // Hash links (e.g. /#contact)
-            document.querySelectorAll('a[href^="/#"]').forEach(function(a) {
-                a.addEventListener('click', function(e) {
-                    var target = document.querySelector(a.getAttribute('href').replace('/', ''));
-                    if (target) {
-                        e.preventDefault();
-                        var idx = Array.from(sections).indexOf(target);
-                        if (idx >= 0) go(idx);
-                    }
-                });
-            });
-        })();
-    </script>
-</body>
-</html>
+  fetch(API + '/photos?page=1&limit=50')
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      var all = data.results || [];
+      for (var i = all.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var t = all[i]; all[i] = all[j]; all[j] = t;
+      }
+      photos = all.slice(0, 6);
+      if (photos.length) render();
+    })
+    .catch(function (e) { console.error(e); });
+})();
+</script>

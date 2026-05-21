@@ -1,445 +1,87 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terms of Service | Alec Jude Wilson</title>
-    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-    <meta name="description" content="Terms of service for apps by Alec Jude Wilson.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@100..900&display=swap" rel="stylesheet">
-    <style>
-        html {
-            scroll-behavior: smooth;
-        }
+---
+layout: default
+title: Terms of Service
+permalink: /legal/tos/
+description: >-
+  Terms of service for apps by Alec Jude Wilson. Short, fair terms covering
+  acceptable use, your content, and intellectual property.
+---
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<section class="simple-page">
+  <div class="wrap" style="max-width:760px">
+    <p class="eyebrow reveal"><a href="/legal/" class="arrow-link">&larr; Legal</a></p>
+    <h1 class="reveal d1" style="font-size:clamp(2.4rem,5vw,3.6rem)">Terms of Service</h1>
+    <p class="lead reveal d2">
+      By using the apps, you agree to these terms. They&rsquo;re short and fair.
+    </p>
 
-        body {
-            font-family: 'Instrument Serif', serif;
-            font-style: italic;
-            min-height: 100vh;
-            background: #111;
-            color: white;
-        }
+    <div class="prose reveal d2" style="max-width:none">
+      <h2>Acceptance of terms</h2>
+      <p>
+        By downloading or using any app made by Alec Jude Wilson, you agree to
+        these Terms of Service. If you don&rsquo;t agree, please don&rsquo;t use
+        the apps.
+      </p>
 
-        .navbar {
-            position: fixed;
-            top: 0;
-            right: 0;
-            left: 0;
-            z-index: 1000;
-            padding: 1rem 1.5rem;
-            pointer-events: none;
-        }
+      <h2>Use of the apps</h2>
+      <p>
+        The apps are provided for your personal, non-commercial use. You agree
+        to use them only for lawful purposes and in ways that don&rsquo;t
+        infringe the rights of others.
+      </p>
+      <ul>
+        <li>Don&rsquo;t reverse-engineer, decompile, or disassemble the apps.</li>
+        <li>Don&rsquo;t use the apps for any unlawful or harmful purpose.</li>
+        <li>Don&rsquo;t attempt to extract source code or create derivative works.</li>
+      </ul>
 
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0.6rem 1.5rem;
-            pointer-events: auto;
-            background: rgba(17, 17, 17, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-        }
+      <h2>Your content</h2>
+      <p>
+        Any data you create in the apps &mdash; notes, entries, or other
+        content &mdash; belongs entirely to you. I have no access to it and
+        make no claim over it. See the
+        <a href="/legal/privacy-policy/">Privacy Policy</a> for more on how your
+        data is stored.
+      </p>
 
-        .logo {
-            font-size: 1.25rem;
-            font-weight: 400;
-            letter-spacing: 0.3px;
-            color: white;
-            font-family: 'Instrument Serif', serif;
-            font-style: normal;
-            text-decoration: none;
-        }
+      <h2>Intellectual property</h2>
+      <p>
+        The apps, including their design, code, and assets, are owned by Alec
+        Jude Wilson and protected by applicable intellectual property laws.
+        These terms don&rsquo;t grant you any ownership rights in the apps
+        themselves.
+      </p>
 
-        .logo-first {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.6em;
-            font-weight: 200;
-            opacity: 0.4;
-        }
+      <h2>Disclaimer of warranties</h2>
+      <p>
+        The apps are provided &ldquo;as is&rdquo; without warranties of any
+        kind. I don&rsquo;t guarantee that the apps will be error-free,
+        uninterrupted, or perfectly suited to your needs. Use them at your own
+        discretion.
+      </p>
 
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            gap: 0.15rem;
-        }
+      <h2>Limitation of liability</h2>
+      <p>
+        To the fullest extent permitted by law, Alec Jude Wilson is not liable
+        for any indirect, incidental, or consequential damages arising from
+        your use of the apps.
+      </p>
 
-        .nav-menu a {
-            color: rgba(255, 255, 255, 0.5);
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 400;
-            letter-spacing: 0.2px;
-            transition: color 0.3s;
-            font-family: 'Inter', sans-serif;
-            font-style: normal;
-            padding: 0.35rem 0.7rem;
-            display: block;
-        }
+      <h2>Changes to these terms</h2>
+      <p>
+        These terms may be updated from time to time. The current version
+        always lives at <a href="/legal/tos/">judes.club/legal/tos</a>.
+        Continued use of the apps after changes constitutes acceptance of the
+        updated terms.
+      </p>
 
-        .nav-menu a:hover {
-            color: white;
-        }
-
-        .nav-toggle {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0.5rem;
-        }
-
-        .nav-toggle span {
-            display: block;
-            width: 18px;
-            height: 1.5px;
-            background: rgba(255, 255, 255, 0.7);
-            transition: transform 0.3s, opacity 0.3s;
-        }
-
-        .nav-toggle span + span {
-            margin-top: 4px;
-        }
-
-        .nav-container.nav-open .nav-toggle span:nth-child(1) {
-            transform: translateY(5.5px) rotate(45deg);
-        }
-
-        .nav-container.nav-open .nav-toggle span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .nav-container.nav-open .nav-toggle span:nth-child(3) {
-            transform: translateY(-5.5px) rotate(-45deg);
-        }
-
-        @media (max-width: 660px) {
-            .navbar {
-                padding: 0.75rem 0.75rem;
-            }
-
-            .nav-container {
-                flex-wrap: wrap;
-                padding: 0.75rem 1rem;
-            }
-
-            .nav-toggle {
-                display: flex;
-            }
-
-            .nav-menu {
-                display: flex;
-                width: 100%;
-                flex-direction: column;
-                gap: 0;
-                padding-top: 0;
-                max-height: 0;
-                overflow: hidden;
-                transition: max-height 0.35s ease, padding-top 0.35s ease;
-            }
-
-            .nav-container.nav-open .nav-menu {
-                max-height: 300px;
-                padding-top: 0.75rem;
-            }
-
-            .nav-menu a {
-                font-size: 0.8rem;
-                padding: 0.5rem 0.5rem;
-            }
-        }
-
-        .page-content {
-            padding: 8rem 2rem 6rem;
-            max-width: 780px;
-            margin: 0 auto;
-        }
-
-        .page-label {
-            font-family: 'Inter', sans-serif;
-            font-style: normal;
-            font-size: 0.72rem;
-            font-weight: 500;
-            letter-spacing: 0.8px;
-            text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.3);
-            margin-bottom: 1rem;
-        }
-
-        .page-content h1 {
-            font-size: 3rem;
-            font-weight: 400;
-            margin-bottom: 0.75rem;
-            letter-spacing: 0.5px;
-            font-style: normal;
-            line-height: 1.1;
-        }
-
-        .page-subtitle {
-            font-family: 'Inter', sans-serif;
-            font-style: normal;
-            font-size: 1rem;
-            font-weight: 300;
-            color: rgba(255, 255, 255, 0.55);
-            margin-bottom: 3.5rem;
-            line-height: 1.7;
-        }
-
-        .policy-section {
-            margin-bottom: 2.5rem;
-            padding-bottom: 2.5rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-        }
-
-        .policy-section:last-of-type {
-            border-bottom: none;
-        }
-
-        .policy-section h2 {
-            font-size: 1.4rem;
-            font-weight: 400;
-            font-style: normal;
-            letter-spacing: 0.3px;
-            margin-bottom: 0.9rem;
-            color: white;
-        }
-
-        .policy-section p {
-            font-family: 'Inter', sans-serif;
-            font-style: normal;
-            font-size: 0.95rem;
-            font-weight: 300;
-            color: rgba(255, 255, 255, 0.6);
-            line-height: 1.75;
-            margin-bottom: 0.75rem;
-        }
-
-        .policy-section p:last-child {
-            margin-bottom: 0;
-        }
-
-        .policy-list {
-            list-style: none;
-            margin-top: 0.75rem;
-        }
-
-        .policy-list li {
-            font-family: 'Inter', sans-serif;
-            font-style: normal;
-            font-size: 0.95rem;
-            font-weight: 300;
-            color: rgba(255, 255, 255, 0.6);
-            line-height: 1.75;
-            padding: 0.35rem 0;
-            padding-left: 1.2rem;
-            position: relative;
-        }
-
-        .policy-list li::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0.85rem;
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.25);
-        }
-
-        .contact-link {
-            color: rgba(255, 255, 255, 0.75);
-            text-decoration: none;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-            transition: color 0.3s, border-color 0.3s;
-        }
-
-        .contact-link:hover {
-            color: white;
-            border-color: rgba(255, 255, 255, 0.5);
-        }
-
-        .effective-date {
-            font-family: 'Inter', sans-serif;
-            font-style: normal;
-            font-size: 0.78rem;
-            font-weight: 400;
-            color: rgba(255, 255, 255, 0.25);
-            margin-top: 3rem;
-            letter-spacing: 0.3px;
-        }
-
-        .footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            font-family: 'Inter', sans-serif;
-            font-style: normal;
-            font-size: 0.8rem;
-            font-weight: 300;
-            color: rgba(255, 255, 255, 0.3);
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 1.5rem;
-        }
-
-        .footer-links a {
-            color: rgba(255, 255, 255, 0.3);
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .footer-links a:hover {
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        @media (max-width: 768px) {
-            .page-content {
-                padding: 7rem 1.5rem 5rem;
-            }
-
-            .page-content h1 {
-                font-size: 2.2rem;
-            }
-
-            .footer {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
-        }
-
-        .fade-in {
-            opacity: 0;
-            transform: translateY(16px);
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .fade-in-delay-1 { transition-delay: 0.1s; }
-        .fade-in-delay-2 { transition-delay: 0.2s; }
-        .fade-in-delay-3 { transition-delay: 0.3s; }
-    </style>
-</head>
-<body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="/" class="logo"><span class="logo-first">Alec</span> Jude Wilson</a>
-            <button class="nav-toggle" aria-label="Menu" aria-expanded="false">
-                <span></span><span></span><span></span>
-            </button>
-            <ul class="nav-menu">
-                <li><a href="/projects">Software</a></li>
-                <li><a href="/photo">Photography</a></li>
-                <li><a href="https://writing.judes.club">Writing</a></li>
-                <li><a href="/#contact">Contact</a></li>
-            </ul>
-        </div>
-    </nav>
-    <script>
-        document.querySelector('.nav-toggle').addEventListener('click', function() {
-            var c = this.closest('.nav-container');
-            var open = c.classList.toggle('nav-open');
-            this.setAttribute('aria-expanded', open);
-        });
-    </script>
-
-    <div class="page-content">
-        <p class="page-label fade-in">Legal</p>
-        <h1 class="fade-in fade-in-delay-1">Terms of Service</h1>
-        <p class="page-subtitle fade-in fade-in-delay-2">By using our apps, you agree to these terms. They're short and fair.</p>
-
-        <div class="policy-section fade-in fade-in-delay-3">
-            <h2>Acceptance of terms</h2>
-            <p>By downloading or using any app made by Alec Jude Wilson, you agree to these Terms of Service. If you don't agree, please don't use the apps.</p>
-        </div>
-
-        <div class="policy-section fade-in">
-            <h2>Use of our apps</h2>
-            <p>Our apps are provided for your personal, non-commercial use. You agree to use them only for lawful purposes and in ways that don't infringe the rights of others.</p>
-            <ul class="policy-list">
-                <li>Don't reverse-engineer, decompile, or disassemble the apps</li>
-                <li>Don't use the apps for any unlawful or harmful purpose</li>
-                <li>Don't attempt to extract source code or create derivative works</li>
-            </ul>
-        </div>
-
-        <div class="policy-section fade-in">
-            <h2>Your content</h2>
-            <p>Any data you create in our apps — notes, entries, or other content — belongs entirely to you. We have no access to it and make no claim over it. See our <a href="/legal/privacy-policy" class="contact-link">Privacy Policy</a> for more on how your data is stored.</p>
-        </div>
-
-        <div class="policy-section fade-in">
-            <h2>Intellectual property</h2>
-            <p>The apps, including their design, code, and assets, are owned by Alec Jude Wilson and protected by applicable intellectual property laws. These terms don't grant you any ownership rights in the apps themselves.</p>
-        </div>
-
-        <div class="policy-section fade-in">
-            <h2>Disclaimer of warranties</h2>
-            <p>Our apps are provided "as is" without warranties of any kind. We don't guarantee that the apps will be error-free, uninterrupted, or perfectly suited to your needs. Use them at your own discretion.</p>
-        </div>
-
-        <div class="policy-section fade-in">
-            <h2>Limitation of liability</h2>
-            <p>To the fullest extent permitted by law, Alec Jude Wilson is not liable for any indirect, incidental, or consequential damages arising from your use of the apps.</p>
-        </div>
-
-        <div class="policy-section fade-in">
-            <h2>Changes to these terms</h2>
-            <p>We may update these terms from time to time. The current version always lives at <a href="/legal/tos" class="contact-link">judes.club/legal/tos</a>. Continued use of the apps after changes constitutes acceptance of the updated terms.</p>
-        </div>
-
-        <div class="policy-section fade-in">
-            <h2>Contact</h2>
-            <p>Questions about these terms? Reach out at <a href="mailto:hi@judes.club" class="contact-link">hi@judes.club</a>.</p>
-        </div>
-
-        <p class="effective-date fade-in">Last updated: February 2026</p>
+      <h2>Contact</h2>
+      <p>
+        Questions about these terms? Reach out at
+        <a href="mailto:hi@judes.club">hi@judes.club</a>.
+      </p>
+      <hr>
+      <p style="color:var(--faint);font-size:0.9rem">Last updated: February 2026</p>
     </div>
-
-    <footer class="footer">
-        <span>&copy; 2026 Alec Jude Wilson</span>
-        <div class="footer-links">
-            <a href="/">Home</a>
-            <a href="https://github.com/alechash" target="_blank">GitHub</a>
-            <a href="https://x.com/alechash" target="_blank">X</a>
-            <a href="/legal">Legal</a>
-        </div>
-    </footer>
-
-    <script>
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-    </script>
-</body>
-</html>
+  </div>
+</section>

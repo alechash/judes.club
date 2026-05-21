@@ -1,0 +1,46 @@
+---
+layout: default
+title: Writing
+permalink: /writing/
+description: >-
+  Essays and notes by Alec Jude Wilson on software engineering, building
+  products, shipping iOS apps, and the craft of writing good code.
+---
+
+<header class="page-hero">
+  <div class="wrap">
+    <p class="eyebrow reveal"><span class="num">&#9656;</span>Writing</p>
+    <h1 class="reveal d1">Writing</h1>
+    <p class="lead reveal d2">
+      Essays and notes on software engineering, building products, and the
+      craft of shipping things that work. New posts land here first.
+      <a href="/feed.xml" style="white-space:nowrap">RSS &nearr;</a>
+    </p>
+  </div>
+</header>
+
+<section class="writing-index">
+  <div class="wrap">
+    {% if site.posts.size > 0 %}
+      {% assign by_year = site.posts | group_by_exp: "post", "post.date | date: '%Y'" %}
+      {% for year in by_year %}
+        <p class="year-label">{{ year.name }}</p>
+        <div class="post-list">
+          {% for post in year.items %}
+            {% assign words = post.content | number_of_words %}
+            {% assign rt = words | divided_by: 200 | plus: 1 %}
+            <a href="{{ post.url }}" class="post-row reveal">
+              <span class="pr-date">{{ post.date | date: "%b %-d, %Y" }}</span>
+              <span class="pr-title">{{ post.title }}
+                <span class="pr-sub">{{ post.description | default: post.excerpt | strip_html | truncate: 150 }}</span>
+              </span>
+              <span class="pr-meta">{{ rt }} min</span>
+            </a>
+          {% endfor %}
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="lead">The first posts are on their way.</p>
+    {% endif %}
+  </div>
+</section>

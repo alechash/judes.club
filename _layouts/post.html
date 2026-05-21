@@ -1,0 +1,41 @@
+---
+layout: default
+---
+{% assign words = content | number_of_words %}
+{% assign rt = words | divided_by: 200 | plus: 1 %}
+<article class="article">
+  <div class="wrap">
+    <header class="article-head reveal">
+      <p class="eyebrow"><a href="/writing/" class="arrow-link">&larr; All writing</a></p>
+      <h1>{{ page.title }}</h1>
+      <div class="article-meta">
+        <span>{{ page.date | date: "%B %-d, %Y" }}</span>
+        <span class="dot"></span>
+        <span>{{ rt }} min read</span>
+        {% if page.tags.size > 0 %}
+          <span class="dot"></span>
+          <span>{{ page.tags | join: " &middot; " }}</span>
+        {% endif %}
+      </div>
+    </header>
+
+    <div class="prose reveal d1">
+      {{ content }}
+    </div>
+
+    <nav class="article-nav">
+      {% if page.next %}
+        <a href="{{ page.next.url }}" class="prev">
+          <span class="an-dir">&larr; Newer</span>
+          <span class="an-title">{{ page.next.title }}</span>
+        </a>
+      {% endif %}
+      {% if page.previous %}
+        <a href="{{ page.previous.url }}" class="next">
+          <span class="an-dir">Older &rarr;</span>
+          <span class="an-title">{{ page.previous.title }}</span>
+        </a>
+      {% endif %}
+    </nav>
+  </div>
+</article>
