@@ -7,6 +7,8 @@ description: >-
   quietly gave away which company sweats the small stuff.
 ---
 
+![A Star Wars-themed trash can in Disney's Galaxy's Edge](/assets/images/writing/disney-trashcan-cover.jpeg)
+
 I recently spent ten days in Orlando visiting Disney World and Universal Orlando. I liked all the parks — they were fun and genuinely enjoyable.
 
 We did every park except one (not counting water parks):
@@ -32,13 +34,13 @@ Okay — onto what this article is actually about.
 
 ### Disney
 
-Disney had exactly one type of trash can across the entire park. Different paint and theming for different areas, sure, but underneath it was the same can every single time. Occasionally it was paired with a recycling can — still the exact same style, just with a round hole for cans and bottles instead of a swinging flap.
+Disney had exactly one type of trash can across the entire park — the one in the photo above. Different paint and theming for different areas, sure, but underneath it was the same can every single time. Occasionally it was paired with a recycling can — still the exact same style, just with a round hole for cans and bottles instead of a swinging flap.
 
 Personally, I loved that design. It's simple and clean, and everybody instantly knows it's a trash can.
 
 ### Universal
 
-Universal had at least four different trash can types: big concrete ones, round metal ones, square metal ones, and some that looked a lot like Disney's. Most of them were paired with recycling cans too. And those were just the variations I could find online afterward — I'm pretty sure there were ten more out in the park.
+Universal had at least four different trash can types: big concrete ones, round metal ones, square metal ones, and some that looked a lot like Disney's. Most of them were paired with recycling cans too. And those were just the variations I could find afterward — I'm pretty sure there were ten more out in the park.
 
 ## Why does it even matter?
 

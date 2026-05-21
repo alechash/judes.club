@@ -8,6 +8,8 @@ description: >-
   wasn't GETTR at all.
 ---
 
+![The GETTR logo](/assets/images/writing/gettr-cover.jpeg)
+
 GETTR launched as the big new conservative social network — Trump world's answer to Twitter. So, naturally, the first thing I wanted to know was how it was built.
 
 Long story short: it took me 34 minutes to reverse-engineer GETTR's internal API, and then to abuse it badly enough to get rate-limited.
@@ -16,6 +18,11 @@ It wasn't hard. What actually surprised me was how little stood in the way. Ther
 
 And here's the part I still think is funny: the thing that *finally* stopped me wasn't GETTR's API. It was Cloudflare. The rate limit that eventually kicked in was Cloudflare's generic protection sitting in front of the site — not anything GETTR had built themselves.
 
-By the end I had an account with roughly a thousand posts on it. Scrolling from the top of them to the bottom took 22 seconds.
+By the end I had an account with roughly a thousand posts on it. Scrolling from the top of them to the bottom took 22 seconds:
+
+<figure>
+  <video src="/assets/images/writing/gettr-spam.mp4" autoplay loop muted playsinline preload="metadata"></video>
+  <figcaption>~1,000 posts, all created in about 90 seconds.</figcaption>
+</figure>
 
 For a platform that launched to that much attention, that's a lot of front door left unlocked.
