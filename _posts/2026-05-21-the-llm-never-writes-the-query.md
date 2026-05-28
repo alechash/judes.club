@@ -11,7 +11,7 @@ description: >-
 
 We have an internal assistant. One of the things it does is find people.
 
-By people I mean records in a system of record — names, contacts, home addresses, current assignments, and other personal details that exist in exactly one place and actually matter. This is the most sensitive data we hold. Staff can search it by typing a request in plain language, such as "find translators in France who speak Spanish," and getting an answer back.
+By people I mean records in a system of record — names, contacts, home addresses, current assignments, and other personal details that exist in exactly one place and actually matter. This is the most sensitive data we hold.[^sor] Staff can search it by typing a request in plain language, such as "find translators in France who speak Spanish," and getting an answer back.
 
 The model handles the request itself without much trouble. This post is about what happens between the request and the answer.
 
@@ -29,7 +29,7 @@ So the model turns language into criteria, and the tool turns criteria into peop
 
 The obvious way to build this is to give the model a flexible search tool and let it improvise — hand it something query-shaped and let it filter however it likes.
 
-For data like this, that's a bad idea. The records are read-only to the assistant by construction; it can't write to them, and the whole feature is gated behind a permission claim. But read-only access still leaves room to read more than you should. If the model improvises its own queries, it can request data in shapes nobody reviewed beforehand.
+For data like this, that's a bad idea. The records are read-only to the assistant by construction; it can't write to them, and the whole feature is gated behind a permission claim.[^claim] But read-only access still leaves room to read more than you should. If the model improvises its own queries, it can request data in shapes nobody reviewed beforehand.
 
 So instead of a query language, the model gets a fixed vocabulary. Every criterion it can express is a small declared object with a field, an operator, and a value:
 
@@ -127,7 +127,7 @@ foreach (var criterion in criteria)
 
 If every criterion pushes cleanly into the indexed query, `needsPhase2` stays `false` and Phase 2 is skipped. The Phase-1 result is the answer, and nothing gets enriched. If one criterion can't be fully expressed on the server — a temporal check, an un-indexed field, a compound object match — Phase 2 runs, but only as a verification pass over a candidate set that's already small. So the expensive path only runs when the criteria actually need it.
 
-There's also a ceiling. If Phase 1 returns more than **2,000 candidates**, the tool doesn't fetch them; it asks for a narrower search instead. If a question is vague enough to match ten thousand people, the right response is to ask for more detail, not to load ten thousand full records into memory.
+There's also a ceiling. If Phase 1 returns more than **2,000 candidates**, the tool doesn't fetch them; it asks for a narrower search instead.[^ceiling] If a question is vague enough to match ten thousand people, the right response is to ask for more detail, not to load ten thousand full records into memory.
 
 ## "Currently"
 
@@ -180,3 +180,9 @@ Giving the model a plain search box would have been faster to build, and for mos
 But the data being searched is a record of real people, and I didn't want "the AI improvised a query" to be a possible explanation for an incident involving that data. The declarative layer isn't there to be elegant, although it is convenient that adding a field now takes one block instead of edits across five files. It's there so that the only way to use the tool is also a way we reviewed in advance.
 
 The model is good at turning language into criteria, and that's the job it has here. What data a query is allowed to touch is decided by the tool and the field definitions, not improvised by the model. Keeping those two responsibilities separate is most of what the design does.
+
+[^sor]: A system of record is the authoritative source for a piece of data — not a cache or a copy. There's exactly one, and the assistant reads it live rather than a snapshot.
+
+[^claim]: A claim is a capability flag carried on the caller's token. Without it the person-search tool isn't even listed to the model, so it can't be called at all.
+
+[^ceiling]: The 2,000 figure is configurable. It's set where Phase-2 enrichment latency starts to dominate the response — past that, a narrower query is faster than a bigger fetch.

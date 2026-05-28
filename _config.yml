@@ -70,3 +70,4 @@ exclude:
   - .vscode
   - old.html
   - about.html
+  - docs
