@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" role="img" aria-label="WHOOP 5.0 custom-channel frame envelope byte layout">
+  <style>
+    .lbl  { font-family: ui-monospace,'SF Mono',Menlo,monospace; font-size:13px; fill:#f3f1ec; }
+    .sub  { font-family: ui-monospace,'SF Mono',Menlo,monospace; font-size:11px; fill:rgba(243,241,236,0.55); }
+    .cap  { font-family: ui-sans-serif,-apple-system,'Segoe UI',sans-serif; font-size:12px; fill:rgba(243,241,236,0.6); }
+    .ttl  { font-family: ui-sans-serif,-apple-system,'Segoe UI',sans-serif; font-size:13px; fill:rgba(243,241,236,0.75); letter-spacing:0.4px; }
+    .box  { fill:#161615; stroke:#34363a; }
+    .boxa { fill:rgba(127,156,209,0.12); stroke:#7f9cd1; }
+    .boxi { fill:rgba(243,241,236,0.045); stroke:#4a4c50; }
+    .tick { stroke:rgba(243,241,236,0.25); stroke-width:1; }
+  </style>
+
+  <rect x="0.5" y="0.5" width="719" height="359" rx="14" fill="#0e0f11" stroke="#26282c"/>
+
+  <text x="32" y="44" class="ttl">OUTER ENVELOPE &#8212; little-endian</text>
+  <text x="688" y="44" class="cap" text-anchor="end">total frame = len + 8 &#183; len counts bytes [4:&#8722;4]</text>
+
+  <!-- outer fields: widths roughly proportional to byte count, inner stretched -->
+  <!-- x positions -->
+  <g>
+    <rect class="box"  x="32"  y="64" width="52"  height="58" rx="6"/>
+    <rect class="box"  x="90"  y="64" width="52"  height="58" rx="6"/>
+    <rect class="box"  x="148" y="64" width="78"  height="58" rx="6"/>
+    <rect class="box"  x="232" y="64" width="78"  height="58" rx="6"/>
+    <rect class="box"  x="316" y="64" width="78"  height="58" rx="6"/>
+    <rect class="boxa" x="400" y="64" width="180" height="58" rx="6"/>
+    <rect class="box"  x="586" y="64" width="102" height="58" rx="6"/>
+
+    <text x="58"  y="90"  class="lbl" text-anchor="middle">0xAA</text>
+    <text x="58"  y="108" class="sub" text-anchor="middle">SOF</text>
+    <text x="116" y="90"  class="lbl" text-anchor="middle">0x01</text>
+    <text x="116" y="108" class="sub" text-anchor="middle">ver</text>
+    <text x="187" y="90"  class="lbl" text-anchor="middle">len</text>
+    <text x="187" y="108" class="sub" text-anchor="middle">u16</text>
+    <text x="271" y="90"  class="lbl" text-anchor="middle">field</text>
+    <text x="271" y="108" class="sub" text-anchor="middle">u16</text>
+    <text x="355" y="90"  class="lbl" text-anchor="middle">crc16</text>
+    <text x="355" y="108" class="sub" text-anchor="middle">MODBUS</text>
+    <text x="490" y="90"  class="lbl" text-anchor="middle">inner</text>
+    <text x="490" y="108" class="sub" text-anchor="middle">variable</text>
+    <text x="637" y="90"  class="lbl" text-anchor="middle">crc32</text>
+    <text x="637" y="108" class="sub" text-anchor="middle">zlib(inner)</text>
+  </g>
+
+  <!-- brackets -->
+  <path d="M148 134 V142 H394 V134" class="tick" fill="none"/>
+  <text x="271" y="160" class="cap" text-anchor="middle">crc16/MODBUS covers bytes [0:6]</text>
+
+  <path d="M400 134 V142 H580 V134" class="tick" fill="none"/>
+  <text x="490" y="160" class="cap" text-anchor="middle">crc32 covers inner</text>
+
+  <!-- inner expansion -->
+  <text x="32" y="222" class="ttl">INNER &#8212; reuses 4.0 command numbering</text>
+
+  <path d="M400 122 L120 244" stroke="#7f9cd1" stroke-width="1" stroke-dasharray="3 3" opacity="0.5" fill="none"/>
+  <path d="M580 122 L676 244" stroke="#7f9cd1" stroke-width="1" stroke-dasharray="3 3" opacity="0.5" fill="none"/>
+
+  <g>
+    <rect class="boxi" x="32"  y="248" width="92"  height="56" rx="6"/>
+    <rect class="boxi" x="130" y="248" width="92"  height="56" rx="6"/>
+    <rect class="boxi" x="228" y="248" width="120" height="56" rx="6"/>
+    <rect class="boxi" x="354" y="248" width="92"  height="56" rx="6"/>
+    <rect class="boxi" x="452" y="248" width="236" height="56" rx="6"/>
+
+    <text x="78"  y="272" class="lbl" text-anchor="middle">type</text>
+    <text x="78"  y="290" class="sub" text-anchor="middle">0x23 = CMD</text>
+    <text x="176" y="272" class="lbl" text-anchor="middle">seq</text>
+    <text x="176" y="290" class="sub" text-anchor="middle">u8</text>
+    <text x="288" y="272" class="lbl" text-anchor="middle">cmd</text>
+    <text x="288" y="290" class="sub" text-anchor="middle">0x91, 0x78, &#8230;</text>
+    <text x="400" y="272" class="lbl" text-anchor="middle">b3</text>
+    <text x="400" y="290" class="sub" text-anchor="middle">per-cmd</text>
+    <text x="570" y="272" class="lbl" text-anchor="middle">payload</text>
+    <text x="570" y="290" class="sub" text-anchor="middle">0x2f r22 &#183; 0x31 metric &#183; 0x32 console</text>
+  </g>
+
+  <text x="32" y="340" class="cap">Validated byte-for-byte against all 8,031 captured frames.</text>
+</svg>

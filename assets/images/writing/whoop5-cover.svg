@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 540" role="img" aria-label="Cracking the WHOOP 5.0 over Bluetooth">
+  <defs>
+    <linearGradient id="w5-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#17191d"/>
+      <stop offset="1" stop-color="#0d0e10"/>
+    </linearGradient>
+  </defs>
+  <style>
+    .eyebrow { font-family: ui-monospace,'SF Mono',Menlo,monospace; font-size:16px; fill:#7f9cd1; letter-spacing:4px; }
+    .title   { font-family: Georgia,'Times New Roman',serif; font-size:78px; fill:#f3f1ec; letter-spacing:-1px; }
+    .titlea  { font-family: Georgia,'Times New Roman',serif; font-size:78px; fill:#7f9cd1; letter-spacing:-1px; }
+    .dek     { font-family: ui-sans-serif,-apple-system,'Segoe UI',sans-serif; font-size:20px; fill:rgba(243,241,236,0.62); }
+    .bandlbl { font-family: ui-monospace,'SF Mono',Menlo,monospace; font-size:13px; fill:rgba(243,241,236,0.45); letter-spacing:1px; }
+    .byte    { font-family: ui-monospace,'SF Mono',Menlo,monospace; font-size:18px; fill:rgba(243,241,236,0.82); }
+    .grp     { font-family: ui-sans-serif,-apple-system,'Segoe UI',sans-serif; font-size:12px; fill:rgba(243,241,236,0.5); }
+    .tick    { stroke:rgba(243,241,236,0.22); stroke-width:1; }
+    .hi-sof  { fill:rgba(127,156,209,0.20); stroke:#7f9cd1; }
+    .hi-crc  { fill:rgba(243,241,236,0.06); stroke:#54565a; }
+  </style>
+
+  <rect x="0.5" y="0.5" width="1199" height="539" rx="20" fill="url(#w5-bg)" stroke="#2a2c30"/>
+
+  <!-- masthead -->
+  <text x="64" y="96"  class="eyebrow">BLE &#183; REVERSE-ENGINEERING</text>
+  <text x="62" y="196" class="title">Cracking the WHOOP 5.0</text>
+  <text x="62" y="280" class="titlea">over Bluetooth</text>
+  <text x="64" y="330" class="dek">An authenticated bond, a custom frame format, and 8,031 captured packets.</text>
+
+  <!-- frame band -->
+  <text x="64" y="392" class="bandlbl">fd4b0005 &#8212; one captured frame, decoded</text>
+  <rect x="64" y="406" width="1072" height="104" rx="10" fill="rgba(243,241,236,0.025)" stroke="#26282c"/>
+
+  <!-- byte highlights (drawn behind the glyphs) -->
+  <rect class="hi-sof" x="71"   y="430" width="50" height="34" rx="5"/>
+  <rect class="hi-crc" x="431"  y="430" width="50" height="34" rx="5"/>
+  <rect class="hi-crc" x="491"  y="430" width="50" height="34" rx="5"/>
+  <rect class="hi-sof" x="911"  y="430" width="50" height="34" rx="5" opacity="0.65"/>
+  <rect class="hi-sof" x="971"  y="430" width="50" height="34" rx="5" opacity="0.65"/>
+  <rect class="hi-sof" x="1031" y="430" width="50" height="34" rx="5" opacity="0.65"/>
+  <rect class="hi-sof" x="1091" y="430" width="50" height="34" rx="5" opacity="0.65"/>
+
+  <!-- bytes: centers at 96 + 60*k -->
+  <g text-anchor="middle">
+    <text class="byte" x="96"   y="453">AA</text>
+    <text class="byte" x="156"  y="453">01</text>
+    <text class="byte" x="216"  y="453">70</text>
+    <text class="byte" x="276"  y="453">00</text>
+    <text class="byte" x="336"  y="453">01</text>
+    <text class="byte" x="396"  y="453">00</text>
+    <text class="byte" x="456"  y="453">9C</text>
+    <text class="byte" x="516"  y="453">4B</text>
+    <text class="byte" x="576"  y="453">23</text>
+    <text class="byte" x="636"  y="453">2F</text>
+    <text class="byte" x="696"  y="453">80</text>
+    <text class="byte" x="756"  y="453">0E</text>
+    <text class="byte" x="816"  y="453">7D</text>
+    <text class="byte" x="876"  y="453">9F</text>
+    <text class="byte" x="936"  y="453">3A</text>
+    <text class="byte" x="996"  y="453">AA</text>
+    <text class="byte" x="1056" y="453">AD</text>
+    <text class="byte" x="1116" y="453">F3</text>
+  </g>
+
+  <!-- group ticks + labels -->
+  <path class="tick" d="M71 476 V482 H121 V476" fill="none"/>
+  <text x="96" y="500" class="grp" text-anchor="middle">SOF</text>
+
+  <path class="tick" d="M431 476 V482 H541 V476" fill="none"/>
+  <text x="486" y="500" class="grp" text-anchor="middle">header CRC</text>
+
+  <path class="tick" d="M551 476 V482 H901 V476" fill="none"/>
+  <text x="726" y="500" class="grp" text-anchor="middle">inner: type &#183; seq &#183; cmd &#183; payload</text>
+
+  <path class="tick" d="M911 476 V482 H1141 V476" fill="none"/>
+  <text x="1026" y="500" class="grp" text-anchor="middle">CRC-32</text>
+</svg>
