@@ -11,13 +11,36 @@ description: >-
 
 ![Cracking the WHOOP 5.0 over Bluetooth: a decoded frame of hex bytes with the start-of-frame, header CRC, inner payload, and CRC-32 marked.](/assets/images/writing/whoop5-cover.svg)
 
+<style>
+.wd-demo{display:flex;align-items:center;gap:1.1rem;margin:1.8rem 0 2.6rem;padding:1.15rem 1.35rem;border:1px solid var(--line);border-radius:14px;background:rgba(127,156,209,0.045);text-decoration:none!important;transition:border-color .18s ease,background .18s ease,transform .18s ease;}
+.wd-demo:hover{border-color:var(--accent);background:rgba(127,156,209,0.1);transform:translateY(-1px);}
+.wd-demo-icon{flex:0 0 auto;width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:var(--accent);box-shadow:0 0 0 6px rgba(127,156,209,0.12);}
+.wd-demo-icon svg{width:18px;height:18px;fill:#0d0e10;margin-left:3px;}
+.wd-demo-body{flex:1 1 auto;display:flex;flex-direction:column;gap:0.16rem;min-width:0;}
+.wd-demo-k{font-family:var(--sans);font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);}
+.wd-demo-t{font-family:var(--sans);font-weight:500;font-size:1.1rem;color:var(--text);line-height:1.25;}
+.wd-demo-s{font-family:var(--sans);font-size:0.9rem;color:var(--muted);line-height:1.45;}
+.wd-demo-arrow{flex:0 0 auto;font-size:1.35rem;color:var(--accent);transition:transform .18s ease;}
+.wd-demo:hover .wd-demo-arrow{transform:translateX(4px);}
+@media(max-width:540px){.wd-demo-s{display:none;}.wd-demo{gap:0.9rem;padding:1rem 1.1rem;}}
+</style>
+<a class="wd-demo" href="/experiments/whoop5/">
+  <span class="wd-demo-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+  <span class="wd-demo-body">
+    <span class="wd-demo-k">Interactive</span>
+    <span class="wd-demo-t">Play with the protocol in your browser</span>
+    <span class="wd-demo-s">Wake a simulated band up, drag its heart rate, tilt it, and watch the real Bluetooth bytes change.</span>
+  </span>
+  <span class="wd-demo-arrow" aria-hidden="true">→</span>
+</a>
+
 I own a WHOOP band. It reads my heart rate about a hundred times a second, tracks how I sleep, and decides every morning whether I'm "recovered." All of that lives in WHOOP's app and WHOOP's cloud, behind a subscription. The data is about my own body and I can barely touch it.
 
 Someone had already fixed this for the older band. John Middleton built [my-whoop](https://github.com/johnmiddleton12/my-whoop), an open-source, local-first client that reads a WHOOP 4.0 over Bluetooth and keeps everything on your own hardware: the app, the decoding, the storage, all of it.[^priorart] I have a 5.0. When I pointed his client at it, every channel went dark. Getting it talking again, and getting the biometric stream out, is the story. The 4.0 groundwork is John's. The 5.0 work below is mine, built on top of his.
 
 [^priorart]: And John's client itself stands on earlier community reverse-engineering of the WHOOP protocol, without which none of this exists: [whoomp](https://github.com/jogolden/whoomp), [whoop-reader](https://github.com/christianmeurer/whoop-reader), [openwhoop](https://github.com/bWanShiTong/openwhoop), and [reverse-engineering-whoop](https://github.com/bWanShiTong/reverse-engineering-whoop). My 5.0 work is one more layer on that stack.
 
-This is the technical writeup, with a full protocol spec at the end for anyone who wants to talk to a 5.0 themselves.
+This is the technical writeup. If you'd rather poke at the protocol than read about it, I built an [interactive playground](/experiments/whoop5/) where you can decode and build real 5.0 frames in the browser, take apart a biometric packet, and watch the checksums update as you type. The full spec lives there too.
 
 ## A quick Bluetooth primer
 
@@ -193,196 +216,6 @@ I'm equally clear about what isn't done. Two layers of sensor data are still raw
 
 The whole point was never the 5.0 specifically. It was that the data my own body produces should be readable by software I run, on hardware I own, without asking anyone's cloud for permission. Getting there meant defeating an authenticated bond and reversing a frame format just to read a pulse off my own wrist, which is satisfying and a little absurd in equal measure. Both bands now do it.
 
+If you want to actually talk to a 5.0, the whole protocol is written up as an [interactive spec and playground](/experiments/whoop5/): the GATT map, the command set, the enable sequence and r22 field layout, plus live tools to decode and build frames yourself. It runs entirely in your browser.
+
 > This WHOOP work is independent and unofficial, not affiliated with, endorsed by, or sponsored by WHOOP, Inc. "WHOOP" is a trademark of its owner, used here only to name the hardware this software interoperates with. It is reverse-engineering for interoperability with a device I own, reading my own data, a protected interest under 17 U.S.C. §1201(f). No proprietary software, firmware, or assets are reproduced, and no access control, DRM, or paywall is circumvented. It is not a medical device, and heart rate, HRV, recovery, and the rest are approximations, not medical advice.
-
----
-
-## Appendix: the WHOOP 5.0 BLE spec
-
-If you read for the story, you already have it and can stop here. This last part is the implementer's manual: the exact bytes, in reference form, for anyone who actually wants to talk to a 5.0. It's dense on purpose.
-
-Everything below is confirmed against the capture and the shipping decoder unless it's explicitly marked otherwise. Byte order is little-endian throughout. A notation like `[7:11]` means bytes 7 through 10 (the end is exclusive, the same as the code). If you're implementing this, the one rule that saves the most pain: build an encoder first and require it to reproduce captured frames byte for byte before you trust a single decoded field.
-
-### Device identity
-
-How to know you're talking to a 5.0 / MG and not a 4.0:
-
-```
-custom service UUID   fd4b0001-cce1-4033-93ce-002d5875f58a   (4.0 used 61080001-…)
-Device Info (0x180A)  model "MG"  ·  hardware "WS50_r03"  ·  firmware "50.38.1.0"
-```
-
-The 4.0 advertises the `61080001-…` service. The 5.0 advertises `fd4b0001-…`. That service UUID alone is enough to branch on.
-
-### GATT map
-
-```
-STANDARD PROFILES — no bond required, usable immediately
-  0x180D  Heart Rate     0x2A37  notify   HR Measurement: flags u8, HR (u8 if flags&0x01==0),
-                                           R-R intervals (u16, units 1/1024 s) when flags&0x10
-  0x180F  Battery        0x2A19  notify   battery percent, u8
-  0x180A  Device Info            read     model / hardware / firmware strings
-
-CUSTOM SERVICE — authenticated, encrypted bond required
-  fd4b0001-cce1-4033-93ce-002d5875f58a
-    fd4b0002   write, write-without-response   command channel  (write commands here)
-    fd4b0003   notify                          command responses
-    fd4b0004   notify                          events
-    fd4b0005   notify                          data + biometric streams (r22 lands here)
-    fd4b0007   notify                          identity / "hello" blob
-```
-
-The standard profiles are the fallback feed: live HR, R-R, and battery work on any 5.0 with zero pairing. Everything rich is on the custom service, behind the bond.
-
-### Connecting and bonding
-
-The custom characteristics refuse all access until the central holds an authenticated, encrypted bond. A fresh central cannot negotiate it: the band offers no generic-BLE pairing a third-party stack can complete, and macOS CoreBluetooth never finishes SMP with it.
-
-The path that works is to run on a phone the official app has already bonded to the band, with the owner's consent, during normal setup. iOS holds that bond at the system level and shares the encrypted transport with apps on the phone. Connect, discover the custom service, subscribe to the notify characteristics, and the band accepts them on the existing bond.
-
-To force the encrypted link up immediately rather than waiting, issue one write-with-response to the command characteristic right after discovery (a bare `GET_HELLO` works). iOS establishes encryption to satisfy the write, and the channel is hot from then on.
-
-### Frame envelope
-
-```
-[0xAA][0x01][len u16][field u16][crc16 u16][ inner … ][crc32 u32]
- SOF   ver   │         │          │                     └ zlib CRC-32 over inner
-             │         │          └ CRC-16/MODBUS over frame bytes [0:6]
-             │         └ control word (not covered by either CRC; commonly 00 01)
-             └ counts frame[4:-4]  →  total frame length = len + 8
-```
-
-```
-crc16  CRC-16/MODBUS   poly 0x8005 reflected (0xA001), init 0xFFFF, refin/refout, xorout 0x0000
-crc32  zlib CRC-32     standard; computed over the inner region only
-```
-
-A frame is valid only if both checksums pass. The reassembler reads `len` from `buf[2:4]`, waits for `len + 8` bytes after the `0xAA` start, and sanity-checks that `buf[1] == 0x01`.
-
-### Inner layout
-
-```
-[type u8][seq u8][cmd u8][b3 u8][ payload … ]
-```
-
-```
-type   meaning
-0x23   COMMAND (and command replies)
-0x2f   r22 biometric stream (high-rate PPG / IMU)
-0x30   event
-0x31   metric / status  (subtype 0x02 carries the offload cursor)
-0x32   console log (ASCII debug text)
-0x36   identity blob, 44-byte inner (observed; not fully classified)
-```
-
-### Command set
-
-`b3` is the fourth inner byte and it is per-command. Wrong `b3` and the band silently ignores the write. All commands are sent to `fd4b0002` with **write-with-response** (write-without-response is dropped).
-
-```
-cmd   name                     b3    payload
-0x91  GET_HELLO                0x01  none
-0x8d  GET_ADVERTISING_NAME     0x01  none
-0x78  SET_CONFIG               0x01  [name NUL-padded to 32B][value u8][7×0x00]   (40 bytes)
-0x22  GET_DATA_RANGE           0x00  none
-0x16  SEND_HISTORICAL          0x00  none        ← this is what starts the 0x2f stream
-0x17  HISTORICAL_DATA_RESULT   0x01  [8-byte cursor]   ← per-chunk ack (see offload loop)
-0x42  SET_ALARM_TIME           0x04  [0x01][epoch u32]…    ⚠ DO NOT SEND — arms an alarm, buzzes the band
-```
-
-### SET_CONFIG feature flags
-
-The realtime-enable flags, in the order the official app sends them, name then value. Payload per flag is the 40-byte `SET_CONFIG` body above.
-
-```
-enable_r22_packets             0x32      hr_ch_switching                0x32
-enable_r22_v2_packets          0x32      ir_hw_switching                0x32
-enable_r22_v3_packets          0x32      enable_passive_strap_fit_gen5  0x31
-enable_r22_v4_packets          0x31      enable_sig11_during_sleep      0x32
-enable_r22_v5_packets          0x32      dorset_inhibit_wpt             0x32
-enable_r22_v6_packets          0x32      make_hrfm_visible              0x32
-enable_r22_v8_packets          0x32      disable_pip_r26_packets        0x32
-wear_detect_bias               0x32
-```
-
-### Enable sequence
-
-The full ordered handshake from silence to a live biometric stream:
-
-```
-1.  GET_HELLO                 b3=0x01
-2.  GET_ADVERTISING_NAME      b3=0x01
-3.  SET_CONFIG × 15           b3=0x01   (every feature flag above)
-4.  GET_DATA_RANGE            b3=0x00
-5.  SEND_HISTORICAL           b3=0x00   → band begins streaming type 0x2f on fd4b0005
-```
-
-The band must be **on a wrist**. Off-wrist it stays gated and emits only events and console logs no matter how clean the handshake is.
-
-### The offload ack loop
-
-After `SEND_HISTORICAL`, the band sends one chunk of r22 data and then waits. It interleaves status frames (`type 0x31`, subtype `0x02`) that each carry an 8-byte progress cursor at `inner[13:21]`. Echo that cursor straight back as a `0x17` command (`b3=0x01`, payload = the 8 bytes verbatim) and the band releases the next chunk. Miss it and the offload dies after one chunk.
-
-```
-band → 0x31/0x02 status frame, cursor at inner[13:21]
-you  → 0x17 command, b3=0x01, payload = those 8 bytes, written with response
-band → next data chunk …  (repeat)
-```
-
-### Data streams
-
-```
-type   on            content
-0x2f   fd4b0005      r22 biometric. cmd 0x80 / 0x82 = 112-byte packet with HR + accel (decoded below).
-                     A 76-byte variant carries an int16 run from inner[19:] — likely PPG, not yet calibrated.
-0x30   fd4b0004      events; device-tick timestamps.
-0x31   fd4b0005/4    metric / status; u32 fields + device timestamp. Subtype 0x02 carries the offload cursor.
-0x32   fd4b0005      console log; ASCII debug text (e.g. "DM_PHY_UPDATE_IND … SUCCESS").
-```
-
-Throughput once enabled and on-wrist: roughly 6,300 r22 frames per minute.
-
-### r22 biometric packet (112-byte, cmd 0x80 / 0x82)
-
-Confirmed fields. Offsets are into `inner`.
-
-```
-offset    type      field
-[0]       u8        type = 0x2f
-[1]       u8        seq
-[2]       u8        cmd  (0x80 or 0x82)
-[7:11]    u32       device timestamp (band RTC, unix seconds)
-[14]      u8        heart rate, channel 1 (bpm)
-[29]      u8        heart rate, channel 2 (bpm; the hr_ch_switching channel, tracks ch1)
-[37]      f32       accelerometer X (g)
-[41]      f32       accelerometer Y (g)
-[45]      f32       accelerometer Z (g)
-```
-
-Sanity checks the decoder applies: HR is accepted only in a plausible physiological range, and the accelerometer vector is rejected if its magnitude isn't finite and under 16 g (a parse-error guard, since at rest the vector sits near 1 g of gravity).
-
-### Quirks that will cost you a debugging cycle
-
-```
-· Commands must be write-WITH-response. Write-without-response is silently dropped.
-· b3 is per-command. Wrong b3 = silent ignore, no error.
-· r22 only streams on-wrist. Off-wrist you get events + console only.
-· Never send cmd 0x42 (SET_ALARM_TIME) with a current epoch — it buzzes the band on connect.
-· The offload stalls after one chunk unless you echo the 0x31/0x02 cursor back as 0x17.
-· The device timestamp in r22 is the band's RTC and was offset from wall-clock in the capture;
-  reconcile it before trusting historical sample times.
-```
-
-### Confirmed vs. still open
-
-```
-CONFIRMED   envelope, both CRCs, inner layout, command set + b3 bytes, the enable sequence,
-            the ack loop, stream classification, and r22 HR + accelerometer fields.
-            Codec round-trips all 8,031 captured frames byte for byte.
-
-OPEN        the 76-byte r22 int16 variant (PPG waveform, uncalibrated); per-axis accel
-            calibration; the meaning of every `field` control-word value; full decode of
-            0x30 events and 0x31 metric fields; the 0x36 identity blob beyond its ID string;
-            and R-R from the historical offload (it carries derived metrics, not beat-to-beat
-            intervals — live R-R still comes from the standard 0x2A37 profile).
-```

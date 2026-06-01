@@ -1,0 +1,506 @@
+---
+layout: default
+title: "WHOOP 5.0 protocol playground"
+permalink: /experiments/whoop5/
+description: >-
+  Play with the WHOOP 5.0 Bluetooth protocol in your browser. Wake a simulated
+  band up, drag its heart rate, tilt it, try to corrupt a packet, and read the
+  full spec. Runs entirely locally, no band required.
+---
+
+{% raw %}
+<style>
+.lab{ --r:20px; --ink:#f3f1ec; --dim:rgba(243,241,236,0.62); --faint:rgba(243,241,236,0.4);
+  --acc:#7f9cd1; --acc2:#9fb4dd; --surface:#15171c; --line:rgba(255,255,255,0.08);
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; --mono:ui-monospace,'SF Mono',Menlo,monospace;
+  max-width:840px; margin:0 auto; padding:6.5rem 1.25rem 6rem; position:relative; }
+.lab *{ box-sizing:border-box; }
+.lab::before{ content:''; position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background:radial-gradient(1100px 560px at 50% -8%, rgba(127,156,209,0.10), transparent 65%); }
+
+/* hero */
+.lab-hero{ margin-bottom:2.4rem; }
+.lab-eyebrow{ font-family:var(--sans); font-size:0.72rem; letter-spacing:0.26em; text-transform:uppercase; color:var(--acc); margin:0 0 0.9rem; }
+.lab h1{ font-family:var(--serif); font-weight:400; font-size:clamp(2.5rem,7vw,3.9rem); line-height:1.0; margin:0 0 1rem; letter-spacing:-0.5px; }
+.lab-lead{ font-family:var(--sans); font-size:1.12rem; line-height:1.55; color:var(--dim); max-width:54ch; margin:0 0 1rem; }
+.lab-meta{ font-family:var(--sans); font-size:0.88rem; display:flex; flex-wrap:wrap; gap:0.5rem 1rem; align-items:center; }
+.lab-pill{ display:inline-block; padding:0.2rem 0.7rem; border:1px solid var(--line); border-radius:999px; font-size:0.78rem; color:var(--dim); }
+.lab-meta a{ color:var(--acc); text-decoration:none; } .lab-meta a:hover{ text-decoration:underline; }
+
+/* cards */
+.lab-card{ position:relative; background:var(--surface); border:1px solid var(--line); border-radius:var(--r);
+  padding:1.7rem 1.7rem; margin:1.1rem 0; box-shadow:0 18px 40px -22px rgba(0,0,0,0.7); }
+.ph{ display:flex; align-items:center; gap:0.85rem; margin-bottom:0.45rem; }
+.ph-num{ flex:0 0 auto; width:30px; height:30px; border-radius:50%; display:grid; place-items:center;
+  font-family:var(--sans); font-weight:600; font-size:0.92rem; color:#0d0e10;
+  background:linear-gradient(150deg,var(--acc2),var(--acc)); box-shadow:0 5px 14px -4px rgba(127,156,209,0.6); }
+.ph h2{ font-family:var(--sans); font-weight:600; font-size:1.28rem; letter-spacing:-0.01em; color:var(--ink); margin:0; }
+.hint{ font-family:var(--sans); font-size:0.98rem; color:var(--dim); margin:0 0 1.3rem 2.45rem; line-height:1.5; }
+@media(max-width:560px){ .hint{ margin-left:0; } }
+
+/* buttons */
+.lab button{ font-family:var(--sans); font-size:0.9rem; font-weight:500; padding:0.6rem 1.15rem; border-radius:999px;
+  border:1px solid var(--line); background:rgba(255,255,255,0.04); color:var(--ink); cursor:pointer; transition:all .18s ease; }
+.lab button:hover{ border-color:rgba(127,156,209,0.55); background:rgba(127,156,209,0.12); transform:translateY(-1px); }
+.lab button:active{ transform:translateY(0); }
+.lab button.primary{ background:linear-gradient(150deg,var(--acc2),var(--acc)); color:#0d0e10; border-color:transparent; box-shadow:0 8px 20px -8px rgba(127,156,209,0.7); }
+.lab button.primary:hover{ filter:brightness(1.06); }
+.lab button:disabled{ opacity:0.4; cursor:default; transform:none; }
+.btn-row{ display:flex; flex-wrap:wrap; gap:0.55rem; align-items:center; }
+
+/* status chip */
+.chip{ display:inline-flex; align-items:center; gap:0.5rem; font-family:var(--sans); font-size:0.83rem;
+  padding:0.34rem 0.8rem; border-radius:999px; border:1px solid var(--line); color:var(--dim); margin-left:auto; }
+.chip .dot{ width:9px; height:9px; border-radius:50%; background:#8a8d93; transition:background .2s; }
+.chip[data-state=listening]{ color:#e6c98a; border-color:rgba(230,201,138,0.4); } .chip[data-state=listening] .dot{ background:#e6c98a; }
+.chip[data-state=streaming]{ color:#9fe0bf; border-color:rgba(127,209,160,0.45); } .chip[data-state=streaming] .dot{ background:#7fd1a0; animation:ping 1.6s infinite; }
+@keyframes ping{ 0%{box-shadow:0 0 0 0 rgba(127,209,160,0.5)} 70%{box-shadow:0 0 0 7px rgba(127,209,160,0)} 100%{box-shadow:0 0 0 0 rgba(127,209,160,0)} }
+
+/* handshake transcript */
+@keyframes rise{ to{ opacity:1; transform:none } }
+#hs-log{ margin-top:1.1rem; max-height:300px; overflow-y:auto; background:rgba(0,0,0,0.3); border:1px solid var(--line);
+  border-radius:14px; padding:0.9rem 1.05rem; font-family:var(--mono); font-size:0.78rem; line-height:1.55; scroll-behavior:smooth; }
+#hs-log:empty{ display:none; }
+#hs-log::-webkit-scrollbar{ width:8px } #hs-log::-webkit-scrollbar-thumb{ background:rgba(255,255,255,0.14); border-radius:4px }
+.tl{ white-space:pre-wrap; word-break:break-all; padding:0.08rem 0; color:var(--dim); opacity:0; transform:translateY(4px); animation:rise .25s ease forwards; }
+.tl .dir{ color:var(--acc) } .tl .rx{ color:#9fe0bf } .tl .nm{ color:var(--ink) } .tl .meta{ color:var(--faint) } .tl .hex{ color:rgba(127,156,209,0.6) }
+.tl.cmt{ color:var(--faint) } .tl.flag .nm{ color:var(--dim) } .tl.ok{ color:#9fe0bf }
+.hs-cta{ font-family:var(--sans); font-size:0.95rem; color:#9fe0bf; margin-top:0.9rem; padding:0.65rem 0.9rem;
+  border:1px solid rgba(127,209,160,0.3); border-radius:12px; background:rgba(127,209,160,0.05); }
+.hs-cta a{ color:#9fe0bf; }
+
+/* shared toy layout */
+.toy{ display:grid; grid-template-columns:230px 1fr; gap:1.8rem; align-items:center; }
+@media(max-width:600px){ .toy{ grid-template-columns:1fr; gap:1.3rem; } }
+
+/* heart */
+.heart-wrap{ display:flex; flex-direction:column; align-items:center; gap:0.6rem; }
+.heart{ width:150px; height:150px; display:grid; place-items:center; }
+.heart svg{ width:100%; height:100%; fill:#e0667a; transform-origin:center; animation:beat var(--beat,1s) infinite ease-in-out; filter:drop-shadow(0 0 22px rgba(224,102,122,0.4)); }
+@keyframes beat{ 0%,100%{transform:scale(0.9)} 12%{transform:scale(1.1)} 24%{transform:scale(0.95)} 36%{transform:scale(1.0)} }
+.heart-num{ font-family:var(--serif); font-size:2.4rem; line-height:1; color:var(--ink); text-align:center; }
+.heart-num small{ font-family:var(--sans); font-size:0.7rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--faint); display:block; margin-top:0.25rem; }
+
+.ctrl label{ display:flex; justify-content:space-between; font-family:var(--sans); font-size:0.86rem; color:var(--dim); margin-bottom:0.55rem; }
+input[type=range].slider{ width:100%; height:6px; accent-color:var(--acc); cursor:pointer; }
+
+.bytecard{ margin-top:1.1rem; font-family:var(--mono); font-size:0.85rem; background:rgba(0,0,0,0.28); border:1px solid var(--line);
+  border-radius:12px; padding:0.85rem 0.95rem; line-height:2; color:var(--dim); word-break:break-word; }
+.bytecard .lead{ font-family:var(--sans); font-size:0.82rem; color:var(--faint); display:block; margin-bottom:0.4rem; }
+.bytecard b{ color:var(--ink); }
+.hl{ color:#0d0e10; background:var(--acc); border-radius:5px; padding:0.12rem 0.36rem; font-weight:600; }
+.hl-acc{ color:#0d0e10; background:#b794d1; border-radius:5px; padding:0.12rem 0.36rem; }
+
+/* accelerometer */
+.tilt-stage{ perspective:620px; width:210px; height:160px; margin:0 auto; display:grid; place-items:center; touch-action:none; cursor:grab; }
+.tilt-stage:active{ cursor:grabbing; }
+.puck{ width:128px; height:104px; border-radius:22px; background:linear-gradient(145deg,#252830,#15171c);
+  border:1px solid #383b42; box-shadow:0 20px 38px -14px rgba(0,0,0,0.7); position:relative; transform-style:preserve-3d; transition:transform .06s linear; }
+.puck::after{ content:''; position:absolute; width:28px; height:28px; border-radius:50%; top:50%; left:50%; transform:translate(-50%,-50%);
+  background:radial-gradient(circle at 40% 35%,#3a8f66,#103a27); border:1px solid #2c5f44; box-shadow:inset 0 0 7px rgba(0,0,0,0.6); }
+.tilt-hint{ text-align:center; font-family:var(--sans); font-size:0.8rem; color:var(--faint); margin-top:0.7rem; }
+.axes{ display:grid; gap:0.65rem; }
+.axis{ display:grid; grid-template-columns:1.3rem 1fr 4.4rem; align-items:center; gap:0.6rem; font-family:var(--mono); font-size:0.84rem; }
+.axis .lbl{ color:var(--faint); }
+.axis .track{ position:relative; height:12px; background:rgba(243,241,236,0.07); border-radius:6px; }
+.axis .track::before{ content:''; position:absolute; left:50%; top:-3px; bottom:-3px; width:1px; background:var(--line); }
+.axis .fill{ position:absolute; top:0; bottom:0; background:linear-gradient(90deg,var(--acc),var(--acc2)); border-radius:6px; }
+.axis .val{ text-align:right; color:var(--ink); white-space:nowrap; font-variant-numeric:tabular-nums; }
+
+/* byte grids */
+.bytes{ display:flex; flex-wrap:wrap; gap:5px; margin:0.9rem 0 0.4rem; font-family:var(--mono); }
+.bytes .b{ min-width:31px; text-align:center; padding:7px 5px 9px; border-radius:7px; font-size:0.82rem;
+  background:rgba(243,241,236,0.05); border-bottom:2px solid rgba(243,241,236,0.18); color:var(--ink); transition:filter .1s; }
+.rg-sof{background:rgba(138,141,147,0.16)!important;border-bottom-color:#8a8d93!important}.rg-ver{background:rgba(138,141,147,0.1)!important;border-bottom-color:#6b6e74!important}.rg-len{background:rgba(127,156,209,0.16)!important;border-bottom-color:#7f9cd1!important}.rg-field{background:rgba(183,148,209,0.16)!important;border-bottom-color:#b794d1!important}.rg-crc16{background:rgba(209,160,127,0.16)!important;border-bottom-color:#d1a07f!important}.rg-inner{background:rgba(243,241,236,0.06)!important}.rg-crc32{background:rgba(127,209,160,0.16)!important;border-bottom-color:#7fd1a0!important}
+.bytes .b.hl-hr{ background:var(--acc)!important; color:#0d0e10!important; border-bottom-color:var(--acc)!important; font-weight:600 }
+.bytes .b.hl-ac{ background:#b794d1!important; color:#0d0e10!important; border-bottom-color:#b794d1!important; font-weight:600 }
+.bytes .b.tap{ cursor:pointer } .bytes .b.tap:hover{ filter:brightness(1.4) }
+.bytes .b.tamper{ outline:2px solid #e0667a; outline-offset:1px; background:rgba(224,102,122,0.28)!important; border-bottom-color:#e0667a!important; color:#fff!important }
+.legend{ display:flex; flex-wrap:wrap; gap:0.4rem 1rem; font-family:var(--sans); font-size:0.76rem; color:var(--dim); margin-top:0.6rem; }
+.legend span{ display:inline-flex; align-items:center; gap:0.35rem; } .legend i{ width:11px; height:11px; border-radius:3px; }
+
+/* tamper verdict */
+.tamper-verdict{ font-family:var(--sans); font-size:1.02rem; margin:0.2rem 0 0.5rem; padding:0.8rem 1rem; border-radius:13px;
+  border:1px solid var(--line); transition:all .15s ease; }
+.tamper-verdict.good{ color:#9fe0bf; border-color:rgba(127,209,160,0.4); background:rgba(127,209,160,0.06); }
+.tamper-verdict.bad{ color:#e6a3a3; border-color:rgba(224,102,122,0.45); background:rgba(224,102,122,0.07); }
+.tamper-verdict .tv-checks{ font-family:var(--mono); font-size:0.83rem; margin-top:0.4rem; color:var(--dim); }
+
+/* details / decoder */
+.lab details{ margin:1.1rem 0; border:1px solid var(--line); border-radius:16px; background:var(--surface); padding:0 1.5rem; box-shadow:0 18px 40px -22px rgba(0,0,0,0.7); }
+.lab details[open]{ padding-bottom:1.5rem; }
+.lab summary{ cursor:pointer; font-family:var(--sans); font-weight:500; font-size:1.05rem; color:var(--ink); padding:1.15rem 0; list-style:none; }
+.lab summary::-webkit-details-marker{ display:none; }
+.lab summary::before{ content:'+'; color:var(--acc); font-weight:600; margin-right:0.7rem; display:inline-block; transition:transform .2s; }
+.lab details[open] summary::before{ transform:rotate(45deg); }
+.lab summary small{ color:var(--faint); font-weight:400; margin-left:0.4rem; }
+.lab textarea,.lab input[type=text]{ width:100%; background:rgba(0,0,0,0.28); border:1px solid var(--line); border-radius:10px;
+  color:var(--ink); font-family:var(--mono); font-size:0.88rem; padding:0.7rem 0.85rem; line-height:1.5; resize:vertical; }
+.lab textarea:focus,.lab input:focus{ outline:none; border-color:var(--acc); }
+.dec-summary{ font-family:var(--sans); font-size:1rem; color:var(--ink); margin:1rem 0 0.3rem; line-height:1.5; }
+.dec-summary .ok{ color:#9fe0bf } .dec-summary .bad{ color:#e6a3a3 }
+.err{ color:#e6a3a3; font-family:var(--sans); font-size:0.9rem; margin-top:0.6rem; }
+
+/* reference (secondary zone) */
+.lab-ref{ margin-top:3.5rem; padding-top:2rem; border-top:1px solid var(--line); }
+.lab-ref > h2{ font-family:var(--serif); font-weight:400; font-size:1.9rem; margin:0 0 0.3rem; }
+.lab-ref > .sub{ font-family:var(--sans); font-size:0.95rem; color:var(--dim); max-width:70ch; margin:0 0 1.4rem; }
+.lab-ref h3{ font-family:var(--sans); font-weight:600; font-size:1rem; margin:1.9rem 0 0.6rem; color:var(--ink); }
+.lab-ref p{ font-family:var(--sans); font-size:0.93rem; line-height:1.6; color:var(--dim); max-width:72ch; }
+.lab-ref img{ width:100%; border-radius:12px; margin:1rem 0; }
+.lab table{ width:100%; border-collapse:collapse; margin:0.7rem 0 1.1rem; font-size:0.85rem; }
+.lab th,.lab td{ text-align:left; padding:0.5rem 0.7rem; border-bottom:1px solid rgba(255,255,255,0.06); vertical-align:top; }
+.lab th{ font-family:var(--sans); font-weight:500; color:var(--faint); font-size:0.72rem; letter-spacing:0.06em; text-transform:uppercase; border-bottom:1px solid var(--line); }
+.lab td{ font-family:var(--mono); color:var(--ink); }
+.lab td.desc{ font-family:var(--sans); color:var(--dim); }
+.lab .warn{ color:#e6b07f; }
+.lab pre{ background:rgba(0,0,0,0.3); border:1px solid var(--line); border-radius:10px; padding:1rem; overflow-x:auto; font-family:var(--mono); font-size:0.82rem; line-height:1.6; }
+.seq-list{ list-style:none; padding:0; } .seq-list li{ font-family:var(--mono); font-size:0.82rem; padding:0.3rem 0; border-bottom:1px solid rgba(255,255,255,0.06); color:var(--dim); } .seq-list li b{ color:var(--acc); font-weight:400; }
+.lab-ref a{ color:var(--acc); }
+.lab td{ word-break:break-word; }
+
+/* mobile */
+@media(max-width:600px){
+  .lab{ padding:5.5rem 0.95rem 4rem; }
+  .lab h1{ font-size:2.35rem; }
+  .lab-lead{ font-size:1.02rem; }
+  .lab-card{ padding:1.3rem 1.1rem; border-radius:16px; }
+  .ph{ flex-wrap:wrap; }
+  .ph h2{ font-size:1.14rem; }
+  .ph-num{ width:26px; height:26px; font-size:0.85rem; }
+  .chip{ font-size:0.74rem; padding:0.26rem 0.6rem; }
+  .hint{ font-size:0.94rem; }
+  .lab button{ padding:0.55rem 0.95rem; font-size:0.86rem; }
+  .bytes{ gap:4px; } .bytes .b{ min-width:27px; font-size:0.75rem; padding:6px 3px 8px; }
+  .heart{ width:120px; height:120px; } .heart-num{ font-size:2rem; }
+  .tilt-stage{ width:180px; height:140px; } .puck{ width:112px; height:90px; }
+  .axis{ grid-template-columns:1.2rem 1fr 4rem; font-size:0.8rem; }
+  .bytecard{ font-size:0.8rem; line-height:1.85; }
+  .lab details{ padding:0 1.1rem; } .lab details[open]{ padding-bottom:1.2rem; }
+  #hs-log{ font-size:0.72rem; padding:0.75rem 0.85rem; }
+  .lab-ref > h2{ font-size:1.6rem; }
+  .lab table{ font-size:0.8rem; } .lab th,.lab td{ padding:0.4rem 0.45rem; }
+  .lab-eyebrow{ font-size:0.68rem; letter-spacing:0.2em; }
+}
+</style>
+{% endraw %}
+
+<div class="lab">
+  <header class="lab-hero">
+    <p class="lab-eyebrow">Interactive · Experiment</p>
+    <h1>Talk to a WHOOP 5.0</h1>
+    <p class="lab-lead">A toy band that runs in your browser. Wake it up, drag its heart rate, tilt it, and watch the real Bluetooth bytes change.</p>
+    <div class="lab-meta">
+      <span class="lab-pill">simulated · runs locally</span>
+      <a href="/writing/cracking-the-whoop-5-bluetooth-protocol/">&larr; How this was reverse-engineered</a>
+    </div>
+  </header>
+
+  <!-- STEP 1 -->
+  <section class="lab-card">
+    <div class="ph"><span class="ph-num">1</span><h2>Wake the band up</h2>
+      <span class="chip" id="chip" data-state="asleep"><span class="dot"></span><span id="chip-txt">asleep</span></span></div>
+    <p class="hint">A band stays silent until an app talks it into streaming. Press play to watch the real sequence go by.</p>
+    <div class="btn-row">
+      <button class="primary" id="hs-run">▶ Run the handshake</button>
+      <button id="hs-reset" disabled>Reset</button>
+    </div>
+    <div id="hs-log"></div>
+    <div class="hs-cta" id="hs-cta" style="display:none"></div>
+  </section>
+
+  <!-- STEP 2 -->
+  <section class="lab-card">
+    <div class="ph"><span class="ph-num">2</span><h2>Drag its heart rate</h2></div>
+    <p class="hint">Heart rate is a single byte in the packet. Drag the slider and watch it change.</p>
+    <div class="toy">
+      <div class="heart-wrap">
+        <div class="heart" id="heart" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>
+        <div class="heart-num"><span id="hr-val">61</span><small>beats / min</small></div>
+      </div>
+      <div>
+        <div class="ctrl">
+          <label><span>Heart rate</span><span id="hr-lbl">61 bpm</span></label>
+          <input type="range" class="slider" id="hr-slider" min="40" max="190" value="61">
+        </div>
+        <div class="bytecard"><span class="lead">the heart-rate byte the band sends:</span><div id="hr-bytes"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STEP 3 -->
+  <section class="lab-card">
+    <div class="ph"><span class="ph-num">3</span><h2>Tilt it in your hand</h2></div>
+    <p class="hint">The accelerometer always feels gravity. Drag to tilt it; each axis is a 32-bit float.</p>
+    <div class="toy">
+      <div>
+        <div class="tilt-stage" id="tilt"><div class="puck" id="puck"></div></div>
+        <p class="tilt-hint">drag to tilt</p>
+      </div>
+      <div>
+        <div class="axes">
+          <div class="axis"><span class="lbl">X</span><div class="track"><div class="fill" id="ax-x"></div></div><span class="val" id="vx">0.00 g</span></div>
+          <div class="axis"><span class="lbl">Y</span><div class="track"><div class="fill" id="ax-y"></div></div><span class="val" id="vy">0.00 g</span></div>
+          <div class="axis"><span class="lbl">Z</span><div class="track"><div class="fill" id="ax-z"></div></div><span class="val" id="vz">1.00 g</span></div>
+        </div>
+        <div class="bytecard"><span class="lead">the accelerometer bytes (X, Y, Z as floats):</span><div id="ac-bytes"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIVE FRAME -->
+  <details id="frame-det" open>
+    <summary>See the whole packet you're building <small>updates as you play above</small></summary>
+    <p class="hint" style="margin:0.4rem 0 0">A complete, valid r22 frame built from the values above. Heart-rate byte in blue, accelerometer floats in violet.</p>
+    <div id="live-frame"></div>
+  </details>
+
+  <!-- STEP 4 -->
+  <section class="lab-card">
+    <div class="ph"><span class="ph-num">4</span><h2>Try to corrupt a packet</h2></div>
+    <p class="hint">Two checksums guard every frame. Click a byte to flip a bit and watch them catch it. Re-seal recomputes both, the way the sender does.</p>
+    <div class="tamper-verdict" id="tv"></div>
+    <div id="tamper-bytes"></div>
+    <div class="legend"><span><i style="background:#8a8d93"></i>start/ver</span><span><i style="background:#7f9cd1"></i>length</span><span><i style="background:#b794d1"></i>field</span><span><i style="background:#d1a07f"></i>header CRC</span><span><i style="background:rgba(243,241,236,0.3)"></i>inner</span><span><i style="background:#7fd1a0"></i>CRC-32</span><span><i style="background:#e0667a"></i>you flipped this</span></div>
+    <div class="btn-row" style="margin-top:1rem">
+      <button id="tm-flip">⚡ Flip a random bit</button>
+      <button id="tm-seal">Re-seal the frame</button>
+      <button id="tm-reset">Reset</button>
+    </div>
+  </section>
+
+  <!-- DECODER -->
+  <details>
+    <summary>Decode a real capture <small>paste your own frame hex</small></summary>
+    <p class="hint" style="margin:0.4rem 0 0.8rem">Paste a frame's hex; it's decoded in plain language with both checksums verified.</p>
+    <textarea id="dec-in" spellcheck="false" rows="2"></textarea>
+    <div class="btn-row" style="margin-top:0.7rem">
+      <button data-load-dec="hello">Load a hello</button>
+      <button data-load-dec="config">Load a SET_CONFIG</button>
+      <button data-load-dec="break">Corrupt a byte</button>
+    </div>
+    <div id="dec-out"></div>
+  </details>
+
+  <!-- REFERENCE -->
+  <div class="lab-ref">
+    <h2>The full spec</h2>
+    <p class="sub">Confirmed against a decrypted HCI capture and the shipping decoder. Little-endian throughout; <code>[7:11]</code> means bytes 7 to 10.</p>
+
+    <h3>Device identity</h3>
+    <p>The 4.0 advertises the <code>61080001-…</code> custom service; the 5.0 advertises <code>fd4b0001-…</code>. Device Info reports model <code>MG</code>, hardware <code>WS50_r03</code>, firmware <code>50.38.1.0</code>.</p>
+
+    <h3>GATT map</h3>
+    <table>
+      <thead><tr><th>service</th><th>characteristic</th><th>access</th><th>what</th></tr></thead>
+      <tbody>
+        <tr><td>0x180D Heart Rate</td><td>0x2A37</td><td>notify</td><td class="desc">standard HR Measurement. No bond needed.</td></tr>
+        <tr><td>0x180F Battery</td><td>0x2A19</td><td>notify</td><td class="desc">battery percent. No bond needed.</td></tr>
+        <tr><td>0x180A Device Info</td><td>—</td><td>read</td><td class="desc">model / hardware / firmware. No bond needed.</td></tr>
+        <tr><td>fd4b0001 (custom)</td><td>fd4b0002</td><td>write</td><td class="desc">command channel. <b>Authenticated bond required.</b></td></tr>
+        <tr><td>fd4b0001</td><td>fd4b0003</td><td>notify</td><td class="desc">command responses.</td></tr>
+        <tr><td>fd4b0001</td><td>fd4b0004</td><td>notify</td><td class="desc">events.</td></tr>
+        <tr><td>fd4b0001</td><td>fd4b0005</td><td>notify</td><td class="desc">data + biometric streams (r22 lands here).</td></tr>
+        <tr><td>fd4b0001</td><td>fd4b0007</td><td>notify</td><td class="desc">identity / "hello" blob.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Frame envelope</h3>
+    <img src="/assets/images/writing/whoop5-frame.svg" alt="WHOOP 5.0 frame envelope byte layout.">
+    <p><code>len</code> counts <code>frame[4:-4]</code>, so total length is <code>len + 8</code>. The header check is CRC-16/MODBUS over the first 6 bytes; the trailer is a zlib CRC-32 over the inner region. Both must pass.</p>
+
+    <h3>Command set</h3>
+    <p><code>b3</code> is the fourth inner byte and it's per-command; the wrong value gets silently ignored. All commands go to <code>fd4b0002</code> with write-<i>with</i>-response.</p>
+    <table>
+      <thead><tr><th>cmd</th><th>name</th><th>b3</th><th>payload</th></tr></thead>
+      <tbody>
+        <tr><td>0x91</td><td>GET_HELLO</td><td>0x01</td><td class="desc">none</td></tr>
+        <tr><td>0x8d</td><td>GET_ADVERTISING_NAME</td><td>0x01</td><td class="desc">none</td></tr>
+        <tr><td>0x78</td><td>SET_CONFIG</td><td>0x01</td><td class="desc">[name NUL-padded to 32B][value u8][7×00] = 40 bytes</td></tr>
+        <tr><td>0x22</td><td>GET_DATA_RANGE</td><td>0x00</td><td class="desc">none</td></tr>
+        <tr><td>0x16</td><td>SEND_HISTORICAL</td><td>0x00</td><td class="desc">none — starts the 0x2f stream</td></tr>
+        <tr><td>0x17</td><td>HISTORICAL_DATA_RESULT</td><td>0x01</td><td class="desc">8-byte cursor — the per-chunk ack</td></tr>
+        <tr><td>0x42</td><td>SET_ALARM_TIME</td><td>0x04</td><td class="desc warn">do NOT send, it buzzes the band</td></tr>
+      </tbody>
+    </table>
+
+    <h3>SET_CONFIG feature flags</h3>
+    <p>The 15 flags the app sets, in order, to turn the stream on. Each is a 40-byte SET_CONFIG payload.</p>
+    <table>
+      <thead><tr><th>flag</th><th>value</th><th>flag</th><th>value</th></tr></thead>
+      <tbody>
+        <tr><td>enable_r22_packets</td><td>0x32</td><td>hr_ch_switching</td><td>0x32</td></tr>
+        <tr><td>enable_r22_v2_packets</td><td>0x32</td><td>ir_hw_switching</td><td>0x32</td></tr>
+        <tr><td>enable_r22_v3_packets</td><td>0x32</td><td>enable_passive_strap_fit_gen5</td><td>0x31</td></tr>
+        <tr><td>enable_r22_v4_packets</td><td>0x31</td><td>enable_sig11_during_sleep</td><td>0x32</td></tr>
+        <tr><td>enable_r22_v5_packets</td><td>0x32</td><td>dorset_inhibit_wpt</td><td>0x32</td></tr>
+        <tr><td>enable_r22_v6_packets</td><td>0x32</td><td>make_hrfm_visible</td><td>0x32</td></tr>
+        <tr><td>enable_r22_v8_packets</td><td>0x32</td><td>disable_pip_r26_packets</td><td>0x32</td></tr>
+        <tr><td>wear_detect_bias</td><td>0x32</td><td></td><td></td></tr>
+      </tbody>
+    </table>
+
+    <h3>The offload ack loop</h3>
+    <p>After SEND_HISTORICAL the band sends one chunk and waits. Status frames (type 0x31, subtype 0x02) carry an 8-byte cursor at <code>inner[13:21]</code>; echo it back verbatim as a 0x17 command and the next chunk releases. Miss it and the offload dies after one chunk.</p>
+
+    <h3>Data streams (type byte)</h3>
+    <table>
+      <thead><tr><th>type</th><th>on</th><th>content</th></tr></thead>
+      <tbody>
+        <tr><td>0x2f</td><td>fd4b0005</td><td class="desc">r22 biometric. cmd 0x80/0x82 = 112-byte HR + accel packet. A 76-byte variant carries an int16 run (likely PPG, uncalibrated).</td></tr>
+        <tr><td>0x30</td><td>fd4b0004</td><td class="desc">events; device-tick timestamps.</td></tr>
+        <tr><td>0x31</td><td>fd4b0005/4</td><td class="desc">metric / status; u32 fields + device timestamp. Subtype 0x02 carries the offload cursor.</td></tr>
+        <tr><td>0x32</td><td>fd4b0005</td><td class="desc">console log; ASCII debug text.</td></tr>
+        <tr><td>0x36</td><td>—</td><td class="desc">identity blob, 44-byte inner (observed, not fully classified).</td></tr>
+      </tbody>
+    </table>
+
+    <h3>r22 packet field map (112-byte, cmd 0x80 / 0x82)</h3>
+    <table>
+      <thead><tr><th>offset</th><th>type</th><th>field</th></tr></thead>
+      <tbody>
+        <tr><td>[7:11]</td><td>u32</td><td class="desc">device timestamp (band RTC, unix seconds)</td></tr>
+        <tr><td>[14]</td><td>u8</td><td class="desc">heart rate, channel 1 (bpm)</td></tr>
+        <tr><td>[29]</td><td>u8</td><td class="desc">heart rate, channel 2 (hr_ch_switching)</td></tr>
+        <tr><td>[37]</td><td>f32</td><td class="desc">accelerometer X (g)</td></tr>
+        <tr><td>[41]</td><td>f32</td><td class="desc">accelerometer Y (g)</td></tr>
+        <tr><td>[45]</td><td>f32</td><td class="desc">accelerometer Z (g)</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Confirmed vs. still open</h3>
+    <p><b>Confirmed:</b> the envelope, both CRCs, inner layout, command set and b3 bytes, the enable sequence, the ack loop, stream classification, and the r22 HR + accelerometer fields. The codec round-trips all 8,031 captured frames byte for byte.</p>
+    <p><b>Open:</b> the 76-byte r22 int16 variant (PPG); per-axis accel calibration; the meaning of every <code>field</code> value; full decode of 0x30 events and 0x31 metrics; the 0x36 identity blob; and R-R from the offload (it carries derived metrics, not beat-to-beat intervals, so live R-R still comes from 0x2A37).</p>
+
+    <p style="margin-top:2.5rem"><a href="/writing/cracking-the-whoop-5-bluetooth-protocol/">&larr; Back to the writeup</a></p>
+  </div>
+</div>
+
+{% raw %}
+<script>
+(function(){
+  function crc16Modbus(b){let c=0xFFFF;for(const x of b){c^=x;for(let i=0;i<8;i++)c=(c&1)?((c>>>1)^0xA001):(c>>>1);}return c&0xFFFF;}
+  const T=(()=>{const t=[];for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1);t[n]=c>>>0;}return t;})();
+  function crc32(b){let c=0xFFFFFFFF;for(const x of b)c=T[(c^x)&0xFF]^(c>>>8);return (c^0xFFFFFFFF)>>>0;}
+  function encodeFrame(inner,field){field=(field==null?0x0100:field);const bl=2+2+inner.length;const h=[0xAA,0x01,bl&0xFF,(bl>>8)&0xFF,field&0xFF,(field>>8)&0xFF];const c=crc16Modbus(h);h.push(c&0xFF,(c>>8)&0xFF);const z=crc32(inner);return h.concat(inner,[z&0xFF,(z>>8)&0xFF,(z>>16)&0xFF,(z>>>24)&0xFF]);}
+  function command(cmd,seq,payload,b3){return encodeFrame([0x23,seq&0xFF,cmd&0xFF,(b3==null?1:b3)&0xFF].concat(payload||[]));}
+  function setConfigPayload(name,value){const p=new Array(40).fill(0);const e=new TextEncoder().encode(name);for(let i=0;i<Math.min(32,e.length);i++)p[i]=e[i];p[32]=value&0xFF;return p;}
+  function hx(n,w){return n.toString(16).toUpperCase().padStart(w||2,'0');}
+  function fmtHex(b){return b.map(x=>hx(x)).join(' ');}
+  function parseHex(s){const m=s.replace(/0x/gi,' ').match(/[0-9a-f]{2}/gi);return m?m.map(h=>parseInt(h,16)):[];}
+  function el(t,c,h){const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e;}
+  function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+
+  const FLAGS=[['enable_r22_packets',0x32],['enable_r22_v2_packets',0x32],['enable_r22_v3_packets',0x32],['enable_r22_v4_packets',0x31],['enable_r22_v5_packets',0x32],['enable_r22_v6_packets',0x32],['enable_r22_v8_packets',0x32],['make_hrfm_visible',0x32],['disable_pip_r26_packets',0x32],['wear_detect_bias',0x32],['hr_ch_switching',0x32],['ir_hw_switching',0x32],['enable_passive_strap_fit_gen5',0x31],['enable_sig11_during_sleep',0x32],['dorset_inhibit_wpt',0x32]];
+  const CMD_NAMES={0x91:'GET_HELLO',0x8d:'GET_ADVERTISING_NAME',0x78:'SET_CONFIG',0x22:'GET_DATA_RANGE',0x16:'SEND_HISTORICAL',0x17:'HISTORICAL_DATA_RESULT',0x42:'SET_ALARM_TIME'};
+  const TYPE_NAMES={0x23:'a command',0x2f:'an r22 biometric packet',0x30:'an event',0x31:'a status/metric frame',0x32:'a console log',0x36:'an identity blob'};
+
+  let HR=61, GX=0, GY=0, GZ=1;
+  function putFloat(arr,o,f){const dv=new DataView(new ArrayBuffer(4));dv.setFloat32(0,f,true);for(let i=0;i<4;i++)arr[o+i]=dv.getUint8(i);}
+  function buildR22(){const inner=new Array(112).fill(0);inner[0]=0x2f;inner[2]=0x80;const ts=1717200000;inner[7]=ts&0xFF;inner[8]=(ts>>8)&0xFF;inner[9]=(ts>>16)&0xFF;inner[10]=(ts>>>24)&0xFF;inner[14]=HR;inner[29]=Math.max(30,Math.min(220,HR+1));putFloat(inner,37,GX);putFloat(inner,41,GY);putFloat(inner,45,GZ);return encodeFrame(inner);}
+
+  // STEP 1
+  const chip=document.getElementById('chip'), chipTxt=document.getElementById('chip-txt'),
+        hsLog=document.getElementById('hs-log'), hsRun=document.getElementById('hs-run'), hsReset=document.getElementById('hs-reset'), hsCta=document.getElementById('hs-cta');
+  function setState(s){chip.dataset.state=s;chipTxt.textContent=s;}
+  function term(html,cls){const r=el('div','tl'+(cls?' '+cls:''),html);hsLog.appendChild(r);hsLog.scrollTop=hsLog.scrollHeight;return r;}
+  function cmdLine(name,opcode,b3,frame,note){return '<span class="dir">→</span> <span class="meta">write fd4b0002</span> · <span class="nm">'+name+'</span> <span class="meta">cmd=0x'+hx(opcode)+' b3=0x'+hx(b3)+' len='+frame.length+'B'+(note?' · '+note:'')+'</span><br><span class="hex">  '+fmtHex(frame)+'</span>';}
+  let running=false;
+  async function runHandshake(){
+    if(running)return; running=true; hsRun.disabled=true; hsCta.style.display='none'; hsLog.innerHTML=''; setState('asleep'); let seq=0;
+    term('<span class="cmt"># link up over the authenticated bond iOS already holds, then drive fd4b0002</span>'); await sleep(450);
+    setState('listening');
+    term(cmdLine('GET_HELLO',0x91,1,command(0x91,seq++,[],1),'identify')); await sleep(560);
+    term(cmdLine('GET_ADVERTISING_NAME',0x8d,1,command(0x8d,seq++,[],1))); await sleep(560);
+    term('<span class="cmt"># 15× SET_CONFIG (cmd=0x78, b3=0x01, 40-byte name+value) — arm the biometric pipeline</span>'); await sleep(320);
+    for(const [n,v] of FLAGS){ term('<span class="dir">→</span> <span class="nm">SET_CONFIG</span> <span class="meta">'+n+' = 0x'+hx(v)+'</span>','flag'); await sleep(90); }
+    await sleep(280);
+    term(cmdLine('GET_DATA_RANGE',0x22,0,command(0x22,seq++,[],0),'what history is stored?')); await sleep(560);
+    term(cmdLine('SEND_HISTORICAL',0x16,0,command(0x16,seq++,[],0),'opens the firehose')); await sleep(620);
+    setState('streaming');
+    const f=buildR22();
+    term('<span class="rx">←</span> <span class="meta">notify fd4b0005</span> · <span class="nm">r22 packet</span> <span class="meta">type=0x2f cmd=0x80 112B</span><br><span class="hex">  '+fmtHex(f.slice(0,30))+' …</span>'); await sleep(220);
+    term('<span class="rx">←</span> <span class="meta">notify fd4b0005</span> · <span class="nm">r22 packet</span> <span class="meta">type=0x2f …</span>'); await sleep(200);
+    term('<span class="ok">▟ streaming — ~6,300 r22 packets/min while on-wrist. Ack each 0x31/0x02 cursor with a 0x17.</span>','ok'); await sleep(150);
+    hsCta.innerHTML='The band is awake and streaming. Now <a href="#" id="hs-jump">play with its heart rate and tilt ↓</a>'; hsCta.style.display='block';
+    document.getElementById('hs-jump').addEventListener('click',function(e){e.preventDefault();document.getElementById('heart').scrollIntoView({behavior:'smooth',block:'center'});});
+    running=false; hsReset.disabled=false;
+  }
+  hsRun.addEventListener('click',runHandshake);
+  hsReset.addEventListener('click',function(){hsLog.innerHTML='';hsCta.style.display='none';setState('asleep');hsRun.disabled=false;hsReset.disabled=true;});
+
+  // STEP 2
+  const heart=document.getElementById('heart'), hrSlider=document.getElementById('hr-slider'), hrVal=document.getElementById('hr-val'), hrLbl=document.getElementById('hr-lbl'), hrBytes=document.getElementById('hr-bytes');
+  function renderHeart(){HR=+hrSlider.value;hrVal.textContent=HR;hrLbl.textContent=HR+' bpm';heart.querySelector('svg').style.setProperty('--beat',(60/HR).toFixed(2)+'s');hrBytes.innerHTML='… 7D 9F 00 <span class="hl">'+hx(HR)+'</span> 00 4C 22 …  <span style="color:var(--faint)">(0x'+hx(HR)+' = '+HR+' bpm)</span>';renderFrame();}
+  hrSlider.addEventListener('input',renderHeart);
+
+  // STEP 3
+  const stage=document.getElementById('tilt'), puck=document.getElementById('puck'), acBytes=document.getElementById('ac-bytes');
+  function bar(id,v){const f=document.getElementById(id);const c=Math.max(-1.2,Math.min(1.2,v));const pct=(c+1.2)/2.4*100;if(c>=0){f.style.left='50%';f.style.width=(pct-50)+'%';}else{f.style.left=pct+'%';f.style.width=(50-pct)+'%';}}
+  function f32bytes(f){const dv=new DataView(new ArrayBuffer(4));dv.setFloat32(0,f,true);return [0,1,2,3].map(i=>hx(dv.getUint8(i))).join(' ');}
+  function setTilt(pitchDeg,rollDeg){const p=pitchDeg*Math.PI/180,r=rollDeg*Math.PI/180;let x=Math.sin(p),y=-Math.sin(r),z=Math.cos(p)*Math.cos(r);const m=Math.hypot(x,y,z)||1;GX=x/m;GY=y/m;GZ=z/m;puck.style.transform='rotateX('+rollDeg+'deg) rotateY('+pitchDeg+'deg)';bar('ax-x',GX);bar('ax-y',GY);bar('ax-z',GZ);document.getElementById('vx').textContent=GX.toFixed(2)+' g';document.getElementById('vy').textContent=GY.toFixed(2)+' g';document.getElementById('vz').textContent=GZ.toFixed(2)+' g';acBytes.innerHTML='X <span class="hl-acc">'+f32bytes(GX)+'</span>  Y <span class="hl-acc">'+f32bytes(GY)+'</span>  Z <span class="hl-acc">'+f32bytes(GZ)+'</span>';renderFrame();}
+  let dragging=false;
+  function fromEvent(e){const rect=stage.getBoundingClientRect();const cx=rect.left+rect.width/2,cy=rect.top+rect.height/2;const nx=Math.max(-1,Math.min(1,(e.clientX-cx)/(rect.width/2)));const ny=Math.max(-1,Math.min(1,(e.clientY-cy)/(rect.height/2)));setTilt(nx*55,-ny*55);}
+  stage.addEventListener('pointerdown',e=>{dragging=true;try{stage.setPointerCapture(e.pointerId);}catch(_){}fromEvent(e);});
+  stage.addEventListener('pointermove',e=>{if(dragging)fromEvent(e);});
+  stage.addEventListener('pointerup',()=>{dragging=false;});
+  stage.addEventListener('pointercancel',()=>{dragging=false;});
+
+  // LIVE FRAME
+  const liveFrame=document.getElementById('live-frame');
+  function renderFrame(){
+    if(!document.getElementById('frame-det').open) return;
+    const f=buildR22(); liveFrame.innerHTML=''; const wrap=el('div','bytes');
+    f.forEach((b,i)=>{let cls;if(i===22)cls='hl-hr';else if(i>=45&&i<57)cls='hl-ac';else if(i<2)cls='rg-sof';else if(i<6)cls='rg-len';else if(i<8)cls='rg-crc16';else if(i>=f.length-4)cls='rg-crc32';else cls='rg-inner';const c=el('div','b '+cls,hx(b));if(cls==='hl-hr')c.title='heart rate (byte 22)';if(cls==='hl-ac')c.title='accelerometer float';wrap.appendChild(c);});
+    liveFrame.appendChild(wrap);
+    liveFrame.appendChild(el('div','legend','<span style="color:var(--acc)">■ heart-rate byte</span> &nbsp; <span style="color:#b794d1">■ accelerometer floats</span> &nbsp; · &nbsp; '+f.length+' bytes, CRCs valid'));
+  }
+  document.getElementById('frame-det').addEventListener('toggle',renderFrame);
+
+  // STEP 4 tamper
+  const TAMPER_ORIG=command(0x78,1,setConfigPayload('enable_r22_packets',0x32),1);
+  let work=TAMPER_ORIG.slice(), base=TAMPER_ORIG.slice();
+  const tBytes=document.getElementById('tamper-bytes'), tv=document.getElementById('tv');
+  function tRegion(i,n){if(i<2)return'rg-sof';if(i<4)return'rg-len';if(i<6)return'rg-field';if(i<8)return'rg-crc16';if(i>=n-4)return'rg-crc32';return'rg-inner';}
+  function renderTamper(){
+    const n=work.length; tBytes.innerHTML=''; const grid=el('div','bytes');
+    work.forEach((b,i)=>{const tampered=b!==base[i];const c=el('div','b tap '+tRegion(i,n)+(tampered?' tamper':''),hx(b));c.title='byte '+i+' — click to flip a bit';c.addEventListener('click',()=>{work[i]^=0x01;renderTamper();});grid.appendChild(c);});
+    tBytes.appendChild(grid);
+    const c16ok=(work[6]|(work[7]<<8))===crc16Modbus(work.slice(0,6));
+    const c32ok=((work[n-4]|(work[n-3]<<8)|(work[n-2]<<16)|(work[n-1]<<24))>>>0)===crc32(work.slice(8,n-4));
+    const both=c16ok&&c32ok;
+    tv.className='tamper-verdict '+(both?'good':'bad');
+    tv.innerHTML=(both?'✓ Valid frame — the band would accept it.':'✗ Corrupted — the band drops this packet the instant it arrives.')+'<div class="tv-checks">header CRC-16 '+(c16ok?'✓ match':'✗ mismatch')+' &nbsp;·&nbsp; CRC-32 '+(c32ok?'✓ match':'✗ mismatch')+'</div>';
+  }
+  document.getElementById('tm-flip').addEventListener('click',()=>{const i=Math.floor(Math.random()*work.length);work[i]^=(1<<Math.floor(Math.random()*8));renderTamper();});
+  document.getElementById('tm-seal').addEventListener('click',()=>{work=encodeFrame(work.slice(8,work.length-4),work[4]|(work[5]<<8));base=work.slice();renderTamper();});
+  document.getElementById('tm-reset').addEventListener('click',()=>{work=TAMPER_ORIG.slice();base=TAMPER_ORIG.slice();renderTamper();});
+
+  // DECODER
+  const decIn=document.getElementById('dec-in'), decOut=document.getElementById('dec-out');
+  function decode(){
+    decOut.innerHTML=''; const b=parseHex(decIn.value);
+    if(b.length<8){if(decIn.value.trim())decOut.appendChild(el('div','err','Need at least 8 bytes for a complete frame.'));return;}
+    const len=b[2]|(b[3]<<8), total=len+8;
+    const c16ok=(b[6]|(b[7]<<8))===crc16Modbus(b.slice(0,6));
+    const inner=b.slice(8,b.length-4);
+    const c32ok=((b[b.length-4]|(b[b.length-3]<<8)|(b[b.length-2]<<16)|(b[b.length-1]<<24))>>>0)===crc32(inner);
+    const type=inner[0],seq=inner[1],cmd=inner[2];
+    let s='This is '+(TYPE_NAMES[type]||'an unknown frame');
+    if(type===0x23&&CMD_NAMES[cmd])s+=' — <b>'+CMD_NAMES[cmd]+'</b>, sequence #'+seq;
+    if(type===0x2f)s+=', heart rate '+inner[14]+' bpm';
+    const both=c16ok&&c32ok;
+    s+='. Checksums '+(both?'<span class="ok">both valid ✓</span>':'<span class="bad">'+(!c16ok&&!c32ok?'both fail ✗':(!c16ok?'header CRC fails ✗':'CRC-32 fails ✗'))+'</span>')+(total!==b.length?' <span class="bad">(length says '+total+'B, you pasted '+b.length+')</span>':'')+'.';
+    decOut.appendChild(el('div','dec-summary',s));
+    const grid=el('div','bytes');
+    b.forEach((x,i)=>{let cls='rg-inner';if(i<2)cls='rg-sof';else if(i<4)cls='rg-len';else if(i<6)cls='rg-field';else if(i<8)cls='rg-crc16';else if(i>=b.length-4)cls='rg-crc32';grid.appendChild(el('div','b '+cls,hx(x)));});
+    decOut.appendChild(grid);
+  }
+  document.querySelectorAll('[data-load-dec]').forEach(btn=>btn.addEventListener('click',()=>{const k=btn.getAttribute('data-load-dec');if(k==='hello')decIn.value=fmtHex(command(0x91,0,[],1));else if(k==='config')decIn.value=fmtHex(command(0x78,1,setConfigPayload('enable_r22_packets',0x32),1));else if(k==='break'){const b=parseHex(decIn.value);if(b.length>9){b[9]^=0xFF;decIn.value=fmtHex(b);}}decode();}));
+  decIn.addEventListener('input',decode);
+
+  // init
+  renderHeart(); setTilt(0,0); renderTamper();
+})();
+</script>
+{% endraw %}
