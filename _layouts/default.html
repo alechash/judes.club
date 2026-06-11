@@ -13,6 +13,35 @@
   {% include footer.html %}
 
   <script>
+    // Theme toggle
+    (function () {
+      var root = document.documentElement;
+      var btn = document.querySelector('.theme-toggle');
+      var themeMeta = document.querySelector('meta[name="theme-color"]');
+      if (!btn) return;
+
+      function currentTheme() {
+        return root.dataset.theme === 'light' ? 'light' : 'dark';
+      }
+
+      function syncTheme(theme) {
+        var isLight = theme === 'light';
+        root.dataset.theme = theme;
+        btn.setAttribute('aria-pressed', isLight ? 'true' : 'false');
+        btn.setAttribute('aria-label', isLight ? 'Switch to dark mode' : 'Switch to light mode');
+        btn.title = isLight ? 'Switch to dark mode' : 'Switch to light mode';
+        if (themeMeta) themeMeta.setAttribute('content', isLight ? '#f7f3ec' : '#101010');
+      }
+
+      syncTheme(currentTheme());
+
+      btn.addEventListener('click', function () {
+        var next = currentTheme() === 'light' ? 'dark' : 'light';
+        syncTheme(next);
+        try { localStorage.setItem('theme', next); } catch (e) {}
+      });
+    })();
+
     // Mobile nav toggle
     (function () {
       var t = document.querySelector('.nav-toggle');
