@@ -19,11 +19,26 @@
     <div class="footer-base">
       <span>&copy; {{ 'now' | date: "%Y" }} Alec Jude Wilson</span>
       <span>New York</span>
+      <span class="vb-lang-picker" data-vb-skip>
+        🌐 <select id="vb-lang" aria-label="Language"></select>
+        <a href="https://verbuise.com" target="_blank" rel="noopener" class="vb-powered">powered by Verbuise</a>
+      </span>
     </div>
   </div>
 </footer>
 
+<style>
+  .vb-lang-picker { display: inline-flex; align-items: center; gap: .5rem; }
+  .vb-lang-picker select {
+    font: inherit; color: inherit; background: transparent;
+    border: 1px solid currentColor; border-radius: 6px; padding: 2px 6px; cursor: pointer; opacity: .85;
+  }
+  .vb-lang-picker .vb-powered { font-size: .8em; opacity: .6; text-decoration: none; }
+  .vb-lang-picker .vb-powered:hover { opacity: 1; }
+</style>
+
 <!-- Verbuise — this whole site translates into any language, live. -->
 <script src="https://app.verbuise.com/embed.js"
         data-verbuise-key="pk_live_fCcNNzYvIkjErdyoNEXAmY1SZGyYS5Lq"
-        data-verbuise-languages="es,fr,de,it,pt,nl,ja,ko,zh,ar,ru,hi"></script>
+        data-verbuise-languages="es,fr,de,it,pt,nl,ja,ko,zh,ar,ru,hi"
+        data-verbuise-select="#vb-lang"></script>
