@@ -1,26 +1,32 @@
 ---
 layout: default
 description: >-
-  Alec Jude Wilson is the founder of Belayer Development, a software & AI
-  consultancy. He writes here about engineering, building products, and craft.
+  Alec Jude Wilson is a software engineer in New York. I build web and mobile
+  applications, write about engineering, and photograph the world.
 ---
 
 <!-- ===================== HERO ===================== -->
 <header class="hero">
   <div class="hero-bg" style="background-image:url('/bg.jpeg')"></div>
   <div class="hero-inner wrap">
-    <p class="eyebrow reveal">Founder &mdash; Belayer Development</p>
-    <h1 class="reveal d1">I&rsquo;m Alec. I build software companies, and write about <span class="em">the craft of building.</span></h1>
+    <p class="eyebrow reveal">Software Engineer &mdash; New York</p>
+    <h1 class="reveal d1">I build software, and write about <span class="em">the craft of building it.</span></h1>
     <p class="hero-sub reveal d2">
-      I founded <strong>Belayer Development</strong>, a software &amp; AI
-      consultancy that helps growing companies plan, build, and ship durable
-      digital products. This is where I keep my writing on the work behind it.
+      I&rsquo;m Alec. I design and ship web and mobile applications, run a small
+      software &amp; AI consultancy, and write here about what I learn building
+      real products.
     </p>
     <div class="hero-actions reveal d3">
-      <a href="https://belayer.dev" class="btn btn-primary">Visit Belayer &nbsp;&rarr;</a>
-      <a href="/writing/" class="btn">Read the writing</a>
+      <a href="/writing/" class="btn btn-primary">Read the writing &nbsp;&rarr;</a>
+      <a href="/projects/" class="btn">See the projects</a>
+    </div>
+    <div class="hero-meta reveal d4">
+      <div class="item"><span class="k">Location</span><span class="v">New York, USA</span></div>
+      <div class="item"><span class="k">Focus</span><span class="v">Web, Mobile &amp; AI</span></div>
+      <div class="item"><span class="k">Consultancy</span><span class="v">Belayer Development</span></div>
     </div>
   </div>
+  <div class="scroll-cue"><span>Scroll</span><span class="bar"></span></div>
   <span class="photo-credit">Manta, Ecuador</span>
 </header>
 
@@ -36,11 +42,32 @@ description: >-
     </div>
 
     {% if site.posts.size > 0 %}
-      <div class="post-list reveal">
-        {% for post in site.posts limit:5 %}
+      {% assign featured = site.posts.first %}
+      {% assign fwords = featured.content | number_of_words %}
+      {% assign frt = fwords | divided_by: 200 | plus: 1 %}
+      <a href="{{ featured.url }}" class="feature-post reveal">
+        <div class="fp-body">
+          <span class="fp-tag">Latest</span>
+          <h3>{{ featured.title }}</h3>
+          <p class="fp-excerpt">{{ featured.description | default: featured.excerpt | strip_html | truncate: 180 }}</p>
+          <div class="fp-foot">
+            <span>{{ featured.date | date: "%B %-d, %Y" }}</span>
+            <span>&middot;</span>
+            <span>{{ frt }} min read</span>
+          </div>
+        </div>
+        <div class="fp-side">
+          <span class="fp-mark">&ldquo;</span>
+          <span class="fp-readtime">Read &rarr;</span>
+        </div>
+      </a>
+
+      {% if site.posts.size > 1 %}
+      <div class="post-list">
+        {% for post in site.posts offset:1 limit:3 %}
           {% assign words = post.content | number_of_words %}
           {% assign rt = words | divided_by: 200 | plus: 1 %}
-          <a href="{{ post.url }}" class="post-row">
+          <a href="{{ post.url }}" class="post-row reveal">
             <span class="pr-date">{{ post.date | date: "%b %-d, %Y" }}</span>
             <span class="pr-title">{{ post.title }}
               <span class="pr-sub">{{ post.description | default: post.excerpt | strip_html | truncate: 110 }}</span>
@@ -49,9 +76,71 @@ description: >-
           </a>
         {% endfor %}
       </div>
+      {% endif %}
     {% else %}
       <p class="lead reveal">Writing is on the way &mdash; the first posts land shortly.</p>
     {% endif %}
+  </div>
+</section>
+
+<!-- ===================== PROJECTS + PHOTOGRAPHY (side pieces) ===================== -->
+<section class="section">
+  <div class="wrap">
+    <div class="side-grid">
+
+      <!-- Projects -->
+      <div class="side-card reveal">
+        <div class="sc-head">
+          <div>
+            <p class="eyebrow"><span class="num">02</span>Selected work</p>
+            <h3>Projects</h3>
+          </div>
+          <a href="/projects/" class="arrow-link">All <span class="ar">&rarr;</span></a>
+        </div>
+        <div class="mini-list">
+          {% assign home_projects = site.projects | sort: "order" %}
+          {% for project in home_projects limit:4 %}
+            <a href="{{ project.url }}" class="mini-row">
+              {% if project.cover %}<img src="{{ project.cover }}" alt="{{ project.title }}" class="mr-thumb" loading="lazy">{% endif %}
+              <span class="mr-text">
+                <span class="mr-title">{{ project.title }}</span>
+                <span class="mr-desc">{{ project.tagline }}</span>
+              </span>
+              <span class="mr-meta">{{ project.kind }}</span>
+            </a>
+          {% endfor %}
+        </div>
+        <div class="sc-links">
+          <a href="{{ site.social.github }}" target="_blank" rel="noopener">GitHub &nearr;</a>
+          <a href="/projects/">Full project list &rarr;</a>
+        </div>
+      </div>
+
+      <!-- Photography -->
+      <div class="side-card reveal d1">
+        <div class="sc-head">
+          <div>
+            <p class="eyebrow"><span class="num">03</span>Off-screen</p>
+            <h3>Photography</h3>
+          </div>
+          <a href="/photo/" class="arrow-link">Gallery <span class="ar">&rarr;</span></a>
+        </div>
+        <div class="photo-strip" id="home-photos">
+          <div class="photo-cell"></div><div class="photo-cell"></div><div class="photo-cell"></div>
+          <div class="photo-cell"></div><div class="photo-cell"></div><div class="photo-cell"></div>
+        </div>
+        <p class="lead" style="font-size:0.9rem;margin-bottom:0.2rem">
+          Travel &amp; street photography. The full gallery carries live view,
+          like, and download counts straight from Unsplash.
+        </p>
+        <div class="sc-links">
+          <a href="/photo/">Open the gallery &rarr;</a>
+          <a href="{{ site.social.instagram }}" target="_blank" rel="noopener">Instagram &nearr;</a>
+          <a href="https://judes.darkroom.com" target="_blank" rel="noopener">Prints &nearr;</a>
+        </div>
+      </div>
+
+    </div>
   </div>
 </section>
 
@@ -60,12 +149,23 @@ description: >-
   <div class="wrap">
     <div class="closer">
       <div class="about-text reveal">
-        <p class="eyebrow"><span class="num">02</span>About</p>
+        <p class="eyebrow"><span class="num">04</span>About</p>
         <h2>A little about me</h2>
         <p>
-          I&rsquo;m a software engineer and founder in New York. I run
-          <strong>Belayer Development</strong>, my software &amp; AI consultancy,
-          and write here about the engineering and craft behind the work.
+          I&rsquo;m a software engineer based in New York. Most of my work lives at
+          the intersection of clean engineering and considered design &mdash; web
+          platforms, iOS apps, and AI-assisted tools that try to stay calm and out
+          of the way.
+        </p>
+        <p>
+          Through <strong>Belayer Development</strong>, my software &amp; AI
+          consultancy, I help growing companies plan, build, and ship digital
+          products. On the side I&rsquo;ve put a few of my own apps on the App
+          Store, and I shoot photography wherever I travel.
+        </p>
+        <p>
+          This site is where I keep all of it &mdash; the writing first, then the
+          work behind it.
         </p>
       </div>
       <div class="contact-card reveal d1">
@@ -74,11 +174,102 @@ description: >-
         <p>Have a project, a question, or just want to say hello? The fastest way to reach me is email.</p>
         <a href="mailto:hi@judes.club" class="contact-email">hi@judes.club</a>
         <div class="contact-socials">
-          <a href="https://belayer.dev" target="_blank" rel="noopener">Belayer</a>
           <a href="{{ site.social.github }}" target="_blank" rel="noopener">GitHub</a>
           <a href="{{ site.social.x }}" target="_blank" rel="noopener">X / Twitter</a>
+          <a href="{{ site.social.instagram }}" target="_blank" rel="noopener">Instagram</a>
         </div>
       </div>
     </div>
   </div>
 </section>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <div class="lightbox-inner">
+    <img id="lb-img" src="" alt="Photograph">
+    <div class="lightbox-row">
+      <button class="lightbox-arrow" id="lb-prev" aria-label="Previous">&#8249;</button>
+      <div class="lightbox-actions">
+        <a id="lb-download" class="btn" href="" download>Download</a>
+        <a class="btn" href="/photo/">View gallery</a>
+        <button class="btn" id="lb-close">Close</button>
+      </div>
+      <button class="lightbox-arrow" id="lb-next" aria-label="Next">&#8250;</button>
+    </div>
+    <p class="lightbox-attr" id="lb-attr"></p>
+  </div>
+</div>
+
+<script>
+(function () {
+  var API = "{{ site.photos_api }}";
+  var grid = document.getElementById('home-photos');
+  if (!grid) return;
+
+  var lb = document.getElementById('lightbox');
+  var lbImg = document.getElementById('lb-img');
+  var lbDl = document.getElementById('lb-download');
+  var lbAttr = document.getElementById('lb-attr');
+  var photos = [];
+  var idx = 0;
+
+  function showLightbox(i) {
+    idx = (i + photos.length) % photos.length;
+    var p = photos[idx];
+    lbImg.src = p.url_regular;
+    lbImg.alt = p.alt_description || 'Photograph';
+    lbDl.href = p.url_regular;
+    lbAttr.innerHTML = 'Photo by <a href="' + p.user_profile + '" target="_blank" rel="noopener">' + p.user_name +
+      '</a> on <a href="' + p.attribution_url + '" target="_blank" rel="noopener">Unsplash</a>';
+    lb.style.display = 'flex';
+    requestAnimationFrame(function () { requestAnimationFrame(function () {
+      lb.classList.add('active'); document.body.style.overflow = 'hidden';
+    }); });
+  }
+  function closeLightbox() {
+    lb.classList.add('closing'); lb.classList.remove('active');
+    setTimeout(function () {
+      lb.classList.remove('closing'); lb.style.display = 'none';
+      document.body.style.overflow = ''; lbImg.src = '';
+    }, 380);
+  }
+  document.getElementById('lb-close').addEventListener('click', closeLightbox);
+  document.getElementById('lb-prev').addEventListener('click', function () { showLightbox(idx - 1); });
+  document.getElementById('lb-next').addEventListener('click', function () { showLightbox(idx + 1); });
+  lb.addEventListener('click', function (e) { if (e.target === lb) closeLightbox(); });
+  document.addEventListener('keydown', function (e) {
+    if (!lb.classList.contains('active')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowRight') showLightbox(idx + 1);
+    if (e.key === 'ArrowLeft') showLightbox(idx - 1);
+  });
+
+  function render() {
+    grid.innerHTML = '';
+    photos.forEach(function (p, i) {
+      var cell = document.createElement('div');
+      cell.className = 'photo-cell';
+      cell.innerHTML =
+        '<button type="button" aria-label="Open photograph">' +
+          '<img src="' + (p.url_small || p.url_regular) + '" alt="' +
+            (p.alt_description || 'Photograph') + '" loading="lazy" decoding="async">' +
+        '</button>';
+      cell.querySelector('button').addEventListener('click', function () { showLightbox(i); });
+      grid.appendChild(cell);
+    });
+  }
+
+  fetch(API + '/photos?page=1&limit=50')
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      var all = data.results || [];
+      for (var i = all.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var t = all[i]; all[i] = all[j]; all[j] = t;
+      }
+      photos = all.slice(0, 6);
+      if (photos.length) render();
+    })
+    .catch(function (e) { console.error(e); });
+})();
+</script>
