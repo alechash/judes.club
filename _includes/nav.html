@@ -6,12 +6,10 @@
       <span></span><span></span><span></span>
     </button>
     <ul class="nav-links">
-      <li><button class="theme-toggle" type="button" aria-label="Switch to light mode" aria-pressed="false" title="Switch theme">
-        <svg class="t-icon t-sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.1"/><path d="M12 2.4v2.3M12 19.3v2.3M4.2 12H1.9M22.1 12h-2.3M5.7 5.7l1.6 1.6M16.7 16.7l1.6 1.6M18.3 5.7l-1.6 1.6M7.3 16.7l-1.6 1.6"/></svg>
-        <svg class="t-icon t-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
-      </button></li>
+      <li><button class="theme-toggle" type="button" aria-label="Switch to light mode" aria-pressed="false" title="Switch theme"></button></li>
       <li><a href="/writing/" class="{% if p contains '/writing' %}active{% endif %}">Writing</a></li>
-      <li><a href="https://belayer.dev" target="_blank" rel="noopener">Belayer &nearr;</a></li>
+      <li><a href="/projects/" class="{% if p contains '/projects' %}active{% endif %}">Projects</a></li>
+      <li><a href="/photo/" class="{% if p contains '/photo' %}active{% endif %}">Photography</a></li>
       <li><a href="/#contact" class="nav-cta">Contact</a></li>
     </ul>
   </div>

@@ -267,34 +267,34 @@ h1, h2, h3, h4 {
 
 .theme-toggle {
   position: relative;
-  display: inline-grid;
-  place-items: center;
-  width: 2.2rem;
-  height: 2.2rem;
-  margin: 0 0.3rem 0 0.15rem;
+  display: inline-flex;
+  align-items: center;
+  width: 2.65rem;
+  height: 1.45rem;
+  margin: 0 0.35rem 0 0.15rem;
   padding: 0;
   border: 1px solid var(--line);
-  border-radius: 50%;
-  background: var(--glass);
-  color: var(--muted);
+  border-radius: 999px;
+  background: var(--glass-2);
   cursor: pointer;
   vertical-align: middle;
-  overflow: hidden;
-  transition: color 0.25s var(--ease), background 0.25s var(--ease), border-color 0.25s var(--ease);
+  transition: background 0.25s var(--ease), border-color 0.25s var(--ease), box-shadow 0.25s var(--ease);
 }
-.theme-toggle:hover { color: var(--text); background: var(--glass-2); border-color: var(--btn-hover-border); }
+.theme-toggle::before {
+  content: "";
+  position: absolute;
+  top: 0.21rem;
+  left: 0.22rem;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background: var(--text);
+  box-shadow: 0 1px 5px var(--line);
+  transition: transform 0.25s var(--ease), background 0.25s var(--ease);
+}
+.theme-toggle:hover { border-color: var(--btn-hover-border); box-shadow: 0 0 0 3px var(--glass); }
 .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-.theme-toggle .t-icon {
-  grid-area: 1 / 1;
-  transition: opacity 0.35s var(--ease), transform 0.45s var(--ease);
-}
-/* Dark mode shows the sun (tap to go light); light mode shows the moon. */
-.theme-toggle .t-sun  { opacity: 1; transform: rotate(0) scale(1); }
-.theme-toggle .t-moon { opacity: 0; transform: rotate(-80deg) scale(0.45); }
-.theme-toggle:hover .t-sun { transform: rotate(35deg) scale(1); }
-:root[data-theme="light"] .theme-toggle .t-sun  { opacity: 0; transform: rotate(80deg) scale(0.45); }
-:root[data-theme="light"] .theme-toggle .t-moon { opacity: 1; transform: rotate(0) scale(1); }
-:root[data-theme="light"] .theme-toggle:hover .t-moon { transform: rotate(-18deg) scale(1); }
+:root[data-theme="light"] .theme-toggle::before { transform: translateX(1.18rem); }
 
 .nav-toggle {
   display: none;
