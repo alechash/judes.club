@@ -20,11 +20,6 @@ description: >-
       <a href="https://belayer.dev" class="btn btn-primary">Visit Belayer &nbsp;&rarr;</a>
       <a href="/writing/" class="btn">Read the writing</a>
     </div>
-    <div class="hero-meta reveal d4">
-      <div class="item"><span class="k">Role</span><span class="v">Founder, Belayer</span></div>
-      <div class="item"><span class="k">Based in</span><span class="v">New York, USA</span></div>
-      <div class="item"><span class="k">Focus</span><span class="v">Web, Mobile &amp; AI</span></div>
-    </div>
   </div>
   <span class="photo-credit">Manta, Ecuador</span>
 </header>
@@ -41,32 +36,11 @@ description: >-
     </div>
 
     {% if site.posts.size > 0 %}
-      {% assign featured = site.posts.first %}
-      {% assign fwords = featured.content | number_of_words %}
-      {% assign frt = fwords | divided_by: 200 | plus: 1 %}
-      <a href="{{ featured.url }}" class="feature-post reveal">
-        <div class="fp-body">
-          <span class="fp-tag">Latest</span>
-          <h3>{{ featured.title }}</h3>
-          <p class="fp-excerpt">{{ featured.description | default: featured.excerpt | strip_html | truncate: 180 }}</p>
-          <div class="fp-foot">
-            <span>{{ featured.date | date: "%B %-d, %Y" }}</span>
-            <span>&middot;</span>
-            <span>{{ frt }} min read</span>
-          </div>
-        </div>
-        <div class="fp-side">
-          <span class="fp-mark">&ldquo;</span>
-          <span class="fp-readtime">Read &rarr;</span>
-        </div>
-      </a>
-
-      {% if site.posts.size > 1 %}
-      <div class="post-list">
-        {% for post in site.posts offset:1 limit:4 %}
+      <div class="post-list reveal">
+        {% for post in site.posts limit:5 %}
           {% assign words = post.content | number_of_words %}
           {% assign rt = words | divided_by: 200 | plus: 1 %}
-          <a href="{{ post.url }}" class="post-row reveal">
+          <a href="{{ post.url }}" class="post-row">
             <span class="pr-date">{{ post.date | date: "%b %-d, %Y" }}</span>
             <span class="pr-title">{{ post.title }}
               <span class="pr-sub">{{ post.description | default: post.excerpt | strip_html | truncate: 110 }}</span>
@@ -75,7 +49,6 @@ description: >-
           </a>
         {% endfor %}
       </div>
-      {% endif %}
     {% else %}
       <p class="lead reveal">Writing is on the way &mdash; the first posts land shortly.</p>
     {% endif %}
@@ -90,16 +63,9 @@ description: >-
         <p class="eyebrow"><span class="num">02</span>About</p>
         <h2>A little about me</h2>
         <p>
-          I&rsquo;m a software engineer and founder based in New York. Most of my
-          work lives at the intersection of clean engineering and considered
-          design &mdash; web platforms, iOS apps, and AI-assisted tools that stay
-          calm and out of the way.
-        </p>
-        <p>
-          I run <strong>Belayer Development</strong>, my software &amp; AI
-          consultancy, helping growing companies plan, build, and ship products
-          they can trust. The writing here is where the thinking behind that work
-          lives &mdash; honest notes on engineering and craft.
+          I&rsquo;m a software engineer and founder in New York. I run
+          <strong>Belayer Development</strong>, my software &amp; AI consultancy,
+          and write here about the engineering and craft behind the work.
         </p>
       </div>
       <div class="contact-card reveal d1">
