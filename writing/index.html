@@ -7,40 +7,35 @@ description: >-
   products, shipping iOS apps, and the craft of writing good code.
 ---
 
-<header class="page-hero">
+<div class="page">
   <div class="wrap">
-    <p class="eyebrow reveal"><span class="num">&#9656;</span>Writing</p>
-    <h1 class="reveal d1">Writing</h1>
-    <p class="lead reveal d2">
-      Essays and notes on software engineering, building products, and the
-      craft of shipping things that work. New posts land here first.
-      <a href="/feed.xml" style="white-space:nowrap">RSS &nearr;</a>
-    </p>
-  </div>
-</header>
+    <div class="page-head">
+      <h1>Writing</h1>
+      <p class="lead">
+        Essays and notes on software engineering, building products, and the
+        craft of shipping things that work.
+        <a href="/feed.xml" style="white-space:nowrap">RSS &nearr;</a>
+      </p>
+    </div>
 
-<section class="writing-index">
-  <div class="wrap">
     {% if site.posts.size > 0 %}
       {% assign by_year = site.posts | group_by_exp: "post", "post.date | date: '%Y'" %}
       {% for year in by_year %}
         <p class="year-label">{{ year.name }}</p>
-        <div class="post-list">
+        <ul class="item-list">
           {% for post in year.items %}
-            {% assign words = post.content | number_of_words %}
-            {% assign rt = words | divided_by: 200 | plus: 1 %}
-            <a href="{{ post.url }}" class="post-row reveal">
-              <span class="pr-date">{{ post.date | date: "%b %-d, %Y" }}</span>
-              <span class="pr-title">{{ post.title }}
-                <span class="pr-sub">{{ post.description | default: post.excerpt | strip_html | truncate: 150 }}</span>
-              </span>
-              <span class="pr-meta">{{ rt }} min</span>
-            </a>
+          <li>
+            <div class="item-line">
+              <a href="{{ post.url }}" class="item-title">{{ post.title }}</a>
+              <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%b %-d" }}</time>
+            </div>
+            <span class="item-sub">{{ post.description | default: post.excerpt | strip_html | truncate: 150 }}</span>
+          </li>
           {% endfor %}
-        </div>
+        </ul>
       {% endfor %}
     {% else %}
       <p class="lead">The first posts are on their way.</p>
     {% endif %}
   </div>
-</section>
+</div>

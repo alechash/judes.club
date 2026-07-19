@@ -7,35 +7,35 @@ description: >-
   America, the US, Europe, and Africa. Live view, like, and download stats.
 ---
 
-<header class="page-hero">
+<div class="page">
   <div class="wrap">
-    <p class="eyebrow reveal"><span class="num">&#9656;</span>Off the keyboard</p>
-    <h1 class="reveal d1">Photography</h1>
-    <p class="lead reveal d2">
-      Travel and street photography from wherever I end up &mdash; Latin
-      America, the US, Europe, Africa, and the rooms in between. Every frame
-      below carries its live view, like, and download counts straight from
-      Unsplash.
-    </p>
-    <div class="stat-row reveal d3" id="summary-stats" style="margin-top:1.8rem"></div>
-    <div class="sc-links reveal d3" style="padding-top:1.4rem">
-      <a href="{{ site.social.unsplash }}" target="_blank" rel="noopener">Unsplash &nearr;</a>
-      <a href="{{ site.social.instagram }}" target="_blank" rel="noopener">Instagram &nearr;</a>
-      <a href="https://glass.photo/wilude" target="_blank" rel="noopener">Glass &nearr;</a>
-      <a href="https://judes.darkroom.com" target="_blank" rel="noopener">Buy prints &nearr;</a>
+    <div class="page-head">
+      <h1>Photography</h1>
+      <p class="lead">
+        Travel and street photography from wherever I end up &mdash; Latin
+        America, the US, Europe, and Africa. View, like, and download counts
+        come live from Unsplash.
+      </p>
+      <div class="stat-row" id="summary-stats"></div>
+      <div class="contact-links" style="margin-top:1rem">
+        <a href="{{ site.social.unsplash }}" target="_blank" rel="noopener">Unsplash &nearr;</a>
+        <a href="{{ site.social.instagram }}" target="_blank" rel="noopener">Instagram &nearr;</a>
+        <a href="https://glass.photo/wilude" target="_blank" rel="noopener">Glass &nearr;</a>
+        <a href="https://judes.darkroom.com" target="_blank" rel="noopener">Buy prints &nearr;</a>
+      </div>
     </div>
   </div>
-</header>
+</div>
 
 <section class="photo-page">
-  <div class="wrap">
-    <div class="section-head reveal" style="margin-bottom:1.6rem">
-      <h2 style="font-size:clamp(1.6rem,3vw,2.2rem)">Collections</h2>
+  <div class="wrap wrap-wide">
+    <div class="collections-section">
+      <h2 style="margin-bottom:1.1rem">Collections</h2>
+      <div class="collections-grid" id="collections"></div>
     </div>
-    <div class="collections-grid" id="collections"></div>
 
-    <div class="photo-toolbar reveal">
-      <h2 style="font-size:clamp(1.6rem,3vw,2.2rem)">Every photograph</h2>
+    <div class="photo-toolbar">
+      <h2>Every photograph</h2>
       <label class="sort-wrap">
         <span class="sr-only">Sort photographs</span>
         Sort

@@ -3,46 +3,35 @@ layout: default
 ---
 {% assign words = content | number_of_words %}
 {% assign rt = words | divided_by: 200 | plus: 1 %}
-<article class="article">
-  <div class="article-grid">
-    <header class="article-head reveal">
-      <p class="eyebrow"><a href="/writing/" class="arrow-link">&larr; All writing</a></p>
+<article class="page">
+  <div class="wrap">
+    <header class="article-head">
+      <a href="/writing/" class="back-link">&larr; All writing</a>
       <h1>{{ page.title }}</h1>
-      <div class="article-meta">
-        <span>{{ page.date | date: "%B %-d, %Y" }}</span>
-        <span class="dot"></span>
-        <span>{{ rt }} min read</span>
-        {% if page.tags.size > 0 %}
-          <span class="dot"></span>
-          <span>{{ page.tags | join: " &middot; " }}</span>
-        {% endif %}
-      </div>
+      <p class="meta">
+        <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %-d, %Y" }}</time>
+        &middot; {{ rt }} min read
+        {% if page.tags.size > 0 %}&middot; {{ page.tags | join: ", " }}{% endif %}
+      </p>
     </header>
 
-    <aside class="toc" aria-label="Table of contents" hidden>
-      <p class="toc-title">Contents</p>
-      <div class="toc-body"></div>
-    </aside>
-
-    <div class="prose reveal d1">
+    <div class="prose">
       {{ content }}
     </div>
 
+    {% if page.next or page.previous %}
     <nav class="article-nav">
       {% if page.next %}
         <a href="{{ page.next.url }}" class="prev">
-          <span class="an-dir">&larr; Newer</span>
-          <span class="an-title">{{ page.next.title }}</span>
+          <span class="an-dir">&larr; Newer</span>{{ page.next.title }}
         </a>
       {% endif %}
       {% if page.previous %}
         <a href="{{ page.previous.url }}" class="next">
-          <span class="an-dir">Older &rarr;</span>
-          <span class="an-title">{{ page.previous.title }}</span>
+          <span class="an-dir">Older &rarr;</span>{{ page.previous.title }}
         </a>
       {% endif %}
     </nav>
+    {% endif %}
   </div>
 </article>
-
-<script src="/assets/post.js" defer></script>

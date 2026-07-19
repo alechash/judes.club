@@ -1,56 +1,34 @@
 <footer class="site-footer">
   <div class="wrap">
-    <div class="footer-grid">
-      <p class="footer-quote" id="footer-quote">
-        <span class="fq-text">Simplicity is the ultimate sophistication.</span>
-        <span class="fq-author">Leonardo da Vinci</span>
-      </p>
-      <nav class="footer-nav" aria-label="Footer">
-        <a href="/">Home</a>
-        <a href="/writing/">Writing</a>
-        <a href="/projects/">Projects</a>
-        <a href="/photo/">Photography</a>
-        <a href="{{ site.social.github }}" target="_blank" rel="noopener">GitHub</a>
-        <a href="{{ site.social.instagram }}" target="_blank" rel="noopener">Instagram</a>
-        <a href="{{ site.social.x }}" target="_blank" rel="noopener">X</a>
-        <a href="/legal/">Legal</a>
-      </nav>
-    </div>
-    <div class="footer-base">
-      <span>&copy; {{ 'now' | date: "%Y" }} Alec Jude Wilson</span>
-      <span>New York</span>
-    </div>
+    <span>&copy; {{ 'now' | date: "%Y" }} Alec Jude Wilson &middot; New York</span>
+    <nav class="footer-links" aria-label="Footer">
+      <a href="mailto:hi@judes.club">Email</a>
+      <a href="{{ site.social.github }}" target="_blank" rel="noopener">GitHub</a>
+      <a href="{{ site.social.x }}" target="_blank" rel="noopener">X</a>
+      <a href="{{ site.social.instagram }}" target="_blank" rel="noopener">Instagram</a>
+      <a href="/feed.xml">RSS</a>
+      <a href="/legal/">Legal</a>
+    </nav>
   </div>
 </footer>
 
-<!-- Verbuise — sticky language picker; translates every page into any language, live. -->
+<!-- Verbuise — language picker; translates every page live. -->
 <div class="vb-lang-picker" data-vb-skip>
-  <span class="vb-globe" aria-hidden="true">🌐</span>
   <select id="vb-lang" aria-label="Language"></select>
-  <a href="https://verbuise.com" target="_blank" rel="noopener" class="vb-powered">powered by&nbsp;Verbuise</a>
 </div>
 
 <style>
   .vb-lang-picker {
-    position: fixed; bottom: 18px; right: 18px; z-index: 2147483000;
-    display: inline-flex; align-items: center; gap: .5rem;
-    background: rgba(20,20,22,.82); color: #fff; backdrop-filter: blur(8px);
-    border: 1px solid rgba(255,255,255,.18); border-radius: 999px;
-    padding: 7px 12px; font: 500 14px/1 system-ui, sans-serif;
-    box-shadow: 0 6px 24px rgba(0,0,0,.25);
+    position: fixed; bottom: 14px; right: 14px; z-index: 2147483000;
   }
-  .vb-lang-picker .vb-globe { font-size: 15px; }
   .vb-lang-picker select {
-    font: inherit; color: #fff; background: transparent; border: none; cursor: pointer; outline: none;
-    max-width: 150px;
+    font: 400 12px/1 system-ui, sans-serif;
+    color: var(--muted, #6f6b63); background: var(--bg, #fbfaf7);
+    border: 1px solid var(--line, #e5e2da); border-radius: 4px;
+    padding: 5px 6px; cursor: pointer; outline: none; max-width: 130px;
   }
-  .vb-lang-picker select option { color: #111; }
-  .vb-lang-picker .vb-powered { font-size: 11px; opacity: .65; text-decoration: none; color: #fff; padding-left: 4px; border-left: 1px solid rgba(255,255,255,.2); }
-  .vb-lang-picker .vb-powered:hover { opacity: 1; }
-  @media (max-width: 480px) { .vb-lang-picker { bottom: 12px; right: 12px; padding: 6px 10px; } .vb-lang-picker .vb-powered { display: none; } }
 </style>
 
-<!-- Verbuise — this whole site translates into any language, live. -->
 <script src="https://app.verbuise.com/embed.js"
         data-verbuise-key="pk_live_fCcNNzYvIkjErdyoNEXAmY1SZGyYS5Lq"
         data-verbuise-languages="es,fr,de,it,pt,nl,ja,ko,zh,ar,ru,hi"

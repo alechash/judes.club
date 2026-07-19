@@ -2,66 +2,54 @@
 layout: default
 ---
 {% assign ordered = site.projects | sort: "order" %}
-<article>
-  <div class="project-hero">
-    <img src="{{ page.cover }}" alt="{{ page.title }}" loading="eager">
-  </div>
-
-  <div class="project-body">
-    <div class="wrap" style="max-width:980px">
-      <p class="eyebrow"><a href="/projects/" class="arrow-link">&larr; All projects</a></p>
-
-      {% if page.tags.size > 0 %}
-      <div class="ph-tags reveal" style="margin-top:1.3rem">
-        {% for tag in page.tags %}<span class="ph-tag">{{ tag }}</span>{% endfor %}
-      </div>
-      {% endif %}
-
-      <h1 class="reveal d1" style="font-size:clamp(2.5rem,5.5vw,4rem);margin-top:1rem">{{ page.title }}</h1>
-      <p class="lead reveal d2" style="margin-top:1rem;max-width:60ch">{{ page.tagline }}</p>
-
+<article class="page">
+  <div class="wrap">
+    <header class="article-head">
+      <a href="/projects/" class="back-link">&larr; All projects</a>
+      <h1>{{ page.title }}</h1>
+      <p class="lead" style="margin-top:0.5rem">{{ page.tagline }}</p>
+      <p class="project-meta">
+        {{ page.kind }} &middot; {{ page.year }} &middot; {{ page.status }}
+        {% if page.stack %} &middot; {{ page.stack | join: ", " }}{% endif %}
+      </p>
       {% if page.links.size > 0 %}
-      <div class="project-actions reveal d2">
+      <div class="project-links">
         {% for link in page.links %}
-          <a href="{{ link.url }}" class="btn{% if forloop.first %} btn-primary{% endif %}" target="_blank" rel="noopener">{{ link.label }} &nearr;</a>
+          <a href="{{ link.url }}" target="_blank" rel="noopener">{{ link.label }} &nearr;</a>
         {% endfor %}
       </div>
       {% endif %}
+    </header>
 
-      <div class="meta-strip reveal" style="margin-top:2.6rem">
-        <div class="ms-item"><div class="ms-k">Role</div><div class="ms-v">{{ page.role }}</div></div>
-        <div class="ms-item"><div class="ms-k">Stack</div><div class="ms-v">{{ page.stack | join: ", " }}</div></div>
-        <div class="ms-item"><div class="ms-k">Status</div><div class="ms-v">{{ page.status }}</div></div>
-        <div class="ms-item"><div class="ms-k">Year</div><div class="ms-v">{{ page.year }}</div></div>
-      </div>
+    {% if page.cover %}
+    <div class="project-cover">
+      <img src="{{ page.cover }}" alt="{{ page.title }}" loading="eager">
+    </div>
+    {% endif %}
 
-      <div class="prose reveal" style="margin-bottom:0">
-        <h2>Overview</h2>
-        {{ content }}
-      </div>
+    <div class="prose">
+      {{ content }}
 
       {% if page.challenge %}
-      <div class="prose reveal" style="margin-top:2.8rem">
-        <h2 style="margin-top:0">How it comes together</h2>
-      </div>
-      <div class="cao-grid reveal d1">
-        <div class="cao-card"><div class="cao-k">The challenge</div><p>{{ page.challenge }}</p></div>
-        <div class="cao-card"><div class="cao-k">The approach</div><p>{{ page.approach }}</p></div>
-        <div class="cao-card"><div class="cao-k">The outcome</div><p>{{ page.outcome }}</p></div>
-      </div>
+      <h2>The challenge</h2>
+      <p>{{ page.challenge }}</p>
+      <h2>The approach</h2>
+      <p>{{ page.approach }}</p>
+      <h2>The outcome</h2>
+      <p>{{ page.outcome }}</p>
       {% endif %}
-
-      <div class="project-back">
-        <a href="/projects/" class="arrow-link">&larr; Back to all projects</a>
-        {% for p in ordered %}
-          {% if p.url == page.url %}{% assign idx = forloop.index0 %}{% endif %}
-        {% endfor %}
-        {% assign nextidx = idx | plus: 1 | modulo: ordered.size %}
-        {% assign nextproj = ordered[nextidx] %}
-        {% if nextproj %}
-          <a href="{{ nextproj.url }}" class="arrow-link pb-next">Next: {{ nextproj.title }} <span class="ar">&rarr;</span></a>
-        {% endif %}
-      </div>
     </div>
+
+    <nav class="article-nav">
+      <a href="/projects/" class="prev"><span class="an-dir">&larr; Back</span>All projects</a>
+      {% for p in ordered %}
+        {% if p.url == page.url %}{% assign idx = forloop.index0 %}{% endif %}
+      {% endfor %}
+      {% assign nextidx = idx | plus: 1 | modulo: ordered.size %}
+      {% assign nextproj = ordered[nextidx] %}
+      {% if nextproj and nextproj.url != page.url %}
+        <a href="{{ nextproj.url }}" class="next"><span class="an-dir">Next &rarr;</span>{{ nextproj.title }}</a>
+      {% endif %}
+    </nav>
   </div>
 </article>
