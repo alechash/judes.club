@@ -3,63 +3,33 @@ layout: default
 title: Projects
 permalink: /projects/
 description: >-
-  Software projects by Alec Jude Wilson — iOS apps, a full-stack career
-  platform, and Belayer Development, a software and AI consultancy.
+  Things Alec Jude Wilson is making — apps and other software, each with a
+  short write-up.
 ---
 
-<header class="page-hero">
+<header class="page-head">
   <div class="wrap">
-    <p class="eyebrow reveal"><span class="num">&#9656;</span>Selected work</p>
-    <h1 class="reveal d1">Projects</h1>
-    <p class="lead reveal d2">
-      Apps, platforms, and a consultancy &mdash; things I&rsquo;ve designed,
-      built, and shipped. Each one has its own write-up on the thinking behind
-      it. For the wider story, the <a href="/writing/">writing</a> goes deeper.
+    <h1>Projects</h1>
+    <p>
+      Things I&rsquo;m making, mostly because I wanted them to exist.
+      Each has a short write-up.
     </p>
   </div>
 </header>
 
 <section class="projects-index">
   <div class="wrap">
-    {% assign ordered = site.projects | sort: "order" %}
-    <div class="project-grid">
-      {% for p in ordered %}
-        <a href="{{ p.url }}" class="project-tile reveal">
-          <img src="{{ p.cover }}" alt="{{ p.title }}" loading="lazy" decoding="async">
-          <span class="pt-meta">{{ p.kind }} &middot; {{ p.year }}</span>
-          <span class="pt-cap">
-            <span class="pt-title">{{ p.title }}</span>
-            <span class="pt-desc">{{ p.tagline | truncate: 84 }}</span>
-          </span>
-        </a>
+    <ul class="project-list">
+      {% assign ordered = site.projects | sort: "order" %}
+      {% for project in ordered %}
+        <li>
+          <div class="p-head">
+            <a href="{{ project.url }}">{{ project.title }}</a>
+            <span class="d">{{ project.kind }} &middot; {{ project.year }}</span>
+          </div>
+          <p>{{ project.tagline }}</p>
+        </li>
       {% endfor %}
-    </div>
-
-    <div class="closer reveal" style="margin-top:4rem">
-      <div class="about-text">
-        <p class="eyebrow">How I work</p>
-        <h2 style="font-size:clamp(1.7rem,3vw,2.4rem);margin-bottom:1.3rem">Build calm, ship small, stay honest.</h2>
-        <p>
-          The thread across all of it: narrow scope, clean engineering, and
-          interfaces that stay out of the way. I&rsquo;d rather ship the
-          smallest honest version of something than the largest impressive one.
-        </p>
-        <p>
-          Most of these started as a problem I had myself. The rest came through
-          <a href="/projects/belayer/">Belayer</a>, where the same principles
-          get applied to other people&rsquo;s products.
-        </p>
-      </div>
-      <div class="contact-card">
-        <p class="cc-eyebrow">Work together</p>
-        <h3>Have something to build?</h3>
-        <p>I take on a small number of consulting projects through Belayer Development. Tell me what you&rsquo;re working on.</p>
-        <a href="mailto:hi@judes.club" class="contact-email">hi@judes.club</a>
-        <div class="contact-socials">
-          <a href="{{ site.social.github }}" target="_blank" rel="noopener">GitHub</a>
-          <a href="https://belayer.dev" target="_blank" rel="noopener">belayer.dev</a>
-        </div>
-      </div>
-    </div>
+    </ul>
   </div>
 </section>

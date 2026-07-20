@@ -13,7 +13,7 @@
   {% include footer.html %}
 
   <script>
-    // Theme toggle
+    // Theme toggle: no stored choice follows the system; the button flips it.
     (function () {
       var root = document.documentElement;
       var btn = document.querySelector('.theme-toggle');
@@ -21,83 +21,25 @@
       if (!btn) return;
 
       function currentTheme() {
-        return root.dataset.theme === 'light' ? 'light' : 'dark';
+        if (root.dataset.theme === 'light' || root.dataset.theme === 'dark') {
+          return root.dataset.theme;
+        }
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
       }
 
-      function syncTheme(theme) {
-        var isLight = theme === 'light';
-        root.dataset.theme = theme;
-        btn.setAttribute('aria-pressed', isLight ? 'true' : 'false');
-        btn.setAttribute('aria-label', isLight ? 'Switch to dark mode' : 'Switch to light mode');
-        btn.title = isLight ? 'Switch to dark mode' : 'Switch to light mode';
-        if (themeMeta) themeMeta.setAttribute('content', isLight ? '#f7f3ec' : '#101010');
+      function syncMeta() {
+        if (themeMeta) themeMeta.setAttribute('content', currentTheme() === 'light' ? '#f7f4ee' : '#1a1813');
       }
 
-      syncTheme(currentTheme());
+      syncMeta();
 
       btn.addEventListener('click', function () {
         var next = currentTheme() === 'light' ? 'dark' : 'light';
-        syncTheme(next);
+        root.dataset.theme = next;
+        btn.setAttribute('aria-pressed', next === 'light' ? 'true' : 'false');
+        syncMeta();
         try { localStorage.setItem('theme', next); } catch (e) {}
       });
-    })();
-
-    // Mobile nav toggle
-    (function () {
-      var t = document.querySelector('.nav-toggle');
-      if (!t) return;
-      t.addEventListener('click', function () {
-        var inner = t.closest('.nav-inner');
-        var open = inner.classList.toggle('open');
-        t.setAttribute('aria-expanded', open);
-      });
-    })();
-
-    // Reveal on scroll
-    (function () {
-      var els = document.querySelectorAll('.reveal');
-      if (!els.length) return;
-      if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        els.forEach(function (e) { e.classList.add('in'); });
-        return;
-      }
-      // threshold:0 fires as soon as any part of the element enters, so it
-      // works regardless of element height (a 12% threshold is unreachable on
-      // elements taller than ~8 viewports, e.g. a long post body). The negative
-      // bottom rootMargin still gives lower-page elements a scroll-into-view cue.
-      var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (e) {
-          if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
-        });
-      }, { threshold: 0, rootMargin: '0px 0px -12% 0px' });
-      els.forEach(function (e) { io.observe(e); });
-    })();
-
-    // Rotating footer quote
-    (function () {
-      var box = document.getElementById('footer-quote');
-      if (!box || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      var quotes = [
-        ['Simplicity is the ultimate sophistication.', 'Leonardo da Vinci'],
-        ['The details are not the details. They make the design.', 'Charles Eames'],
-        ['Make it work, make it right, make it fast.', 'Kent Beck'],
-        ['Perfection is achieved when there is nothing left to take away.', 'Antoine de Saint-Exupéry'],
-        ['Stay hungry, stay foolish.', 'Steve Jobs'],
-        ['Programs must be written for people to read.', 'Harold Abelson'],
-        ['The best way out is always through.', 'Robert Frost']
-      ];
-      var i = 0;
-      var textEl = box.querySelector('.fq-text');
-      var authEl = box.querySelector('.fq-author');
-      setInterval(function () {
-        box.classList.add('fading');
-        setTimeout(function () {
-          i = (i + 1) % quotes.length;
-          textEl.textContent = quotes[i][0];
-          authEl.textContent = quotes[i][1];
-          box.classList.remove('fading');
-        }, 500);
-      }, 8000);
     })();
   </script>
 </body>
