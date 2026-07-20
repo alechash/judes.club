@@ -1,22 +1,12 @@
 ---
 layout: default
 ---
-{% assign words = content | number_of_words %}
-{% assign rt = words | divided_by: 200 | plus: 1 %}
 <article class="article">
-  <div class="article-grid">
-    <header class="article-head reveal">
-      <p class="eyebrow"><a href="/writing/" class="arrow-link">&larr; All writing</a></p>
+  <div class="wrap article-grid">
+    <header class="article-head">
+      <p class="crumb"><a href="/writing/">&larr; Writing</a></p>
       <h1>{{ page.title }}</h1>
-      <div class="article-meta">
-        <span>{{ page.date | date: "%B %-d, %Y" }}</span>
-        <span class="dot"></span>
-        <span>{{ rt }} min read</span>
-        {% if page.tags.size > 0 %}
-          <span class="dot"></span>
-          <span>{{ page.tags | join: " &middot; " }}</span>
-        {% endif %}
-      </div>
+      <div class="article-meta">{{ page.date | date: "%B %-d, %Y" }}</div>
     </header>
 
     <aside class="toc" aria-label="Table of contents" hidden>
@@ -24,7 +14,7 @@ layout: default
       <div class="toc-body"></div>
     </aside>
 
-    <div class="prose reveal d1">
+    <div class="prose">
       {{ content }}
     </div>
 
