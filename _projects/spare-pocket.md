@@ -1,6 +1,6 @@
 ---
 title: Spare Pocket
-order: 2
+order: 3
 kind: iOS
 year: 2026
 cover: /projects/spare-pocket.png
