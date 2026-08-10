@@ -1,6 +1,7 @@
 ---
 title: "The market won the argument: building a baseball model and betting it on Kalshi"
 date: 2026-07-28
+published: false
 tags: [baseball, data, prediction-markets, engineering]
 description: >-
   Statball started as a nostalgia project: a cream-newsprint almanac that
