@@ -470,12 +470,6 @@ a, button{ -webkit-tap-highlight-color: transparent; }
                       >hello@example.com</a
                     >
                   </p>
-                  <p>
-                    <strong>Twitter/X:</strong>
-                    <a id="contactX" href="#" target="_blank" rel="noreferrer"
-                      >@yourhandle</a
-                    >
-                  </p>
                 </div>
               </div>
               <div class="hero-card">
@@ -566,7 +560,7 @@ a, button{ -webkit-tap-highlight-color: transparent; }
         headline: "Track your books. Know your books.",
         sub: "A book tracker designed for readers who love simplicity and speed. No bloat, just books.",
         primaryCTA: { label: "Download on the App Store", href: "#" },
-        contact: { email: "apps@judes.club", x: "https://x.com/alechash" },
+        contact: { email: "apps@judes.club" },
         changelog: [
           {
             version: "1.0.0",
@@ -758,11 +752,6 @@ a, button{ -webkit-tap-highlight-color: transparent; }
         if (email) {
           email.href = `mailto:${SITE.contact.email}`;
           email.textContent = SITE.contact.email;
-        }
-        const cx = $("contactX");
-        if (cx) {
-          cx.href = SITE.contact.x;
-          cx.textContent = SITE.contact.x.replace("https://", "");
         }
 
         const log = $("changelogList");
