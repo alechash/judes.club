@@ -44,17 +44,6 @@ description: >-
 <section class="home-section">
   <div class="wrap">
     <span class="section-label">Projects</span>
-    <ul class="project-list">
-      {% assign home_projects = site.projects | sort: "order" %}
-      {% for project in home_projects %}
-        <li>
-          <div class="p-head">
-            <a href="{{ project.url }}">{{ project.title }}</a>
-            <span class="d">{{ project.year }}</span>
-          </div>
-          <p>{{ project.tagline }}</p>
-        </li>
-      {% endfor %}
-    </ul>
+    {% include project-groups.html %}
   </div>
 </section>

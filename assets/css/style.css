@@ -155,6 +155,9 @@ h1, h2, h3, h4 { font-weight: 600; line-height: 1.25; text-wrap: balance; }
 .project-list .p-head { display: flex; align-items: baseline; gap: 1rem; }
 .project-list .p-head .d { margin-left: auto; flex-shrink: 0; font-size: 0.85rem; color: var(--faint); font-variant-numeric: tabular-nums; }
 .project-list p { margin-top: 0.15rem; font-size: 0.95rem; color: var(--muted); max-width: 34rem; }
+.group-label { font-size: 0.9rem; color: var(--faint); margin-bottom: 0.6rem; }
+.project-list + .group-label { margin-top: 1.8rem; }
+.group-label a { color: var(--muted); }
 
 /* ---------- Page (writing / projects index) ---------- */
 .page-head { padding: 4.5rem 0 2.2rem; }

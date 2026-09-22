@@ -1,0 +1,18 @@
+# Products and client work that live under Belayer (belayer.dev).
+# belayer.dev owns the details; this list is one line each and links out.
+- name: BenchScout
+  url: https://benchscout.com
+  host: benchscout.com
+  tagline: Live scores, play-by-play, and odds across five leagues, with an archive back to 1901.
+- name: Bricklane
+  url: https://bricklane.app
+  host: bricklane.app
+  tagline: Invoicing for service companies, with payments, recurring work, and sales tax built in.
+- name: Verbuise
+  url: https://verbuise.com
+  host: verbuise.com
+  tagline: AI localization that makes a product feel native in any language.
+- name: OutShine
+  url: https://belayer.dev/work/outshine/
+  host: case study
+  tagline: A sales platform and AI assistant for a national commercial window cleaning company.

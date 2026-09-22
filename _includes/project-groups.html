@@ -1,0 +1,34 @@
+{% comment %} Projects split by owner: Belayer work links out, personal work has pages here. {% endcomment %}
+<p class="group-label">Through <a href="https://belayer.dev">Belayer</a>, my studio</p>
+<ul class="project-list">
+  {% for item in site.data.belayer %}
+    <li>
+      <div class="p-head">
+        <a href="{{ item.url }}">{{ item.name }}</a>
+        <span class="d">{{ item.host }}</span>
+      </div>
+      <p>{{ item.tagline }}</p>
+    </li>
+  {% endfor %}
+</ul>
+
+<p class="group-label">On my own</p>
+<ul class="project-list">
+  <li>
+    <div class="p-head">
+      <a href="https://statball.net">Statball</a>
+      <span class="d">{% if include.kinds %}Web &middot; {% endif %}2026</span>
+    </div>
+    <p>A baseball model that prices every MLB game, backtested on 170,000 games. <a href="/writing/building-statball/">The build log</a>.</p>
+  </li>
+  {% assign ordered = site.projects | sort: "order" %}
+  {% for project in ordered %}
+    <li>
+      <div class="p-head">
+        <a href="{{ project.url }}">{{ project.title }}</a>
+        <span class="d">{% if include.kinds %}{{ project.kind }} &middot; {% endif %}{{ project.year }}</span>
+      </div>
+      <p>{{ project.tagline }}</p>
+    </li>
+  {% endfor %}
+</ul>
