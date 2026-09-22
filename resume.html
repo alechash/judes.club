@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alec Wilson — Resume</title>
+  <style>
+    /* Resume — follows the judes.club system: system serif type,
+       warm paper / soft ink, faint hairlines, small-caps labels. */
+
+    /* Margins live on .page (below), not @page: Safari ignores @page margins. */
+    @page {
+      size: letter;
+      margin: 0;
+    }
+
+    /* ---------- Theme ---------- */
+    :root {
+      color-scheme: light;
+      --serif: Charter, "Bitstream Charter", "Sitka Text", Cambria, Georgia, serif;
+
+      --bg: #f7f4ee;
+      --sheet: #fbf9f4;
+      --text: #23211c;
+      --muted: #6f6a5e;
+      --faint: #a59d8f;
+      --line: #e2dccf;
+      --accent: #8f4a24;
+      --mark: rgba(143, 74, 36, 0.14);
+    }
+
+    @media screen and (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        color-scheme: dark;
+        --bg: #131313;
+        --sheet: #1a1a19;
+        --text: #e6e1d6;
+        --muted: #a19a8b;
+        --faint: #6e6759;
+        --line: #2e2b24;
+        --accent: #d18c58;
+        --mark: rgba(209, 140, 88, 0.18);
+      }
+    }
+
+    /* ---------- Base ---------- */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    body {
+      font-family: var(--serif);
+      font-size: 9.5pt;
+      line-height: 1.36;
+      color: var(--text);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    ::selection { background: var(--mark); }
+
+    a {
+      color: var(--text);
+      text-decoration: underline;
+      text-decoration-color: var(--faint);
+      text-underline-offset: 2px;
+      transition: text-decoration-color 0.15s ease, color 0.15s ease;
+    }
+    a:hover { text-decoration-color: var(--accent); color: var(--accent); }
+
+    /* On screen, a letter-sized sheet; in print, the padding is the page margin */
+    .page {
+      width: 8.5in;
+      min-height: 11in;
+      margin: 0.5in auto;
+      padding: 0.55in 0.7in;
+      background: var(--sheet);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+    }
+
+    @media (max-width: 8.8in) {
+      .page { width: auto; min-height: 0; margin: 0; padding: 2rem 1.25rem; border: 0; border-radius: 0; }
+    }
+
+    @media print {
+      :root { --bg: #fff; --sheet: #fff; }
+      .page { width: auto; min-height: 0; margin: 0; padding: 0.45in 0.6in; border: 0; border-radius: 0; }
+      a { text-decoration: none; }
+    }
+
+    /* ---------- Header ---------- */
+    header { margin-bottom: 12pt; }
+
+    header h1 {
+      font-size: 21pt;
+      font-weight: 600;
+      line-height: 1.15;
+    }
+
+    .headline {
+      margin-top: 1pt;
+      font-size: 11pt;
+      font-style: italic;
+      color: var(--muted);
+    }
+
+    .contact {
+      margin-top: 6pt;
+      display: flex;
+      flex-wrap: wrap;
+      column-gap: 14pt;
+      row-gap: 2pt;
+      font-size: 9.5pt;
+      color: var(--muted);
+    }
+    .contact a { color: var(--muted); text-decoration: none; }
+    .contact a:hover { color: var(--accent); }
+
+    .relocate {
+      margin-top: 3pt;
+      font-size: 9.5pt;
+      color: var(--muted);
+    }
+    .relocate strong { font-weight: 400; color: var(--text); }
+
+    /* ---------- Sections ---------- */
+    section { margin-top: 10pt; }
+
+    .section-label {
+      display: block;
+      font-size: 8pt;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding-bottom: 3pt;
+      margin-bottom: 6pt;
+      border-bottom: 1px solid var(--line);
+    }
+
+
+    /* ---------- Entries ---------- */
+    .entry {
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+    .entry + .entry { margin-top: 8pt; }
+
+    .entry-head {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+    }
+
+    .entry-title { font-weight: 600; }
+    .entry-org { color: var(--text); }
+    .entry-loc { color: var(--muted); }
+
+    .d {
+      margin-left: auto;
+      flex-shrink: 0;
+      font-size: 9pt;
+      color: var(--faint);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .entry-sub {
+      font-size: 9.5pt;
+      font-style: italic;
+      color: var(--muted);
+    }
+
+    .entry ul {
+      list-style: none;
+      margin-top: 3pt;
+    }
+    .entry li {
+      position: relative;
+      padding-left: 13pt;
+    }
+    .entry li + li { margin-top: 1pt; }
+    .entry li::before {
+      content: "–";
+      position: absolute;
+      left: 0;
+      color: var(--faint);
+    }
+
+    .entry p.desc {
+      margin-top: 1pt;
+      font-size: 9.5pt;
+      color: var(--muted);
+    }
+
+    /* ---------- Skills ---------- */
+    .skills {
+      display: grid;
+      grid-template-columns: 1.25in 1fr;
+      row-gap: 2pt;
+      column-gap: 10pt;
+    }
+    .skills dt { color: var(--muted); font-style: italic; }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <h1>Alec Wilson</h1>
+      <div class="headline">Software Engineer</div>
+      <div class="contact">
+        <a href="mailto:hi@judes.club">hi@judes.club</a>
+        <a href="tel:+19376685138">(937) 668-5138</a>
+        <span>Wappingers Falls, NY 12590</span>
+        <a href="https://judes.club">judes.club</a>
+        <a href="https://github.com/alechash">github.com/alechash</a>
+      </div>
+      <div class="relocate">
+        Willing to relocate to <strong>New York City</strong>, <strong>Boston</strong>, <strong>Austin</strong>,
+        <strong>Seattle</strong>, <strong>San Francisco</strong>, <strong>Cincinnati</strong>, or <strong>Charlotte</strong>.
+      </div>
+    </header>
+
+    <section>
+      <span class="section-label">Summary</span>
+      <p class="summary">
+        Software engineer working on production AI systems. I&rsquo;m at Watchtower now, building an internal AI assistant after a
+        year on their DevOps team, and I build iOS apps and data projects on my own. Next, I want a fast-paced team where results
+        get rewarded: an early-stage startup, or a tech company pushing into something new.
+      </p>
+    </section>
+
+    <section>
+      <span class="section-label">Experience</span>
+
+      <div class="entry">
+        <div class="entry-head">
+          <div><span class="entry-title">Software Engineer, AI Systems</span>, <span class="entry-org">Watchtower</span> <span class="entry-loc">(jw.org)</span></div>
+          <span class="d">Feb 2026 – Present</span>
+        </div>
+        <ul>
+          <li>Core engineer on the organization&rsquo;s internal AI assistant for staff (.NET 10, React, LiteLLM).</li>
+          <li>Designed and own person lookup, the assistant&rsquo;s gateway to staff and member data, with four-tier access control.</li>
+          <li>Built the typed chat widgets the model renders, and promptfoo evals that catch hallucinations.</li>
+          <li>Set up Datadog for the beta, then used it to analyze and optimize the assistant&rsquo;s AI usage.</li>
+        </ul>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head">
+          <div><span class="entry-title">DevOps Engineer</span>, <span class="entry-org">Watchtower</span> <span class="entry-loc">(jw.org)</span></div>
+          <span class="d">Mar 2025 – Feb 2026</span>
+        </div>
+        <ul>
+          <li>90-person DevOps org supporting 1,000+ engineers. Kubernetes, Docker, and Terraform on AWS and Azure.</li>
+          <li>Ran GitLab CI/CD pipelines for build, test, and promotion through dev, staging, and prod.</li>
+        </ul>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head">
+          <div><span class="entry-title">Founder &amp; Lead Engineer</span>, <span class="entry-org"><a href="https://belayer.dev">Belayer Dev</a></span> <span class="entry-loc">(belayer.dev)</span></div>
+          <span class="d">Jan 2025 – Present</span>
+        </div>
+        <ul>
+          <li>Software studio I founded. It runs BenchScout and <a href="https://bricklane.app">Bricklane</a>, an invoicing app.</li>
+          <li>Built the sales app field reps use at the largest private commercial window cleaning company in the U.S.</li>
+          <li>Made hundreds of thousands of their records AI-ready, with indexing and custom tooling AI agents can query.</li>
+          <li>I ship solo, from architecture to release. Project details and case studies at <a href="https://belayer.dev">belayer.dev</a>.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <span class="section-label">Projects</span>
+
+      <div class="entry">
+        <div class="entry-head">
+          <div><span class="entry-title"><a href="https://benchscout.com">BenchScout</a></span> <span class="entry-loc">&middot; benchscout.com</span></div>
+          <span class="d">2024 – Present</span>
+        </div>
+        <ul>
+          <li>Live scores, play-by-play, odds, and standings for MLB, NBA, NHL, NFL, and college football.</li>
+          <li>Web app in Next.js and TypeScript. iOS app in SwiftUI with home screen widgets and Live Activities.</li>
+        </ul>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head">
+          <div><span class="entry-title"><a href="https://statball.net">Statball</a></span> <span class="entry-loc">&middot; statball.net</span></div>
+          <span class="d">2026</span>
+        </div>
+        <ul>
+          <li>Predicts every MLB game with a gradient-boosted Python model trained on decades of Retrosheet data.</li>
+          <li>Backtested on about 170,000 past games. It beats a plain Elo rating, but the betting market is still sharper.</li>
+          <li>Posts daily picks with a public record (55.4% in 2026) and bets small on Kalshi when the edge covers fees.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <span class="section-label">Skills</span>
+      <dl class="skills">
+        <dt>Languages</dt>
+        <dd>C#, Swift, JavaScript/TypeScript, Go, Python</dd>
+        <dt>Frontend</dt>
+        <dd>React, Next.js, Angular, SwiftUI, HTML/CSS, Blazor</dd>
+        <dt>Backend</dt>
+        <dd>Node, Express, .NET, PostgreSQL, Redis, OpenSearch, GraphQL</dd>
+        <dt>Infrastructure</dt>
+        <dd>Azure, AWS, Kubernetes, Docker, GitHub Actions, GitLab CI</dd>
+        <dt>AI &amp; Data</dt>
+        <dd>LiteLLM, promptfoo evals, Databricks, Datadog, Splunk</dd>
+      </dl>
+    </section>
+  </main>
+</body>
+</html>
